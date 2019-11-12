@@ -82,6 +82,31 @@ public class CustomerDAO extends DAO {
         return customers;
     }
 
+    public static List<Integer> selectIdCustomer(Statement st) throws SQLException {
+        List<Integer> ids = new LinkedList<Integer>();
+        String query = "SELECT idCustomer FROM customer;";
+        ResultSet rs = st.executeQuery(query);
+        while (rs.next())
+        {
+            int idCustomer = rs.getInt("idCustomer");
+            ids.add(idCustomer);
+        }
+        return ids;
+    }
+
+    public static String selectPinCode(Statement st, int idCustomer) throws SQLException {
+        String query = "SELECT pinCode FROM customer WHERE idCustomer =" + idCustomer + ";";
+        String pinCode = "";
+        ResultSet rs = st.executeQuery(query);
+        while (rs.next())
+        {
+            pinCode = rs.getString("pinCode");
+        }
+        return pinCode;
+    }
+
+
+
 
 
 
