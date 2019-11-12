@@ -5,11 +5,10 @@ public class BATGA {
 
         System.out.println("Hier kommt alles was das BATGA kann hinein");
 
-        boolean system = true;
         Scanner scanner = new Scanner(System.in);
-        Authentification aut = new Authentification();
+        Authentication aut = new Authentication();
 
-        while (system) {
+        while (true) {
             System.out.println("1 - Log in");
             System.out.println("0 - quit");
             int choice = Integer.parseInt(scanner.nextLine());
