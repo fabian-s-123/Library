@@ -1,46 +1,53 @@
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 import java.util.Scanner;
 
 public class Authentication {
 
 
-    public int handleAuthentication(DBConnect con1, Connection connection) throws SQLException {
-        Statement st = connection.createStatement();
+    public int handleAuthentication(Statement st) throws SQLException {
         Scanner scanner = new Scanner(System.in);
+        int idCustomerDB = checkIdCustomer(st, scanner);
+        checkPinCode(st, idCustomerDB, scanner);
+        System.out.println("Authentication successful.");
+        return idCustomerDB;
+    }
 
+    private int checkIdCustomer(Statement st, Scanner scanner) throws SQLException {
         int idCustomerDB = 0;
-        int triesID = 0;
-        int triesPW = 0;
-
-        while (true) {
-            for (triesID = 0; triesID < 5; triesID++) {
-                System.out.println("please enter you customer ID:");
-                int idCustomerInput = scanner.nextInt();
-                for (Integer id : CustomerDAO.selectIdCustomer(st)) {
-                    if (id.equals(idCustomerInput)) {
-                        idCustomerDB = id;
-                        String pwDB = CustomerDAO.selectPinCode(st, idCustomerDB);
-                        System.out.println("please enter your password:");
-                        for (triesPW = 0; triesPW < 3; triesPW++) {
-                            String pwInput = scanner.nextLine();
-                            if (pwDB.equals(pwInput)) {
-                                return idCustomerDB;
-                            } else {
-                                System.out.println("wrong password!");
-                            }
-                        }
-                        System.out.println("too many attempts!");
-                        System.exit(0);
-                    } else {
-                        System.out.println("no customer found with this customer ID!");
-
-                    }
+        System.out.println("Please enter your customer ID:");
+        for (int i = 0; i < 5; i++) {
+            int idCustomerInput = scanner.nextInt();
+            if (CustomerDAO.selectIdCustomer(st).contains(idCustomerInput)) {
+                idCustomerDB = idCustomerInput;
+                break;
+            } else {
+                System.out.println("Sorry, no customer found with this ID.");
+                if (i == 4) {
+                    System.out.println("Too many attempts!");
+                    System.exit(0);
                 }
             }
-            System.out.println("too many attempts!");
-            System.exit(0);
+        }
+        return idCustomerDB;
+    }
+
+    private void checkPinCode(Statement st, int idCustomer, Scanner scanner) throws SQLException {
+        System.out.println("Please enter your pin code:");
+        for (int i = 0; i < 3; i++) {
+            String pinCodeInput = scanner.next();
+            String pinCodeDB = CustomerDAO.selectPinCode(st, idCustomer);
+            if (pinCodeInput.equals(pinCodeDB)) {
+                System.out.println("Pin code correct.");
+                break;
+            } else {
+                System.out.println("Wrong pin code!");
+                if (i == 2) {
+                    System.out.println("Too many attempts!");
+                    System.exit(0);
+                }
+            }
         }
     }
 }
