@@ -8,6 +8,22 @@ public class CreateDataBases {
         //cuDAO.createTableCustomer();
         BookDAO boDAO = new BookDAO(con1.getConnection());
         //boDAO.createTableBook();
+        AuthorDAO auDAO = new AuthorDAO(con1.getConnection());
+        //auDAO.createTableAuthor();
+        CategoryDAO caDAO = new CategoryDAO(con1.getConnection());
+        //caDAO.createTablCategory();
+        LoanedDAO loDAO = new LoanedDAO(con1.getConnection());
+        //loDAO.createTableLoaned();
+//        auDAO.createRecordAuthor("Johann Wolfgang", "von Goethe", 1749);
+//        auDAO.createRecordAuthor("Friedrich", "Schiller", 1759);
+//        auDAO.createRecordAuthor("Michael", "Amon", 1954);
+//        auDAO.createRecordAuthor("Jeff", "Kinney",1971 );
+//        auDAO.createRecordAuthor("Doris", "Chevron", 1951);
+//        auDAO.createRecordAuthor("Madeleine", "Mueller", 1968);
+//        auDAO.createRecordAuthor("Fred", "Vargas", 1959);
+        con1.closeDB();
+
+
 
     }
 }
