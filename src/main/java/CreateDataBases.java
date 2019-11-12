@@ -6,6 +6,8 @@ public class CreateDataBases {
         con1.connectDB();
         CustomerDAO cuDAO = new CustomerDAO(con1.getConnection());
         //cuDAO.createTableCustomer();
+        BookDAO boDAO = new BookDAO(con1.getConnection());
+        //boDAO.createTableBook();
 
     }
 }
