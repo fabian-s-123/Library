@@ -11,11 +11,11 @@ public class CustomerDAO extends DAO {
                 "idCustomer int(4) unsigned auto_increment not null, " +
                 "pinCode varchar(25) not null, " +
                 "email varchar(50) not null, " +
-                "firstname varchar(25) not null, " +
-                "lastname varchar(25) not null, " +
+                "firstName varchar(25) not null, " +
+                "lastName varchar(25) not null, " +
                 "birthDay timestamp not null, " +
                 "street varchar(50) not null, " +
-                "apnr varchar(7) not null, " +
+                "apNr varchar(7) not null, " +
                 "zip int(5) not null, " +
                 "city varchar(20) not null, " +
                 "creditCardNr int(16), " +

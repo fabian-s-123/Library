@@ -9,8 +9,8 @@ public class AuthorDAO extends DAO{
     public void createTableAuthor() {
         String query = "create table author (" +
                 "idAuthor int(4) unsigned auto_increment not null, " +
-                "firstname varchar(25) not null, " +
-                "lastname varchar(25) not null, " +
+                "firstName varchar(25) not null, " +
+                "lastName varchar(25) not null, " +
                 "birthYear int(4) not null, " +
                 "created_at timestamp default current_timestamp, " +
                 "updated_at timestamp default current_timestamp on update current_timestamp, " +
@@ -25,6 +25,6 @@ public class AuthorDAO extends DAO{
                 "\"" + lastname + "\"," +
                 + birthYear + ");";
         String query = query1 + query2;
-        executeStatement(query, "Ein Author wurde der Datenbank zugefügt.");
+        executeStatement(query, "Ein Datensatz Author wurde der Tabelle Author zugefügt.");
     }
 }
