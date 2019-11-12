@@ -1,4 +1,6 @@
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -22,7 +24,7 @@ public class CustomerDAO extends DAO {
                 "apNr varchar(7) not null, " +
                 "zip int(5) not null, " +
                 "city varchar(20) not null, " +
-                "creditCardNr int(16), " +
+                "creditCardNr bigint(16), " +
                 "cvc int(3), " +
                 "expiryDateYear int(4), " +
                 "expiryDateMonth int(2), " +
@@ -33,6 +35,25 @@ public class CustomerDAO extends DAO {
         executeStatement(query, "Die Tabelle customer wurde angelegt.");
     }
 
+    public void createRecordCustomer(String pinCode, String email, String firstName, String lastName, LocalDateTime birthDay, String street, String apNr, int zip, String city, long creditCardNr, int cvc, int expiryDateYear, int expiryDateMonth){
+        String query1 = "insert into customer (pinCode, email, firstName, lastName, birthDay, street, apNr, zip, city, creditCardNr, cvc, expiryDateYear, expiryDateMonth) values (";
+        Timestamp birthDayTS = Timestamp.valueOf(birthDay);
+        String query2 = "\"" + pinCode + "\", " +
+                "\"" + email + "\", " +
+                "\"" + firstName  + "\", " +
+                "\"" + lastName  + "\", " +
+                "\"" + birthDayTS + "\", " +
+                "\"" + street + "\", " +
+                "\"" + apNr + "\", " +
+                zip + ", " +
+                "\"" + city + "\", " +
+                creditCardNr + ", " +
+                cvc + ", " +
+                expiryDateYear + ", " +
+                expiryDateMonth + ");";
+        String query = query1 + query2;
+        executeStatement(query, "Ein Datensatz customer der Tabelle customer zugefügt.");
+    }
 
     public static List<Customer> select(Statement st) throws SQLException {
         List<Customer> customers = new LinkedList<Customer>();
@@ -60,6 +81,31 @@ public class CustomerDAO extends DAO {
         }
         return customers;
     }
+
+    public static List<Integer> selectIdCustomer(Statement st) throws SQLException {
+        List<Integer> ids = new LinkedList<Integer>();
+        String query = "SELECT idCustomer FROM customer;";
+        ResultSet rs = st.executeQuery(query);
+        while (rs.next())
+        {
+            int idCustomer = rs.getInt("idCustomer");
+            ids.add(idCustomer);
+        }
+        return ids;
+    }
+
+    public static String selectPinCode(Statement st, int idCustomer) throws SQLException {
+        String query = "SELECT pinCode FROM customer WHERE idCustomer =" + idCustomer + ";";
+        String pinCode = "";
+        ResultSet rs = st.executeQuery(query);
+        while (rs.next())
+        {
+            pinCode = rs.getString("pinCode");
+        }
+        return pinCode;
+    }
+
+
 
 
 
