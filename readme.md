@@ -23,46 +23,53 @@ Eine Anwendungen, nach Start aber abfragen in welche “Ansicht”
 
 Datenbank:
 
-Kundendaten
-    idKd (KDNR-1, KDNR-2,...)
-    PIN-Code (gehasht - MD5)
-    Email
-    Vorname
-    Nachname
-    Geburtsdatum
-    Adresse
-    Kreditkarten Nr.
+customer
+    idCustomer (KDNR-1, KDNR-2,...) -> primary key
+    pinCode (gehasht - MD5)
+    email
+    firstName
+    lastName
+    birthDay
+    street
+    apNr
+    zip
+    city
+    creditCardNr
     CVC
-    Ablaufdatum
+    expiryDateYear
+    expiryDateMonth
 
-Bücher
-    idBuch
-    Titel
-    Autor-Nr.
-    Kategorie
-    ISBN
-    FSK
-    Verlag
-    Ausgabe / Version
-    Ersterscheinung
-    Anzahl Seiten
-    Sprache
-    Regal
-    Spalte
+book
+    idBook -> primary key
+    Title
+    idAuthor -> foreign key
+    idCategory -> foreign key
+    isbn
+    fsk
+    publisher
+    edition
+    firstEdition
+    language
+    idRow
+    idColumn
 
-Autoren
-    idAutor
-    Name
-    Geburtsjahr
+author
+    idAuthor -> primary key
+    name
+    birthYear
 
-Kreuztabelle Ausleihvorgänge
-    idVorgang
-    KDNR
-    Buch-Nr
-    ausgeliehen am
-    zurückgegeben am
-    (Verlängerungsvorgänge -> Eintrag in zurückgegeben an und Neueintrag mit kDNR, BuchNr, ausgeliehen am)
+category
+    idCategory -> primary key
+    description
 
+loaned
+    idLoaned -> primary key
+    idCustomer -> foreign key
+    idBook -> foreign key
+    loanedOn
+    returnedOn
+    extraTime (-> Eintrag in zurückgegeben an und Neueintrag mit idCustomer, idBook, loanedOn)
+    
 Verfügbarkeit? --> Buch, welches entweder nicht in Ausleihvorgänge aufgeführt oder in Ausleihvorgänge im letzten Eintrag sowohl ausgeliehen als auch zurückgegeben-Eintrag hat 
 Liste an aktuell ausgeliehenen Büchern --> Bücher, die ein ausgeliehen-Datum und ein offenen zurückgegeben-Datum haben
 Liste an allen Büchern die jemals ausgeliehen wurden --> Eintrag in Ausleihvorgang vorhanden (unabhängig von Datums-Einträgen)
