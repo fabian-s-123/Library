@@ -1,4 +1,8 @@
-import java.sql.Connection;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
 
 public class CustomerDAO extends DAO {
 
@@ -28,4 +32,37 @@ public class CustomerDAO extends DAO {
                 ");";
         executeStatement(query, "Die Tabelle customer wurde angelegt.");
     }
+
+
+    public static List<Customer> select(Statement st) throws SQLException {
+        List<Customer> customers = new LinkedList<Customer>();
+        String query = "SELECT * FROM customer";
+        ResultSet rs = st.executeQuery(query);
+        while (rs.next())
+        {
+            int idCustomer = rs.getInt("idCustomer");
+            String pinCode = rs.getString("pinCode");
+            String email = rs.getString("email");
+            String firstName = rs.getString("firstName");
+            String lastName = rs.getString("lastName");
+            Timestamp birthday = rs.getTimestamp("birthday");
+            String street = rs.getString("street");
+            String apNr = rs.getString("apNr");
+            int zip = rs.getInt("zip");
+            String city = rs.getString("city");
+            int creditCardNr = rs.getInt("creditCardNr");
+            int CVC = rs.getInt("CVC");
+            int expiryDateYear = rs.getInt("expiryDateYear");
+            int expiryDateMonth = rs.getInt("expiryDateMonth");
+
+            Customer customer = new Customer(idCustomer, pinCode, email, firstName, lastName, birthday, street, apNr, zip, city, creditCardNr, CVC, expiryDateYear, expiryDateMonth);
+            customers.add(customer);
+        }
+        return customers;
+    }
+
+
+
+
+
 }
