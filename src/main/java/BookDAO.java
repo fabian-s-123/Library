@@ -9,12 +9,11 @@ public class BookDAO extends DAO {
     public void createTableBook() {
         String query = "create table book (" +
                 "idBook int(4) unsigned auto_increment not null, " +
-                "title varchar(30) not null, " +
+                "title varchar(50) not null, " +
                 "idAuthor int(4) not null, " +
                 "idCategory int(2) not null, " +
-                "isbn int(13),  " +
+                "isbn bigint(13),  " +
                 "fsk int(2) not null, " +
-                "street varchar(50) not null, " +
                 "publisher varchar(30) not null, " +
                 "edition varchar(10) not null, " +
                 "firstEdition varchar(10), " +
@@ -27,6 +26,26 @@ public class BookDAO extends DAO {
                 "primary key (idBook)" +
                 ");";
         executeStatement(query, "Die Tabelle customer wurde angelegt.");
+    }
+
+    public void createRecordBook(String title, int idAuthor, int idCategory, long isbn, int fsk, String publisher,
+                                     String edition, String firstEdition, int amountPages, String language, int idRow, int idColumn){
+        String query1 = "insert into book (title, idAuthor, idCategory, isbn, fsk, publisher, edition, firstEdition, amountPages, language, idRow, idColumn) values (";
+
+        String query2 = "\"" + title + "\", " +
+                idAuthor + ", " +
+                idCategory + ", " +
+                isbn + ", " +
+                fsk + ", " +
+                "\"" + publisher + "\", " +
+                "\"" + edition + "\", " +
+                "\"" + firstEdition + "\", " +
+                amountPages + ", " +
+                "\"" + language + "\", " +
+                idRow + ", " +
+                idColumn + ");";
+                String query = query1 + query2;
+        executeStatement(query, "Ein Datensatz book der Tabelle book zugefügt.");
     }
 }
 

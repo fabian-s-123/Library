@@ -16,4 +16,11 @@ public class CategoryDAO extends DAO{
                 ");";
         executeStatement(query, "Die Tabelle category wurde angelegt.");
     }
+
+    public void createRecordCategory(String description){
+        String query1 = "insert into category (description) values (";
+        String query2 = "\"" + description + "\");";
+        String query = query1 + query2;
+        executeStatement(query, "Ein Datensatz Category wurde der Tabelle Category zugefügt.");
+    }
 }
