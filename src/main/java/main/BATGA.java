@@ -1,3 +1,8 @@
+package main;
+
+import controller.Authentication;
+import daos.CustomerDAO;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -15,7 +20,7 @@ public class BATGA {
         int idCustomer = 0;
 
         while (true) {
-            System.out.println("Welcome to Lukas' Library. My name is BATGA, what would you like to do?");
+            System.out.println("Welcome to Lukas' Library. My name is main.BATGA, what would you like to do?");
             System.out.println("1 - log in");
             System.out.println("0 - quit");
             int choice = scanner.nextInt();

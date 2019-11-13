@@ -1,6 +1,9 @@
+package controller;
+
+import daos.CustomerDAO;
+
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.List;
 import java.util.Scanner;
 
 public class Authentication {
@@ -10,7 +13,7 @@ public class Authentication {
         Scanner scanner = new Scanner(System.in);
         int idCustomerDB = checkIdCustomer(st, scanner);
         checkPinCode(st, idCustomerDB, scanner);
-        System.out.println("Authentication successful.");
+        System.out.println("controller.Authentication successful.");
         return idCustomerDB;
     }
 

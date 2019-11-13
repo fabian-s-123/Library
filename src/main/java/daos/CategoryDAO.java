@@ -1,3 +1,5 @@
+package daos;
+
 import java.sql.Connection;
 
 public class CategoryDAO extends DAO{
@@ -21,6 +23,6 @@ public class CategoryDAO extends DAO{
         String query1 = "insert into category (description) values (";
         String query2 = "\"" + description + "\");";
         String query = query1 + query2;
-        executeStatement(query, "Ein Datensatz Category wurde der Tabelle Category zugefügt.");
+        executeStatement(query, "Ein Datensatz entities.Category wurde der Tabelle entities.Category zugefügt.");
     }
 }

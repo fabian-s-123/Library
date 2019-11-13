@@ -1,15 +1,17 @@
+package daos;
+
+import entities.Customer;
+
 import java.sql.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 
 public class CustomerDAO extends DAO {
-
     public CustomerDAO(Connection con1) {
         super(con1);
+
     }
 
     public void createTableCustomer() {

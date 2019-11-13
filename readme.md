@@ -14,7 +14,7 @@ Eine Anwendungen, nach Start aber abfragen in welche “Ansicht”
         Bücher hinzufügen, bearbeiten & löschen
         Benutzer hinzufügen, bearbeiten & löschen
         Autoren hinzufügen, bearbeiten & löschen
-    Buch-Ausleih-Terminal-Gerät-Anwendung (BATGA)
+    Buch-Ausleih-Terminal-Gerät-Anwendung (main.BATGA)
         Authentifizieren (Benutzer)
         Buch ausleihen
         Buch zurückgeben

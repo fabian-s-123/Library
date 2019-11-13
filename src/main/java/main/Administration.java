@@ -1,10 +1,12 @@
+package main;
+
 import java.util.Scanner;
 
 public class Administration {
 
     public static void main(String[] args) {
-        System.out.println("Willkommen in der Administration");
-        String[] auswahlString1 = {"Book", "Author", "Category", "Customer", "Loaned"};
+        System.out.println("Willkommen in der main.Administration");
+        String[] auswahlString1 = {"entities.Book", "entities.Author", "entities.Category", "entities.Customer", "entities.Loaned"};
         boolean verbleibImProgramm = true;
         boolean verbleibInAuswahlstufe = true;
         int auswahl1 = 0;
@@ -14,11 +16,11 @@ public class Administration {
             boolean isEingabeGueltig = false;
             do {
                 System.out.println("Bitte wähle aus - 0 = Programmende");
-                System.out.println("                  1 = Pflege Daten Book");
-                System.out.println("                  2 = Pflege Daten Author");
-                System.out.println("                  3 = Pflege Daten Category");
-                System.out.println("                  4 = Pflege Daten Customer");
-                System.out.println("                  5 = Pflege Daten Loaned ");
+                System.out.println("                  1 = Pflege Daten entities.Book");
+                System.out.println("                  2 = Pflege Daten entities.Author");
+                System.out.println("                  3 = Pflege Daten entities.Category");
+                System.out.println("                  4 = Pflege Daten entities.Customer");
+                System.out.println("                  5 = Pflege Daten entities.Loaned ");
                 auswahl1 = sc.nextInt();
                 if (auswahl1 >= 0 && auswahl1 < 6) {
                     isEingabeGueltig = true;
