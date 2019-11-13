@@ -14,46 +14,44 @@ import java.util.Scanner;
 
 public class LoanBook {
 
-    public void loanBook(Statement st, Scanner scanner, int idCustomer, LoanedDAO loDAO)throws SQLException {
+    public void loanBook(Statement st, Scanner scanner, int idCustomer, LoanedDAO loDAO) throws SQLException {
         LocalDateTime now = LocalDateTime.now();
         System.out.println("These books are available for loaning:\n");
         List listAllBooksAfterFSKCheck;
         ArrayList<Integer> listBooksLoaned = new ArrayList<>();
-
         listAllBooksAfterFSKCheck = checkFSK(st, idCustomer, now);
 
-        if (isAllowedToLoan(st, idCustomer)) {
-            for (Integer x : BookDAO.selectIdBooks(st)) {
-                if (LoanedDAO.selectIdBooksLoaned(st).contains(x)) {
-                    listBooksLoaned.add(x);
+        for (Integer x : BookDAO.selectIdBooks(st)) {
+            if (LoanedDAO.selectIdBooksLoaned(st).contains(x)) {
+                listBooksLoaned.add(x);
+            }
+        }
+        for (Integer y : listBooksLoaned) {
+            for (Timestamp time : LoanedDAO.selectBookReturned(st, "idCustomer", y, 1)) {
+                if (time == null) {
+                    listAllBooksAfterFSKCheck.remove(y);
                 }
             }
-            for (Integer y : listBooksLoaned) {
-                for (Timestamp time : LoanedDAO.selectBookReturned(st, y, 1)) {
-                    if (time == null) {
-                        listAllBooksAfterFSKCheck.remove(y);
-                    }
-                }
-            }
-            for (Object z : listAllBooksAfterFSKCheck) {
-                System.out.println(z.toString());
-            }
+        }
+        for (Object z : listAllBooksAfterFSKCheck) {
+            System.out.println(z.toString());
         }
         System.out.println("\nPlease select the book you would like to loan.");
         int choice = scanner.nextInt();
         loDAO.createRecordLoanedWithoutReturn(idCustomer, choice, now);
     }
 
-    private List<Integer> checkFSK (Statement st, int idCustomer, LocalDateTime now) throws SQLException {
+
+    private List<Integer> checkFSK(Statement st, int idCustomer, LocalDateTime now) throws SQLException {
         Timestamp timestamp = CustomerDAO.selectBirthDay(st, idCustomer);
         LocalDateTime birthDayCustomer = timestamp.toLocalDateTime();
         List<Integer> booksAfterFSKCheck = null;
         int fsk = 0;
-        if (birthDayCustomer.plusYears(18).isBefore(now)){
+        if (birthDayCustomer.plusYears(18).isBefore(now)) {
             fsk = 3;
-        } else if (birthDayCustomer.plusYears(10).isBefore(now) && birthDayCustomer.plusYears(18).isAfter(now)){
+        } else if (birthDayCustomer.plusYears(10).isBefore(now) && birthDayCustomer.plusYears(18).isAfter(now)) {
             fsk = 2;
-        } else if (birthDayCustomer.plusYears(10).isAfter(now)){
+        } else if (birthDayCustomer.plusYears(10).isAfter(now)) {
             fsk = 1;
         }
         assert false;
@@ -61,17 +59,22 @@ public class LoanBook {
         return booksAfterFSKCheck;
     }
 
-    private boolean isAllowedToLoan(Statement st, int idCustomer) throws SQLException {
+    public boolean isAllowedToLoan(Statement st, int idCustomer) throws SQLException {
         boolean isAllowed = false;
-        List<Timestamp> books = null;
-        books.addAll(LoanedDAO.selectBookReturned(st, idCustomer, 4));
-        for (Timestamp time : books){
-            if (time
+        int booksLoanedAllTime = LoanedDAO.selectCountIdCustomer(st, idCustomer);
+        if (booksLoanedAllTime >= 4) {
+            int booksCurrentlyLoaned = 0;
+            for (Timestamp time : LoanedDAO.selectBookReturned(st, "idCustomer", idCustomer, booksLoanedAllTime)) {
+                if (time == null) {
+                    booksCurrentlyLoaned++;
+                }
+            }
+            if (booksCurrentlyLoaned < 4) {
+                isAllowed = true;
+            }
+        } else {
+            isAllowed = true;
         }
-
         return isAllowed;
     }
-
-
-
 }

@@ -1,7 +1,6 @@
 package main;
 
 import controller.Authentication;
-import controller.DiverseLists;
 import controller.LoanBook;
 import daos.*;
 
@@ -9,8 +8,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class BATGA {
@@ -24,7 +21,7 @@ public class BATGA {
 
         Scanner scanner = new Scanner(System.in);
         Authentication aut = new Authentication();
-        LoanBook loan = new LoanBook();
+        LoanBook loanBook = new LoanBook();
 
         CustomerDAO cuDAO = new CustomerDAO();
         BookDAO boDAO = new BookDAO();
@@ -73,7 +70,25 @@ public class BATGA {
                         idCustomer = 0;
                         break;
                     case 1:
-
+                        if (loanBook.isAllowedToLoan(st, idCustomer)){
+                            loanBook.loanBook(st, scanner, idCustomer, loDAO);
+                        } else {
+                            System.out.println("Sorry " + CustomerDAO.selectFirstName(st, idCustomer) + ", you already have four books currently in loan." +
+                                    "please return a book first, before you loan out another one.");
+                        }
+                         break;
+                    case 2:
+                        //handle return book
+                        break;
+                    case 3:
+                        //handle extend loan
+                        break;
+                    case 4:
+                        //extend browse book collection
+                        break;
+                    default:
+                        System.out.println("Not a valid command.");
+                        break;
                 }
             }
             dbConnector.close();

@@ -3,7 +3,6 @@ package daos;
 import java.sql.*;
 import entities.Loaned;
 import entities.LoanedCustomerBook;
-import sun.awt.image.ImageWatched;
 
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -170,9 +169,9 @@ public class LoanedDAO extends DAO {
         return ids;
     }
 
-    public static List<Timestamp> selectBookReturned(Statement st, int idBook, int limit) throws SQLException {
+    public static List<Timestamp> selectBookReturned(Statement st, String column, int condition, int limit) throws SQLException {
         List<Timestamp> ids = new ArrayList<>();
-        String query = "SELECT returnedOn FROM loaned WHERE idBook="+ idBook + " ORDER BY `idLoaned` DESC LIMIT " + limit + ";";
+        String query = "SELECT returnedOn FROM loaned WHERE " + column + "="+ condition + " ORDER BY `idLoaned` DESC LIMIT " + limit + ";";
         ResultSet rs = st.executeQuery(query);
         while (rs.next()){
             Timestamp returnedOn = rs.getTimestamp("returnedOn");
@@ -181,4 +180,13 @@ public class LoanedDAO extends DAO {
         return ids;
     }
 
+    public static int selectCountIdCustomer(Statement st, int idCustomer) throws SQLException {
+        int result = 0;
+        String query = "SELECT COUNT(idCustomer) FROM loaned WHERE idCustomer=" + idCustomer + ";";
+        ResultSet rs = st.executeQuery(query);
+        while (rs.next()){
+            result = rs.getInt(1);
+        }
+        return result;
+    }
 }
