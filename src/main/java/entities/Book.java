@@ -19,23 +19,6 @@ public class Book {
     private LocalDateTime created_at;
     private LocalDateTime updated_at;
 
-
-    public Book(int idBook, String title, int idAuthor, int idCategory, long isbn, int fsk, String publisher, String edition, String firstEdition, int amountPages, String language, int idRow, int idColumn) {
-        this.idBook = idBook;
-        this.title = title;
-        this.idAuthor = idAuthor;
-        this.idCategory = idCategory;
-        this.isbn = isbn;
-        this.fsk = fsk;
-        this.publisher = publisher;
-        this.edition = edition;
-        this.firstEdition = firstEdition;
-        this.amountPages = amountPages;
-        this.language = language;
-        this.idRow = idRow;
-        this.idColumn = idColumn;
-    }
-
 }
 
 

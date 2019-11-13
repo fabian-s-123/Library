@@ -22,20 +22,22 @@ public class LoanBook {
 
         listAllBooksAfterFSKCheck = checkFSK(st, idCustomer, now);
 
-        for (Integer x : BookDAO.selectIdBooks(st)) {
-            if (LoanedDAO.selectIdBooksLoaned(st).contains(x)) {
-                listBooksLoaned.add(x);
-            }
-        }
-        for (Integer y : listBooksLoaned) {
-            for (Timestamp time : LoanedDAO.selectBookReturned(st, y)) {
-                if (time==null){
-                    listAllBooksAfterFSKCheck.remove(y);
+        if (isAllowedToLoan(st, idCustomer)) {
+            for (Integer x : BookDAO.selectIdBooks(st)) {
+                if (LoanedDAO.selectIdBooksLoaned(st).contains(x)) {
+                    listBooksLoaned.add(x);
                 }
             }
-        }
-        for (Object z : listAllBooksAfterFSKCheck) {
-            System.out.println(z.toString());
+            for (Integer y : listBooksLoaned) {
+                for (Timestamp time : LoanedDAO.selectBookReturned(st, y, 1)) {
+                    if (time == null) {
+                        listAllBooksAfterFSKCheck.remove(y);
+                    }
+                }
+            }
+            for (Object z : listAllBooksAfterFSKCheck) {
+                System.out.println(z.toString());
+            }
         }
         System.out.println("\nPlease select the book you would like to loan.");
         int choice = scanner.nextInt();
@@ -57,6 +59,17 @@ public class LoanBook {
         assert false;
         booksAfterFSKCheck.addAll(BookDAO.selectBooksFSK(st, fsk));
         return booksAfterFSKCheck;
+    }
+
+    private boolean isAllowedToLoan(Statement st, int idCustomer) throws SQLException {
+        boolean isAllowed = false;
+        List<Timestamp> books = null;
+        books.addAll(LoanedDAO.selectBookReturned(st, idCustomer, 4));
+        for (Timestamp time : books){
+            if (time
+        }
+
+        return isAllowed;
     }
 
 

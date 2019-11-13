@@ -170,9 +170,9 @@ public class LoanedDAO extends DAO {
         return ids;
     }
 
-    public static List<Timestamp> selectBookReturned(Statement st, int idBook) throws SQLException {
+    public static List<Timestamp> selectBookReturned(Statement st, int idBook, int limit) throws SQLException {
         List<Timestamp> ids = new ArrayList<>();
-        String query = "SELECT returnedOn FROM loaned WHERE idBook="+ idBook + " ORDER BY `idLoaned` DESC LIMIT 1;";
+        String query = "SELECT returnedOn FROM loaned WHERE idBook="+ idBook + " ORDER BY `idLoaned` DESC LIMIT " + limit + ";";
         ResultSet rs = st.executeQuery(query);
         while (rs.next()){
             Timestamp returnedOn = rs.getTimestamp("returnedOn");
@@ -180,9 +180,5 @@ public class LoanedDAO extends DAO {
         }
         return ids;
     }
-
-
-
-
 
 }
