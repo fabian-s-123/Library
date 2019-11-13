@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public abstract class DAO {
-    private DBConnector dbConnector;
+    protected DBConnector dbConnector;
     protected Connection connection;
 
     public DAO() {

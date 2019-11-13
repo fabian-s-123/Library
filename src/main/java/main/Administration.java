@@ -1,5 +1,8 @@
 package main;
 
+import controller.DiverseLists;
+import daos.*;
+
 import java.util.Scanner;
 
 public class Administration {
@@ -7,6 +10,18 @@ public class Administration {
     public static void main(String[] args) {
         System.out.println("Willkommen in der Administration");
         String[] auswahlString1 = {"Book", "Author", "Category", "Customer", "Loaned", "diverse Listen"};
+        String[] auswahlString2 = {"Wer hat welche Bücher derzeit ausgeliehen", "Wer hat welche Bücher überhaupt ausgeliehen", "Welche Bücher sind derzeit ausgeliehen", "Welche Bücher sind derzeit im Haus", "Welche Bücher wurden überhaupt verliehen", "Welche Bücher wurden gar nicht verliehen", "Vom Autor ... sind welche Bücher gelistet", "In welcher Kategorie sind welche Bücher gelistet"};
+        DBConnector dbConnector;
+        dbConnector = DBConnector.getInstance();
+        dbConnector.connect("w0136ee0.kasserver.com", "d03037fa", "d03037fa", "fpcQdPhv5v4UoQ6H");
+
+        CustomerDAO cuDAO = new CustomerDAO();
+        BookDAO boDAO = new BookDAO();
+        AuthorDAO auDAO = new AuthorDAO();
+        CategoryDAO caDAO = new CategoryDAO();
+        LoanedDAO loDAO = new LoanedDAO();
+        DiverseLists diLi = new DiverseLists();
+
         boolean verbleibImProgramm = true;
         boolean verbleibInAuswahlstufe = true;
         int auswahl1 = 0; //für 1. Menüstufe (Pflege Book, Author, Category, Customer, Loaned, Übersichten
@@ -17,11 +32,9 @@ public class Administration {
             boolean isEingabeGueltig = false;
             do {
                 System.out.println("Bitte wähle aus - 0 = Programmende");
-                System.out.println("                  1 = Pflege Daten Book");
-                System.out.println("                  2 = Pflege Daten Author");
-                System.out.println("                  3 = Pflege Daten Category");
-                System.out.println("                  4 = Pflege Daten Customer");
-                System.out.println("                  5 = Pflege Daten Loaned ");
+                for (int i = 0; i < auswahlString1.length - 1; i++) {
+                    System.out.println("                  " + (i + 1) + " = Pflege Daten " + auswahlString1[i]);
+                }
                 System.out.println("                  6 = diverse Übersichten");
                 auswahl1 = sc.nextInt();
                 if (auswahl1 >= 0 && auswahl1 < 7) {
@@ -34,20 +47,16 @@ public class Administration {
             if (auswahl1 == 0) {
                 verbleibImProgramm = false;
 
-            } else if(auswahl1 == 6) {
+            } else if (auswahl1 == 6) {
                 do { //Verbleib in Auswahlstufe
                     verbleibInAuswahlstufe = true;
                     isEingabeGueltig = false;
                     do {
                         System.out.println("Was möchtest du im Bereich " + auswahlString1[auswahl1 - 1].toUpperCase() + " erledigen?");
                         System.out.println("Bitte wähle aus - 0 = zurück zur vorherigen Auswahl ");
-                        System.out.println("                  1 = Wer hat welche Bücher derzeit ausgeliehen");
-                        System.out.println("                  2 = Wer hat welche Bücher überhaupt ausgeliehen");
-                        System.out.println("                  3 = Welche Bücher sind derzeit ausgeliehen");
-                        System.out.println("                  4 = Welche Bücher sind wurden überhaupt verliehen");
-                        System.out.println("                  5 = Welche Bücher wurden gar nicht verliehen");
-                        System.out.println("                  6 = Vom Autor ... sind welche Bücher gelistet");
-                        System.out.println("                  7 = In welcher Kategorie sind welche Bücher");
+                        for (int i = 0; i < auswahlString2.length; i++) {
+                            System.out.println("                  " + (i + 1) + " = " + auswahlString2[i]);
+                        }
                         auswahl3 = sc.nextInt();
                         if (auswahl3 >= 0 && auswahl3 < 8) {
                             isEingabeGueltig = true;
@@ -61,30 +70,36 @@ public class Administration {
                             verbleibInAuswahlstufe = false;
                             break;
                         case 1:
-                            System.out.println("Hier ist die Liste 1 zu ("  + auswahlString1[auswahl1 - 1].toUpperCase() + ") vorgesehen");
+                            System.out.println("Hier ist die Liste zu (" + auswahlString1[auswahl1 - 1].toUpperCase() + " - " + auswahlString2[auswahl3 - 1] + ").");
+                            diLi.createListWerHatDerzeitWelcheBuecherAusgeliehen(loDAO, auswahlString2[auswahl3 - 1]);
                             break;
                         case 2:
-                            System.out.println("Hier ist die Liste 2 zu ("  + auswahlString1[auswahl1 - 1].toUpperCase() + ") vorgesehen");
+                            System.out.println("Hier ist die Liste zu (" + auswahlString1[auswahl1 - 1].toUpperCase() + " - " + auswahlString2[auswahl3 - 1] + ").");
+                            diLi.createListWerHatUeberhauptBuecherAusgeliehen(loDAO, auswahlString2[auswahl3 - 1]);
                             break;
                         case 3:
-                            System.out.println("Hier ist die Liste 3 zu  ("  + auswahlString1[auswahl1 - 1].toUpperCase() + ") vorgesehen");
+                            System.out.println("Hier ist die Liste zu  (" + auswahlString1[auswahl1 - 1].toUpperCase() + " - " + auswahlString2[auswahl3 - 1] + ").");
+                            diLi.createListWelcheBuechersindderzeitausgeliehen(loDAO, auswahlString2[auswahl3 - 1]);
                             break;
                         case 4:
-                            System.out.println("Hier ist die Liste 4 zu  ("  + auswahlString1[auswahl1 - 1].toUpperCase() + ")vorgesehen");
+                            System.out.println("Hier ist die Liste zu  (" + auswahlString1[auswahl1 - 1].toUpperCase() + " - " + auswahlString2[auswahl3 - 1] + ")vorgesehen");
                             break;
                         case 5:
-                            System.out.println("Hier ist die Liste 5 zu  ("  + auswahlString1[auswahl1 - 1].toUpperCase() + ")vorgesehen");
+                            System.out.println("Hier ist die Liste zu  (" + auswahlString1[auswahl1 - 1].toUpperCase() + " - " + auswahlString2[auswahl3- 1] + ").");
+                            diLi.createListWelcheBuecherwurdenueberhauptverliehen(loDAO, auswahlString2[auswahl3 - 1]);
                             break;
                         case 6:
-                            System.out.println("Hier ist die Liste 6 zu  ("  + auswahlString1[auswahl1 - 1].toUpperCase() + ")vorgesehen");
+                            System.out.println("Hier ist die Liste zu  (" + auswahlString1[auswahl1 - 1].toUpperCase() + " - " + auswahlString2[auswahl3 - 1] + ")vorgesehen");
                             break;
                         case 7:
-                            System.out.println("Hier ist die Liste 7 zu  ("  + auswahlString1[auswahl1 - 1].toUpperCase() + ")vorgesehen");
+                            System.out.println("Hier ist die Liste zu  (" + auswahlString1[auswahl1 - 1].toUpperCase() + " - " + auswahlString2[auswahl3 - 1] + ")vorgesehen");
+                            break;
+                        case 8:
+                            System.out.println("Hier ist die Liste zu  (" + auswahlString1[auswahl1 - 1].toUpperCase() + " - " + auswahlString2[auswahl3 - 1] + ")vorgesehen");
                             break;
                     }
                 } while (verbleibInAuswahlstufe);
-            } else
-                {
+            } else {
                 do { //Verbleib in Auswahlstufe
                     verbleibInAuswahlstufe = true;
                     isEingabeGueltig = false;
@@ -108,21 +123,22 @@ public class Administration {
                             verbleibInAuswahlstufe = false;
                             break;
                         case 1:
-                            System.out.println("Hier ist die Liste aller DS zu ("  + auswahlString1[auswahl1 - 1].toUpperCase() + ") vorgesehen");
+                            System.out.println("Hier ist die Liste aller DS zu (" + auswahlString1[auswahl1 - 1].toUpperCase() + ") vorgesehen");
                             break;
                         case 2:
-                            System.out.println("Hier ist das Erstellen eines neuen DS in ("  + auswahlString1[auswahl1 - 1].toUpperCase() + ") vorgesehen");
+                            System.out.println("Hier ist das Erstellen eines neuen DS in (" + auswahlString1[auswahl1 - 1].toUpperCase() + ") vorgesehen");
                             break;
                         case 3:
-                            System.out.println("Hier ist das Editieren eines einzelnen DS in ("  + auswahlString1[auswahl1 - 1].toUpperCase() + ") vorgesehen");
+                            System.out.println("Hier ist das Editieren eines einzelnen DS in (" + auswahlString1[auswahl1 - 1].toUpperCase() + ") vorgesehen");
                             break;
                         case 4:
-                            System.out.println("Hier ist das Löschen eines einzelnen DS in ("  + auswahlString1[auswahl1 - 1].toUpperCase() + ")vorgesehen");
+                            System.out.println("Hier ist das Löschen eines einzelnen DS in (" + auswahlString1[auswahl1 - 1].toUpperCase() + ")vorgesehen");
                             break;
                     }
                 } while (verbleibInAuswahlstufe);
             }//else
         } while (verbleibImProgramm);
+        dbConnector.close();
         System.out.println("Reguläres Programmende");
     }
 }

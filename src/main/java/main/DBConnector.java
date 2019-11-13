@@ -12,8 +12,7 @@ public class DBConnector {
 
     public static DBConnector getInstance(){
         if (instance == null) {
-            instance = new DBConnector(
-            );
+            instance = new DBConnector();
         }
         return instance;
     }
