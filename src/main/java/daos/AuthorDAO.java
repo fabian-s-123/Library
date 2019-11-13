@@ -1,9 +1,10 @@
+package daos;
+
 import java.sql.Connection;
 
 public class AuthorDAO extends DAO{
 
-    public AuthorDAO(Connection con1) {
-        super(con1);
+    public AuthorDAO() {
     }
 
     public void createTableAuthor() {
@@ -16,7 +17,7 @@ public class AuthorDAO extends DAO{
                 "updated_at timestamp default current_timestamp on update current_timestamp, " +
                 "primary key (idAuthor)" +
                 ");";
-        executeStatement(query, "Die Tabelle Author wurde angelegt.");
+        executeStatement(query, "Die Tabelle entities.Author wurde angelegt.");
     }
 
     public void createRecordAuthor(String firstname, String lastname, int birthYear){
@@ -25,6 +26,6 @@ public class AuthorDAO extends DAO{
                 "\"" + lastname + "\"," +
                 + birthYear + ");";
         String query = query1 + query2;
-        executeStatement(query, "Ein Datensatz Author wurde der Tabelle Author zugefügt.");
+        executeStatement(query, "Ein Datensatz entities.Author wurde der Tabelle entities.Author zugefügt.");
     }
 }

@@ -1,15 +1,15 @@
+package daos;
+
+import entities.Customer;
+
 import java.sql.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 
 public class CustomerDAO extends DAO {
-
-    public CustomerDAO(Connection con1) {
-        super(con1);
+    public CustomerDAO() {
     }
 
     public void createTableCustomer() {
@@ -83,7 +83,7 @@ public class CustomerDAO extends DAO {
     }
 
     public static List<Integer> selectIdCustomer(Statement st) throws SQLException {
-        List<Integer> ids = new LinkedList<Integer>();
+        ArrayList<Integer> ids = new ArrayList<>();
         String query = "SELECT idCustomer FROM customer;";
         ResultSet rs = st.executeQuery(query);
         while (rs.next())
@@ -105,10 +105,14 @@ public class CustomerDAO extends DAO {
         return pinCode;
     }
 
-
-
-
-
-
-
+    public static String selectFirstName(Statement st, int idCustomer) throws SQLException {
+        String query = "SELECT firstName FROM customer WHERE idCustomer =" + idCustomer + ";";
+        String firstName = "";
+        ResultSet rs = st.executeQuery(query);
+        while (rs.next())
+        {
+            firstName = rs.getString("firstName");
+        }
+        return firstName;
+    }
 }

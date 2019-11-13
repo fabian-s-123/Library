@@ -1,9 +1,15 @@
+package daos;
+
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.LinkedList;
+import java.util.List;
 
 public class BookDAO extends DAO {
 
-    public BookDAO(Connection con1) {
-        super(con1);
+    public BookDAO() {
     }
 
     public void createTableBook() {
@@ -47,5 +53,23 @@ public class BookDAO extends DAO {
                 String query = query1 + query2;
         executeStatement(query, "Ein Datensatz book der Tabelle book zugefügt.");
     }
+
+    public static List<Integer> selectIdBooks(Statement st) throws SQLException {
+        List<Integer> ids = new LinkedList<Integer>();
+        String query = "SELECT idBook FROM book;";
+        ResultSet rs = st.executeQuery(query);
+        while (rs.next())
+        {
+            int idBook = rs.getInt("idBook");
+            ids.add(idBook);
+        }
+        return ids;
+    }
+
+
+
+
+
+
 }
 
