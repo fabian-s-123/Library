@@ -61,16 +61,25 @@ public class Administration {
                             verbleibInAuswahlstufe = false;
                             break;
                         case 1:
-                            System.out.println("XXXXXXXXXXXXXXXXXXHier ist die Liste aller DS zu ("  + auswahlString1[auswahl1 - 1].toUpperCase() + ") vorgesehen");
+                            System.out.println("Hier ist die Liste 1 zu ("  + auswahlString1[auswahl1 - 1].toUpperCase() + ") vorgesehen");
                             break;
                         case 2:
-                            System.out.println("XXXXXXXXXXXXXXXXXXHier ist das Erstellen eines neuen DS in ("  + auswahlString1[auswahl1 - 1].toUpperCase() + ") vorgesehen");
+                            System.out.println("Hier ist die Liste 2 zu ("  + auswahlString1[auswahl1 - 1].toUpperCase() + ") vorgesehen");
                             break;
                         case 3:
-                            System.out.println("XXXXXXXXXXXXXXXXXXHier ist das Editieren eines einzelnen DS in ("  + auswahlString1[auswahl1 - 1].toUpperCase() + ") vorgesehen");
+                            System.out.println("Hier ist die Liste 3 zu  ("  + auswahlString1[auswahl1 - 1].toUpperCase() + ") vorgesehen");
                             break;
                         case 4:
-                            System.out.println("XXXXXXXXXXXXXXXXXXHier ist das Löschen eines einzelnen DS in ("  + auswahlString1[auswahl1 - 1].toUpperCase() + ")vorgesehen");
+                            System.out.println("Hier ist die Liste 4 zu  ("  + auswahlString1[auswahl1 - 1].toUpperCase() + ")vorgesehen");
+                            break;
+                        case 5:
+                            System.out.println("Hier ist die Liste 5 zu  ("  + auswahlString1[auswahl1 - 1].toUpperCase() + ")vorgesehen");
+                            break;
+                        case 6:
+                            System.out.println("Hier ist die Liste 6 zu  ("  + auswahlString1[auswahl1 - 1].toUpperCase() + ")vorgesehen");
+                            break;
+                        case 7:
+                            System.out.println("Hier ist die Liste 7 zu  ("  + auswahlString1[auswahl1 - 1].toUpperCase() + ")vorgesehen");
                             break;
                     }
                 } while (verbleibInAuswahlstufe);
@@ -90,7 +99,7 @@ public class Administration {
                         if (auswahl2 >= 0 && auswahl2 < 5) {
                             isEingabeGueltig = true;
                         } else {
-                            System.out.println("Deine Eingabe war ungültig, bitte wiederhole die Auswahl!");
+                            System.out.println("Deine Eingabe war ungültig, bitte wiederhole deine Auswahl!");
                         }
                     } while (!isEingabeGueltig);
                     switch (auswahl2) {
@@ -111,14 +120,9 @@ public class Administration {
                             System.out.println("Hier ist das Löschen eines einzelnen DS in ("  + auswahlString1[auswahl1 - 1].toUpperCase() + ")vorgesehen");
                             break;
                     }
-
-
-
                 } while (verbleibInAuswahlstufe);
             }//else
         } while (verbleibImProgramm);
         System.out.println("Reguläres Programmende");
     }
 }
-
-
