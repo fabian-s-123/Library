@@ -36,7 +36,7 @@ public class LoanBook {
         }
         System.out.println("\nPlease select the book you would like to loan.");
         int choice = scanner.nextInt();
-        
+
 
     }
 }
