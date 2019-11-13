@@ -1,11 +1,6 @@
 package main;
 
-
 import daos.*;
-
-import java.sql.Connection;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 public class CreateDataBases {
 
@@ -82,6 +77,7 @@ public class CreateDataBases {
 //        boDAO.createRecordBook("Face it",8, 4,  9783453271623L, 18, "Heyne", "2019", "2019", 432, "deutsch", 4, 1);
 //        boDAO.createRecordBook("World of IT", 9, 2, 9781419740473L, 18, "Abrams & Chronicle Books", "2019", "2019", 224, "engllish", 2, 4);
 //        boDAO.createRecordBook("Abnehmen mit Brot und Kuchen Teil 1", 10, 1, 9783000579141L, 0, "DplusA Verlag", "2018", "2015", 128, "deutsch", 1, 1);
+//        boDAO.createRecordBook("Abnehmen mit Brot und Kuchen Teil 1", 10, 1, 9783000579141L, 0, "DplusA Verlag", "2018", "2015", 128, "deutsch", 1, 1);
 
 //        cuDAO.createRecordCustomer("abcdef", "ulrike_klaus@gmx.at", "Ulrike", "Klaus", LocalDateTime.of(1973, 2, 27, 15, 32), "Rebhalde", "51", 6832, "Röthis", 4568123587459658L, 547, 2020, 12);
 //        cuDAO.createRecordCustomer("abcdef", "fabian.sinz@gmx.at", "Fabian", "Sinz", LocalDateTime.of(1985, 3, 3, 3, 30), "Dorfweg", "7", 6850, "Dornbirn", 9547853214687411L, 242, 2020, 12);
@@ -103,7 +99,7 @@ public class CreateDataBases {
 //        loDAO.createRecordLoanedWithoutReturn(1, 17, LocalDateTime.of(2019, 11, 12, 15, 15));
 //        loDAO.createRecordLoanedWithoutReturn(4, 27, LocalDateTime.now());
 //        loDAO.createRecordLoanedWithExtraTime(5, 6, LocalDateTime.of(2019, 11, 5, 15, 11), LocalDateTime.of(2019, 11, 13, 8, 26));
-//        loDAO.createRecordLoanedWithExtraTime(6, 8, LocalDateTime.of(2019, 11, 9, 15, 11), LocalDateTime.of(2019, 11, 13, 8, 26));
+//        loDAO.createRecordLoanedWithExtraTime(2, 8, LocalDateTime.of(2019, 11, 9, 15, 11), LocalDateTime.of(2019, 11, 13, 8, 26));
          dbConnector.close();
     }
 }

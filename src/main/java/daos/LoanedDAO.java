@@ -1,8 +1,13 @@
 package daos;
 
-import java.sql.Connection;
-import java.sql.Timestamp;
+import entities.Loaned;
+import entities.LoanedCustomerBook;
+import sun.awt.image.ImageWatched;
+
+import java.sql.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.LinkedList;
 
 public class LoanedDAO extends DAO {
     public LoanedDAO() {
@@ -14,7 +19,7 @@ public class LoanedDAO extends DAO {
                 "idCustomer int(4) not null, " +
                 "idBook int(4) not null, " +
                 "loanedOn timestamp not null default 0, " +
-                "returnedOn timestamp, " +
+                "returnedOn timestamp null, " +
                 "extraTime boolean, " +
                 "created_at timestamp default current_timestamp, " +
                 "updated_at timestamp default current_timestamp on update current_timestamp, " +
@@ -60,5 +65,93 @@ public class LoanedDAO extends DAO {
                 false + ");";
         String query = query1 + query2;
         executeStatement(query, "Ein Datensatz loaned wurde der Tabelle loaned zugefügt. (offene Rückgabe)");
+    }
+
+    public LinkedList<Loaned> getListeoffeneRückgabenKurz() {
+        LinkedList<Loaned> listLoaned = new LinkedList<>();
+        String query = "select * from loaned";
+        listLoaned = createLinkedListLoaned(query);
+        return listLoaned;
+    }
+
+    public LinkedList<Loaned> createLinkedListLoaned(String query) {
+        LinkedList<Loaned> listLoaned = new LinkedList<>();
+        try {
+            Statement st = dbConnector.getConnection().createStatement();
+            ResultSet rs = st.executeQuery(query);
+            while (rs.next()) {
+                int idLoaned = rs.getInt(1);
+                int idCustomer = rs.getInt(2);
+                int idBook = rs.getInt(3);
+                LocalDateTime loanedOn = rs.getTimestamp(4).toLocalDateTime();
+                LocalDateTime returnedOn = null;
+                Timestamp tsReturnedOn = rs.getTimestamp(5);
+                if (tsReturnedOn != null) {
+                    returnedOn = tsReturnedOn.toLocalDateTime();
+                }
+                boolean extraTime = rs.getBoolean(6);
+                LocalDateTime created_at = rs.getTimestamp(7).toLocalDateTime();
+                LocalDateTime updated_at = rs.getTimestamp(8).toLocalDateTime();
+                Loaned temp = new Loaned(idLoaned, idCustomer, idBook, loanedOn, returnedOn, extraTime, created_at, updated_at);
+                listLoaned.add(temp);
+            }
+            st.close();
+        } catch (SQLException sqle) {
+            System.out.println("SQLException: " + sqle.getMessage());
+            System.out.println("SQLState: " + sqle.getSQLState());
+            System.out.println("VendorError: " + sqle.getErrorCode());
+            sqle.printStackTrace();
+        }
+        return listLoaned;
+    }
+
+    public LinkedList<LoanedCustomerBook> getListeLCB_sortCustomer() {
+        LinkedList<LoanedCustomerBook> listLCB = new LinkedList<>();
+        String query = "select * from (((loaned inner join customer on loaned.idCustomer=customer.idCustomer) inner join book on loaned.idBook = book.idBook) inner join author on book.idAuthor = author.idAuthor) order by loaned.idCustomer ASC";
+        listLCB = createLinkedListLCB(query);
+        return listLCB;
+    }
+
+    public LinkedList<LoanedCustomerBook> getListeLCB_sortBook() {
+        LinkedList<LoanedCustomerBook> listLCB = new LinkedList<>();
+        String query = "select * from (((loaned inner join customer on loaned.idCustomer=customer.idCustomer) inner join book on loaned.idBook = book.idBook) inner join author on book.idAuthor = author.idAuthor) order by loaned.idBook ASC";
+        listLCB = createLinkedListLCB(query);
+        return listLCB;
+    }
+
+    public LinkedList<LoanedCustomerBook> createLinkedListLCB(String query) {
+        LinkedList<LoanedCustomerBook> listLCB = new LinkedList<>();
+        try {
+            Statement st = dbConnector.getConnection().createStatement();
+            ResultSet rs = st.executeQuery(query);
+            while (rs.next()) {
+                int idLoaned = rs.getInt(1);
+                int idCustomer = rs.getInt(2);
+                int idBook = rs.getInt(3);
+                LocalDateTime loanedOn = rs.getTimestamp(4).toLocalDateTime();
+                LocalDateTime returnedOn = null;
+                Timestamp tsReturnedOn = rs.getTimestamp(5);
+                if (tsReturnedOn != null) {
+                    returnedOn = tsReturnedOn.toLocalDateTime();
+                }
+                boolean extraTime = rs.getBoolean(6);
+                LocalDateTime created_at = rs.getTimestamp(7).toLocalDateTime();
+                LocalDateTime updated_at = rs.getTimestamp(8).toLocalDateTime();
+                String customerFirstName = rs.getString(12);
+                String customerLastName = rs.getString(13);
+                String title = rs.getString(26);
+                String authorFirstName = rs.getString(41);
+                String authorLastName = rs.getString(42);
+                LoanedCustomerBook temp = new LoanedCustomerBook(idLoaned, idCustomer, customerFirstName, customerLastName, idBook, title, authorFirstName, authorLastName, loanedOn, returnedOn, extraTime, created_at, updated_at);
+                listLCB.add(temp);
+            }
+            st.close();
+        } catch (SQLException sqle) {
+            System.out.println("SQLException: " + sqle.getMessage());
+            System.out.println("SQLState: " + sqle.getSQLState());
+            System.out.println("VendorError: " + sqle.getErrorCode());
+            sqle.printStackTrace();
+        }
+        return listLCB;
     }
 }

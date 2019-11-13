@@ -12,8 +12,7 @@ public class DBConnector {
 
     public static DBConnector getInstance(){
         if (instance == null) {
-            instance = new DBConnector(
-            );
+            instance = new DBConnector();
         }
         return instance;
     }
@@ -21,7 +20,7 @@ public class DBConnector {
     public void connect(String hostname, String dbname, String user, String password) {
         try {
             System.out.println("* Verbindung zur Datenbank " + dbname + " wird aufgebaut.");
-            String url = "jdbc:mysql://" + hostname + "/" + dbname + "?serverTimezone=GMT-1";
+            String url = "jdbc:mysql://" + hostname + "/" + dbname + "?serverTimezone=GMT-1&zeroDateTimeBehavior=CONVERT_TO_NULL";
             connection = DriverManager.getConnection(url, user, password);
         } catch (SQLException sqle) {
             System.out.println("SQLException: " + sqle.getMessage());
