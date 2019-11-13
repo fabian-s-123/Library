@@ -1,11 +1,16 @@
 package main;
 
 import controller.Authentication;
+import controller.LoanBook;
+import daos.BookDAO;
 import daos.CustomerDAO;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class BATGA {
@@ -19,6 +24,17 @@ public class BATGA {
 
         Scanner scanner = new Scanner(System.in);
         Authentication aut = new Authentication();
+        LoanBook loan = new LoanBook();
+
+        /**
+         * test start
+         */
+
+        /**
+         * test end
+         */
+
+
         int idCustomer = 0;
 
         while (true) {
@@ -32,7 +48,7 @@ public class BATGA {
                     System.exit(0);
                     break;
                 case 1:
-                    idCustomer = aut.handleAuthentication(st);
+                    idCustomer = aut.handleAuthentication(st, scanner);
                     break;
                 default:
                     System.out.println("Not a valid command.");

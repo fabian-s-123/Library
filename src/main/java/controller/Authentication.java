@@ -9,10 +9,9 @@ import java.util.Scanner;
 
 public class Authentication {
 
-    public int handleAuthentication(Statement st) throws SQLException {
+    public int handleAuthentication(Statement st, Scanner scanner) throws SQLException {
         DBConnector dbConnector;
         dbConnector = DBConnector.getInstance();
-        Scanner scanner = new Scanner(System.in);
         int idCustomerDB = checkIdCustomer(st, scanner, dbConnector);
         checkPinCode(st, idCustomerDB, scanner, dbConnector);
         System.out.println("Authentication successful.");

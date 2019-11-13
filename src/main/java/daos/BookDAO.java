@@ -1,9 +1,9 @@
 package daos;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import entities.Book;
+
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -55,7 +55,7 @@ public class BookDAO extends DAO {
     }
 
     public static List<Integer> selectIdBooks(Statement st) throws SQLException {
-        List<Integer> ids = new LinkedList<Integer>();
+        List<Integer> ids = new ArrayList<Integer>();
         String query = "SELECT idBook FROM book;";
         ResultSet rs = st.executeQuery(query);
         while (rs.next())
@@ -65,6 +65,7 @@ public class BookDAO extends DAO {
         }
         return ids;
     }
+
 
 
 

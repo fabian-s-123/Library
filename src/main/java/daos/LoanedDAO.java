@@ -1,8 +1,9 @@
 package daos;
 
-import java.sql.Connection;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LoanedDAO extends DAO {
     public LoanedDAO() {
@@ -61,4 +62,31 @@ public class LoanedDAO extends DAO {
         String query = query1 + query2;
         executeStatement(query, "Ein Datensatz loaned wurde der Tabelle loaned zugefügt. (offene Rückgabe)");
     }
+
+    public static List<Integer> selectIdBooksLoaned(Statement st) throws SQLException {
+        List<Integer> ids = new ArrayList<Integer>();
+        String query = "SELECT idBook FROM loaned;";
+        ResultSet rs = st.executeQuery(query);
+        while (rs.next())
+        {
+            int idBook = rs.getInt("idBook");
+            ids.add(idBook);
+        }
+        return ids;
+    }
+
+    public static List<Timestamp> selectBookReturned(Statement st, int idBook) throws SQLException {
+        List<Timestamp> ids = new ArrayList<>();
+        String query = "SELECT returnedOn FROM loaned WHERE idBook="+ idBook + " ORDER BY `idLoaned` DESC LIMIT 1;";
+        ResultSet rs = st.executeQuery(query);
+        while (rs.next()){
+            Timestamp returnedOn = rs.getTimestamp("returnedOn");
+            ids.add(returnedOn);
+        }
+        return ids;
+    }
+
+
+
+
 }
