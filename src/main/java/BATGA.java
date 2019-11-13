@@ -16,7 +16,7 @@ public class BATGA {
                 case 0:
                     break;
                 case 1:
-                    aut.handleAuthentication();
+                    //aut.handleAuthentication();
             }
         }
     }
