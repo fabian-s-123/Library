@@ -115,4 +115,16 @@ public class CustomerDAO extends DAO {
         }
         return firstName;
     }
+
+    public static Timestamp selectBirthDay(Statement st, int idCustomer) throws SQLException {
+        String query = "SELECT birthDay FROM customer WHERE idCustomer =" + idCustomer + ";";
+        Timestamp birthDay = null;
+        ResultSet rs = st.executeQuery(query);
+        while (rs.next())
+        {
+            birthDay = rs.getTimestamp("birthDay");
+        }
+        return birthDay;
+    }
+
 }

@@ -1,11 +1,13 @@
 package controller;
 
 import daos.BookDAO;
+import daos.CustomerDAO;
 import daos.LoanedDAO;
 
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -13,29 +15,50 @@ import java.util.Scanner;
 public class LoanBook {
 
     public void loanBook(Statement st, Scanner scanner, int idCustomer, LoanedDAO loDAO)throws SQLException {
+        LocalDateTime now = LocalDateTime.now();
         System.out.println("These books are available for loaning:\n");
-        List<Integer> listAllBooks = BookDAO.selectIdBooks(st);
+        List listAllBooksAfterFSKCheck;
         ArrayList<Integer> listBooksLoaned = new ArrayList<>();
 
+        listAllBooksAfterFSKCheck = checkFSK(st, idCustomer, now);
 
         for (Integer x : BookDAO.selectIdBooks(st)) {
             if (LoanedDAO.selectIdBooksLoaned(st).contains(x)) {
                 listBooksLoaned.add(x);
             }
         }
-        for (Integer x : listBooksLoaned) {
-            for (Timestamp time : LoanedDAO.selectBookReturned(st, x)) {
+        for (Integer y : listBooksLoaned) {
+            for (Timestamp time : LoanedDAO.selectBookReturned(st, y)) {
                 if (time==null){
-                    listAllBooks.remove(x);
+                    listAllBooksAfterFSKCheck.remove(y);
                 }
             }
         }
-        for (Integer idBook : listAllBooks) {
-            System.out.println(idBook.toString());
+        for (Object z : listAllBooksAfterFSKCheck) {
+            System.out.println(z.toString());
         }
         System.out.println("\nPlease select the book you would like to loan.");
         int choice = scanner.nextInt();
-
-
+        loDAO.createRecordLoanedWithoutReturn(idCustomer, choice, now);
     }
+
+    private List<Integer> checkFSK (Statement st, int idCustomer, LocalDateTime now) throws SQLException {
+        Timestamp timestamp = CustomerDAO.selectBirthDay(st, idCustomer);
+        LocalDateTime birthDayCustomer = timestamp.toLocalDateTime();
+        List<Integer> booksAfterFSKCheck = null;
+        int fsk = 0;
+        if (birthDayCustomer.plusYears(18).isBefore(now)){
+            fsk = 3;
+        } else if (birthDayCustomer.plusYears(10).isBefore(now) && birthDayCustomer.plusYears(18).isAfter(now)){
+            fsk = 2;
+        } else if (birthDayCustomer.plusYears(10).isAfter(now)){
+            fsk = 1;
+        }
+        assert false;
+        booksAfterFSKCheck.addAll(BookDAO.selectBooksFSK(st, fsk));
+        return booksAfterFSKCheck;
+    }
+
+
+
 }

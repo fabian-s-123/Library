@@ -66,11 +66,16 @@ public class BookDAO extends DAO {
         return ids;
     }
 
-
-
-
-
-
-
+    public static List<Integer> selectBooksFSK(Statement st, int fsk) throws SQLException {
+        List<Integer> ids = new ArrayList<>();
+        String query = "SELECT idBook FROM book WHERE fsk<=" + fsk + ";";
+        ResultSet rs = st.executeQuery(query);
+        while (rs.next())
+        {
+            int idBook = rs.getInt("idBook");
+            ids.add(idBook);
+        }
+        return ids;
+    }
 }
 
