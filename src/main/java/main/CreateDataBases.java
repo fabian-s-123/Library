@@ -2,6 +2,8 @@ package main;
 
 
 import daos.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class CreateDataBases {
 
@@ -41,7 +43,6 @@ public class CreateDataBases {
 //        caDAO.createRecordCategory("Christmas");                         //8
 //        caDAO.createRecordCategory("Children");                          //9
 //        caDAO.createRecordCategory("Classic");                           //10
-
 
 //        boDAO.createRecordBook("Gregs Tagebuch Band  1 Von Idioten umzingelt!", 4, 9, 9783833936586L,10, "Baumhaus", "2016", "2007", 224, "deutsch", 9, 3   );
 //        boDAO.createRecordBook("Gregs Tagebuch Band  1 Von Idioten umzingelt!", 4, 9, 9783833936586L,10, "Baumhaus", "2016", "2007", 224, "deutsch", 9, 3   );
@@ -84,7 +85,21 @@ public class CreateDataBases {
 //        cuDAO.createRecordCustomer("abcedf", "max@muster.de", "Max", "Muster", LocalDateTime.of(2010, 10, 10, 10, 10), "Waldweg", "27", 6900, "Bregenz", 0, 0, 0, 0);
 //        cuDAO.createRecordCustomer("abcdef", "netterNachbar@gmx.at", "Heinz", "Nachbar", LocalDateTime.of(1970, 7, 10, 0, 0), "Rebhalde", "51",  6832, "Röthis", 0, 0, 0, 0);
 
-
-        con1.closeDB();
+//        loDAO.createRecordLoanedWithReturn(1, 1, LocalDateTime.of(2019, 10, 10, 14, 0), LocalDateTime.of(2019, 10, 20, 15, 0));
+//        loDAO.createRecordLoanedWithReturn(1, 3, LocalDateTime.of(2019, 10, 10, 14, 0), LocalDateTime.of(2019, 10, 20, 15, 0));
+//        loDAO.createRecordLoanedWithReturn(1, 5, LocalDateTime.of(2019, 10, 10, 14, 0), LocalDateTime.of(2019, 10, 20, 15, 0));
+//        loDAO.createRecordLoanedWithReturn(1, 7, LocalDateTime.of(2019, 10, 12, 14, 0), LocalDateTime.of(2019, 10, 22, 15, 0));
+//        loDAO.createRecordLoanedWithReturn(1, 9, LocalDateTime.of(2019, 10, 12, 14, 0), LocalDateTime.of(2019, 10, 22, 15, 0));
+//        loDAO.createRecordLoanedWithReturn(1, 11, LocalDateTime.of(2019, 10, 12, 14, 0), LocalDateTime.of(2019, 10, 22, 15, 0));
+//        loDAO.createRecordLoanedWithReturn(1, 13, LocalDateTime.of(2019, 10, 12, 14, 0), LocalDateTime.of(2019, 10, 22, 15, 0));
+//        loDAO.createRecordLoanedWithReturn(1, 15, LocalDateTime.of(2019, 10, 12, 14, 0), LocalDateTime.of(2019, 10, 22, 15, 0));
+//        loDAO.createRecordLoanedWithReturn(2, 29, LocalDateTime.of(2019, 11, 10, 15, 11), LocalDateTime.of(2019, 11, 12, 15, 11));
+//        loDAO.createRecordLoanedWithoutReturn(3, 29, LocalDateTime.of(2019, 11, 12, 15, 15));
+//        loDAO.createRecordLoanedWithoutReturn(3, 30, LocalDateTime.of(2019, 11, 12, 15, 15));
+//        loDAO.createRecordLoanedWithoutReturn(1, 17, LocalDateTime.of(2019, 11, 12, 15, 15));
+//        loDAO.createRecordLoanedWithoutReturn(4, 27, LocalDateTime.now());
+//        loDAO.createRecordLoanedWithExtraTime(5, 6, LocalDateTime.of(2019, 11, 5, 15, 11), LocalDateTime.of(2019, 11, 13, 8, 26));
+//        loDAO.createRecordLoanedWithExtraTime(6, 8, LocalDateTime.of(2019, 11, 9, 15, 11), LocalDateTime.of(2019, 11, 13, 8, 26));
+         con1.closeDB();
     }
 }
