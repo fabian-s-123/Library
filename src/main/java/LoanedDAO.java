@@ -34,17 +34,32 @@ public class LoanedDAO extends DAO {
                 "\"" + returnedOnTS + "\", " +
                 false + ");";
         String query = query1 + query2;
-        executeStatement(query, "Ein Datensatz loaned wurde der Tabelle loaned zugefügt.");
+        executeStatement(query, "Ein Datensatz loaned wurde der Tabelle loaned zugefügt. (Rückgabedatum eingetragen)");
+    }
+
+
+    public void createRecordLoanedWithExtraTime(int idCustomer, int idBook, LocalDateTime loanedOn, LocalDateTime returnedOn) {
+        Timestamp loanedOnTS = Timestamp.valueOf(loanedOn);
+        Timestamp returnedOnTS = Timestamp.valueOf(returnedOn);
+        String query1 = "insert into loaned (idCustomer, idBook, loanedOn, returnedOn, extraTime) values (";
+        String query2 = idCustomer + ", " +
+                idBook + ", " +
+                "\"" + loanedOnTS + "\", " +
+                "\"" + returnedOnTS + "\", " +
+                true + ");";
+        String query = query1 + query2;
+        executeStatement(query, "Ein Datensatz loaned wurde der Tabelle loaned zugefügt. (mit Verlängerungsvermerk)");
+        createRecordLoanedWithoutReturn(idCustomer, idBook, returnedOn);
     }
 
     public void createRecordLoanedWithoutReturn(int idCustomer, int idBook, LocalDateTime loanedOn) {
         Timestamp loanedOnTS = Timestamp.valueOf(loanedOn);
-        String query1 = "insert into loaned (idCustomer, idBook, loanedOn, returnedOn, extraTime) values (";
+        String query1 = "insert into loaned (idCustomer, idBook, loanedOn, extraTime) values (";
         String query2 = idCustomer + ", " +
                 idBook + ", " +
                 "\"" + loanedOnTS + "\", " +
                 false + ");";
         String query = query1 + query2;
-        executeStatement(query, "Ein Datensatz loaned wurde der Tabelle loaned zugefügt.");
+        executeStatement(query, "Ein Datensatz loaned wurde der Tabelle loaned zugefügt. (offene Rückgabe)");
     }
 }
