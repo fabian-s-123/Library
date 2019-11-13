@@ -4,8 +4,7 @@ import java.sql.Connection;
 
 public class CategoryDAO extends DAO{
 
-    public CategoryDAO(Connection con1) {
-        super(con1);
+    public CategoryDAO() {
     }
 
     public void createTablCategory() {

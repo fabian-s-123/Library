@@ -2,6 +2,8 @@ package main;
 
 
 import daos.*;
+
+import java.sql.Connection;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -9,17 +11,19 @@ public class CreateDataBases {
 
     public static void main(String[] args) {
         System.out.println("Hallo und herzlich willkommen - Erstellen der Datenbanken");
-        DBConnect con1 = new DBConnect("w0136ee0.kasserver.com", "d03037fa", "d03037fa", "fpcQdPhv5v4UoQ6H");
-        con1.connectDB();
-        CustomerDAO cuDAO = new CustomerDAO(con1.getConnection());
+        DBConnector dbConnector;
+        dbConnector = DBConnector.getInstance();
+        dbConnector.connect("w0136ee0.kasserver.com", "d03037fa", "d03037fa", "fpcQdPhv5v4UoQ6H");
+
+        CustomerDAO cuDAO = new CustomerDAO();
         //cuDAO.createTableCustomer();
-        BookDAO boDAO = new BookDAO(con1.getConnection());
+        BookDAO boDAO = new BookDAO();
         //boDAO.createTableBook();
-        AuthorDAO auDAO = new AuthorDAO(con1.getConnection());
+        AuthorDAO auDAO = new AuthorDAO();
         //auDAO.createTableAuthor();
-        CategoryDAO caDAO = new CategoryDAO(con1.getConnection());
+        CategoryDAO caDAO = new CategoryDAO();
         //caDAO.createTablCategory();
-        LoanedDAO loDAO = new LoanedDAO(con1.getConnection());
+        LoanedDAO loDAO = new LoanedDAO();
         //loDAO.createTableLoaned();
 
 //        auDAO.createRecordAuthor("Johann Wolfgang", "von Goethe", 1749); //1
@@ -100,6 +104,6 @@ public class CreateDataBases {
 //        loDAO.createRecordLoanedWithoutReturn(4, 27, LocalDateTime.now());
 //        loDAO.createRecordLoanedWithExtraTime(5, 6, LocalDateTime.of(2019, 11, 5, 15, 11), LocalDateTime.of(2019, 11, 13, 8, 26));
 //        loDAO.createRecordLoanedWithExtraTime(6, 8, LocalDateTime.of(2019, 11, 9, 15, 11), LocalDateTime.of(2019, 11, 13, 8, 26));
-         con1.closeDB();
+         dbConnector.close();
     }
 }

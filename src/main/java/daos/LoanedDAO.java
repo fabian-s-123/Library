@@ -1,14 +1,11 @@
 package daos;
 
 import java.sql.Connection;
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 public class LoanedDAO extends DAO {
-
-    public LoanedDAO(Connection con1) {
-        super(con1);
+    public LoanedDAO() {
     }
 
     public void createTableLoaned() {

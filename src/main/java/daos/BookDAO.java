@@ -9,8 +9,7 @@ import java.util.List;
 
 public class BookDAO extends DAO {
 
-    public BookDAO(Connection con1) {
-        super(con1);
+    public BookDAO() {
     }
 
     public void createTableBook() {

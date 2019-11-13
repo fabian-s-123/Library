@@ -4,8 +4,7 @@ import java.sql.Connection;
 
 public class AuthorDAO extends DAO{
 
-    public AuthorDAO(Connection con1) {
-        super(con1);
+    public AuthorDAO() {
     }
 
     public void createTableAuthor() {

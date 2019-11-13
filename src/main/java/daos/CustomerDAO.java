@@ -9,9 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class CustomerDAO extends DAO {
-    public CustomerDAO(Connection con1) {
-        super(con1);
-
+    public CustomerDAO() {
     }
 
     public void createTableCustomer() {
