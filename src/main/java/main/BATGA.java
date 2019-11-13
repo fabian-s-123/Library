@@ -1,9 +1,9 @@
 package main;
 
 import controller.Authentication;
+import controller.DiverseLists;
 import controller.LoanBook;
-import daos.BookDAO;
-import daos.CustomerDAO;
+import daos.*;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -25,6 +25,12 @@ public class BATGA {
         Scanner scanner = new Scanner(System.in);
         Authentication aut = new Authentication();
         LoanBook loan = new LoanBook();
+
+        CustomerDAO cuDAO = new CustomerDAO();
+        BookDAO boDAO = new BookDAO();
+        AuthorDAO auDAO = new AuthorDAO();
+        CategoryDAO caDAO = new CategoryDAO();
+        LoanedDAO loDAO = new LoanedDAO();
 
         /**
          * test start

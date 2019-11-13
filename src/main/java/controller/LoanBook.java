@@ -2,7 +2,6 @@ package controller;
 
 import daos.BookDAO;
 import daos.LoanedDAO;
-import entities.Book;
 
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -13,7 +12,7 @@ import java.util.Scanner;
 
 public class LoanBook {
 
-    public void loanBook(Statement st, Scanner scanner, int idCustomer)throws SQLException {
+    public void loanBook(Statement st, Scanner scanner, int idCustomer, LoanedDAO loDAO)throws SQLException {
         System.out.println("These books are available for loaning:\n");
         List<Integer> listAllBooks = BookDAO.selectIdBooks(st);
         ArrayList<Integer> listBooksLoaned = new ArrayList<>();
