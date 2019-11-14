@@ -1,8 +1,11 @@
 package controller;
 
+import daos.BACDAO;
 import daos.BookDAO;
 import daos.CustomerDAO;
 import daos.LoanedDAO;
+import entities.Book;
+import entities.BookAuthorCategory;
 
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -15,7 +18,7 @@ import java.util.Scanner;
 
 public class LoanBook {
 
-    public void loanBook(Statement st, Scanner scanner, int idCustomer, LoanedDAO loDAO, BookDAO boDAO) throws SQLException {
+    public void loanBook(Statement st, Scanner scanner, int idCustomer, LoanedDAO loDAO, BookDAO boDAO, BACDAO bacDAO) throws SQLException {
         LocalDateTime now = LocalDateTime.now();
         System.out.println("These books are available for loaning:\n");
         List<Integer> listAllBooksAfterFSKCheck;
@@ -28,15 +31,21 @@ public class LoanBook {
             }
         }
         for (Integer y : listBooksLoaned) {
-            for (Timestamp time : LoanedDAO.selectBookReturned(st, "idCustomer", y, 1)) {
+            for (Timestamp time : LoanedDAO.selectBookReturned(st, "idBook", y, 1)) {
                 if (time == null) {
                     listAllBooksAfterFSKCheck.remove(y);
                 }
             }
         }
-        for (Integer z : listAllBooksAfterFSKCheck) {
-            boDAO.getListBAC();
+
+        //printing the list of book available for this customer
+        BookAuthorCategory b = new BookAuthorCategory();
+        b.printHeadBAC();
+        for (Integer x : listAllBooksAfterFSKCheck) {
+            b.printListBAC(BACDAO.selectBacId(st, x));
         }
+
+        //select the book for loan
         System.out.println("\nPlease select the book you would like to loan.");
         int choice = scanner.nextInt();
         loDAO.createRecordLoanedWithoutReturn(idCustomer, choice, now);
@@ -54,7 +63,7 @@ public class LoanBook {
         } else if (birthDayCustomer.plusYears(10).isAfter(now)) {
             fsk = 0;
         }
-        for (Integer x : BookDAO.selectBooksFSK(st, fsk)){
+        for (Integer x : BookDAO.selectBooksFSK(st, fsk)) {
             booksAfterFSKCheck.add(x);
         }
         return booksAfterFSKCheck;

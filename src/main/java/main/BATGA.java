@@ -3,6 +3,7 @@ package main;
 import controller.Authentication;
 import controller.LoanBook;
 import daos.*;
+import entities.BookAuthorCategory;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -28,13 +29,21 @@ public class BATGA {
         AuthorDAO auDAO = new AuthorDAO();
         CategoryDAO caDAO = new CategoryDAO();
         LoanedDAO loDAO = new LoanedDAO();
+        BACDAO bacDAO = new BACDAO();
 
         /**
          * test start
          */
-        /*for (Integer x : BookDAO.selectBooksFSK(st, 10)){
-            System.out.println(x);
-        }*/
+/*
+        BookAuthorCategory b = new BookAuthorCategory();
+        b.ausgabeListBookAuthorCategory(boDAO.getListBAC());
+
+        for (BookAuthorCategory bac : boDAO.createLinkedListBAC("select * from ((book inner join author on book.idAuthor=author.idAuthor) inner join category on book.idCategory = category.idCategory) order by book.idBook ASC")){
+            bacDAO.createRecordBAC(bac.getTitle(), bac.getIdAuthor(), bac.getFirstName(), bac.getLastName(), bac.getBirthYear(), bac.getIdCategory(), bac.getDescription(), bac.getIsbn(), bac.getFsk(), bac.getPublisher(), bac.getEdition(), bac.getFirstEdition(),
+                    bac.getAmountPages(), bac.getLanguage(), bac.getIdRow(), bac.getIdColumn());
+        }
+
+ */
         /**
          * test end
          */
@@ -77,7 +86,7 @@ public class BATGA {
                             break;
                         case 1:
                             if (loanBook.isAllowedToLoan(st, idCustomer)) {
-                                loanBook.loanBook(st, scanner, idCustomer, loDAO, boDAO);
+                                loanBook.loanBook(st, scanner, idCustomer, loDAO, boDAO, bacDAO);
                             } else {
                                 System.out.println("Sorry " + CustomerDAO.selectFirstName(st, idCustomer) + ", you already have four books currently in loan." +
                                         "please return a book first, before you loan out another one.");
