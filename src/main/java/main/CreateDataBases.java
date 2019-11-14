@@ -1,6 +1,7 @@
 package main;
 
 import daos.*;
+import entities.BookAuthorCategory;
 
 import java.time.LocalDateTime;
 
@@ -22,6 +23,8 @@ public class CreateDataBases {
         //caDAO.createTablCategory();
         LoanedDAO loDAO = new LoanedDAO();
         //loDAO.createTableLoaned();
+        BACDAO bacDAO = new BACDAO();
+        //bacDAO.createTableBAC();
 
 //        auDAO.createRecordAuthor("Johann Wolfgang", "von Goethe", 1749); //1
 //        auDAO.createRecordAuthor("Friedrich", "Schiller", 1759);         //2
@@ -102,6 +105,12 @@ public class CreateDataBases {
 //        loDAO.createRecordLoanedWithoutReturn(4, 27, LocalDateTime.now());
 //        loDAO.createRecordLoanedWithExtraTime(5, 6, LocalDateTime.of(2019, 11, 5, 15, 11), LocalDateTime.of(2019, 11, 13, 8, 26));
 //        loDAO.createRecordLoanedWithExtraTime(2, 8, LocalDateTime.of(2019, 11, 9, 15, 11), LocalDateTime.of(2019, 11, 13, 8, 26));
+/*
+        for (BookAuthorCategory bac : boDAO.createLinkedListBAC("select * from ((book inner join author on book.idAuthor=author.idAuthor) inner join category on book.idCategory = category.idCategory) order by book.idBook ASC")){
+            bacDAO.createRecordBAC(bac.getTitle(), bac.getIdAuthor(), bac.getFirstName(), bac.getLastName(), bac.getBirthYear(), bac.getIdCategory(), bac.getDescription(), bac.getIsbn(), bac.getFsk(), bac.getPublisher(), bac.getEdition(), bac.getFirstEdition(),
+                    bac.getAmountPages(), bac.getLanguage(), bac.getIdRow(), bac.getIdColumn());
+        }
+*/
          dbConnector.close();
     }
 }

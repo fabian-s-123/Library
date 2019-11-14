@@ -3,6 +3,7 @@ package entities;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
+import java.util.List;
 
 public class BookAuthorCategory {
     private int idBook;
@@ -47,6 +48,29 @@ public class BookAuthorCategory {
         this.updated_at = updated_at;
     }
 
+    public BookAuthorCategory(int idBook, String title, int idAuthor, String firstName, String lastName, int birthYear, int idCategory, String description, long isbn, int fsk, String publisher, String edition, String firstEdition, int amountPages, String language, int idRow, int idColumn) {
+        this.idBook = idBook;
+        this.title = title;
+        this.idAuthor = idAuthor;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.birthYear = birthYear;
+        this.idCategory = idCategory;
+        this.description = description;
+        this.isbn = isbn;
+        this.fsk = fsk;
+        this.publisher = publisher;
+        this.edition = edition;
+        this.firstEdition = firstEdition;
+        this.amountPages = amountPages;
+        this.language = language;
+        this.idRow = idRow;
+        this.idColumn = idColumn;
+    }
+
+    public BookAuthorCategory() {
+    }
+
     public void ausgabeKopfListBookAuthorCategory(){
         System.out.println("ID    Titel                                              Vorname         Name            Geb.  Kategorie                     ISBN          FSK  Verlag                    Edition               Sei-    Sprache    erstellt             updated");
         System.out.println("book                                                     Author                          Jahr  ID Beschreibung                                                                      First       ten                am                   am");
@@ -58,7 +82,7 @@ public class BookAuthorCategory {
                 temp.idBook, temp.title, temp.firstName, temp.lastName, temp.birthYear, temp.idCategory, temp.description, temp.isbn, temp.fsk, temp.publisher, temp.edition, temp.firstEdition, temp.amountPages, temp.language, temp.created_at.format(dtf), temp.updated_at.format(dtf));
     }
 
-    public void ausgabeListBookAuthorCategory(LinkedList<BookAuthorCategory> listAllBooks){
+    public void ausgabeListBookAuthorCategory(List<BookAuthorCategory> listAllBooks){
         ausgabeKopfListBookAuthorCategory();
         for (int i = 0; i < listAllBooks.size(); i++) {
             BookAuthorCategory temp = listAllBooks.get(i);
@@ -66,6 +90,30 @@ public class BookAuthorCategory {
             }
         System.out.print("Ende der Liste\n\n");
     }
+
+    /**
+     * Version Fabian
+     */
+    public void printHeadBAC(){
+        System.out.println("ID    Title                                              First Name      Last Name       Y.o.  Category                      ISBN           FSK Publisher                    First              pages   Language");
+        System.out.println("book                                                     Author          Author          Birth ID  Description                                                               Edition                            ");
+        System.out.println("________________________________________________________________________________________________________________________________________________________________________________________________________________");
+    }
+
+    public void printListBAC(BookAuthorCategory temp) {
+        System.out.printf("%-5d %-50s %-15s %-15s %4d %2d   %-25s %-13d  %2d  %-25s %-10s %-10s %-5d   %-10s\n", +
+                temp.idBook, temp.title, temp.firstName, temp.lastName, temp.birthYear, temp.idCategory, temp.description, temp.isbn, temp.fsk, temp.publisher, temp.edition, temp.firstEdition, temp.amountPages, temp.language);
+    }
+
+    public void printListBAC(List<BookAuthorCategory> listAllBooks){
+        for (int i = 0; i < listAllBooks.size(); i++) {
+            BookAuthorCategory temp = listAllBooks.get(i);
+            printListBAC(temp);
+        }
+    }
+    /**
+     *End Version Fabian
+     */
 
     public int getIdBook() {
         return idBook;
@@ -218,5 +266,11 @@ public class BookAuthorCategory {
     public void setUpdated_at(LocalDateTime updated_at) {
         this.updated_at = updated_at;
     }
+
+    @Override
+    public String toString() {
+            return "'" + idBook + "', '" + title + "', '"+ idAuthor + "', '" + firstName + "', '" + lastName + "', '" + birthYear + "', '" + idCategory + "', '" + description + "', '" + isbn + "', '" + fsk + "', '" + publisher + "', '" + edition + ", '" + firstEdition
+                    + "', '" + amountPages + "', '" + language + "', '" + idRow + "', '" + idColumn + "'";
+        }
 }
 

@@ -1,8 +1,11 @@
 package controller;
 
+import daos.BACDAO;
 import daos.BookDAO;
 import daos.CustomerDAO;
 import daos.LoanedDAO;
+import entities.Book;
+import entities.BookAuthorCategory;
 
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -15,12 +18,13 @@ import java.util.Scanner;
 
 public class LoanBook {
 
-    public void loanBook(Statement st, Scanner scanner, int idCustomer, LoanedDAO loDAO, BookDAO boDAO) throws SQLException {
+    public void loanBook(Statement st, Scanner scanner, int idCustomer, LoanedDAO loDAO, BookDAO boDAO, BACDAO bacDAO) throws SQLException {
         LocalDateTime now = LocalDateTime.now();
         System.out.println("These books are available for loaning:\n");
         List<Integer> listAllBooksAfterFSKCheck;
         ArrayList<Integer> listBooksLoaned = new ArrayList<>();
         listAllBooksAfterFSKCheck = checkFSK(st, idCustomer, now);
+        List<BookAuthorCategory> finalList = new LinkedList<>();
 
         for (Integer x : BookDAO.selectIdBooks(st)) {
             if (LoanedDAO.selectIdBooksLoaned(st).contains(x)) {
@@ -34,10 +38,14 @@ public class LoanBook {
                 }
             }
         }
-        for (Integer z : listAllBooksAfterFSKCheck) {
-            boDAO.getListBAC();
+        BookAuthorCategory b = new BookAuthorCategory();
+        b.printHeadBAC();
+        for (Integer x : listAllBooksAfterFSKCheck) {
+            b.printListBAC(BACDAO.selectBacId(st, x));
         }
+
         System.out.println("\nPlease select the book you would like to loan.");
+
         int choice = scanner.nextInt();
         loDAO.createRecordLoanedWithoutReturn(idCustomer, choice, now);
     }
@@ -54,7 +62,7 @@ public class LoanBook {
         } else if (birthDayCustomer.plusYears(10).isAfter(now)) {
             fsk = 0;
         }
-        for (Integer x : BookDAO.selectBooksFSK(st, fsk)){
+        for (Integer x : BookDAO.selectBooksFSK(st, fsk)) {
             booksAfterFSKCheck.add(x);
         }
         return booksAfterFSKCheck;
