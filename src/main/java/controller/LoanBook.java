@@ -9,15 +9,16 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
 public class LoanBook {
 
-    public void loanBook(Statement st, Scanner scanner, int idCustomer, LoanedDAO loDAO) throws SQLException {
+    public void loanBook(Statement st, Scanner scanner, int idCustomer, LoanedDAO loDAO, BookDAO boDAO) throws SQLException {
         LocalDateTime now = LocalDateTime.now();
         System.out.println("These books are available for loaning:\n");
-        List listAllBooksAfterFSKCheck;
+        List<Integer> listAllBooksAfterFSKCheck;
         ArrayList<Integer> listBooksLoaned = new ArrayList<>();
         listAllBooksAfterFSKCheck = checkFSK(st, idCustomer, now);
 
@@ -33,29 +34,29 @@ public class LoanBook {
                 }
             }
         }
-        for (Object z : listAllBooksAfterFSKCheck) {
-            System.out.println(z.toString());
+        for (Integer z : listAllBooksAfterFSKCheck) {
+            boDAO.getListBAC();
         }
         System.out.println("\nPlease select the book you would like to loan.");
         int choice = scanner.nextInt();
         loDAO.createRecordLoanedWithoutReturn(idCustomer, choice, now);
     }
 
-
     private List<Integer> checkFSK(Statement st, int idCustomer, LocalDateTime now) throws SQLException {
         Timestamp timestamp = CustomerDAO.selectBirthDay(st, idCustomer);
         LocalDateTime birthDayCustomer = timestamp.toLocalDateTime();
-        List<Integer> booksAfterFSKCheck = null;
-        int fsk = 0;
+        List<Integer> booksAfterFSKCheck = new LinkedList<>();
+        int fsk = -1;
         if (birthDayCustomer.plusYears(18).isBefore(now)) {
-            fsk = 3;
+            fsk = 18;
         } else if (birthDayCustomer.plusYears(10).isBefore(now) && birthDayCustomer.plusYears(18).isAfter(now)) {
-            fsk = 2;
+            fsk = 10;
         } else if (birthDayCustomer.plusYears(10).isAfter(now)) {
-            fsk = 1;
+            fsk = 0;
         }
-        assert false;
-        booksAfterFSKCheck.addAll(BookDAO.selectBooksFSK(st, fsk));
+        for (Integer x : BookDAO.selectBooksFSK(st, fsk)){
+            booksAfterFSKCheck.add(x);
+        }
         return booksAfterFSKCheck;
     }
 

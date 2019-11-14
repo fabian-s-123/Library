@@ -113,6 +113,7 @@ public class BookDAO extends DAO {
         }
         return listBAC;
     }
+
     public static List<Integer> selectBooksFSK(Statement st, int fsk) throws SQLException {
         List<Integer> ids = new ArrayList<>();
         String query = "SELECT idBook FROM book WHERE fsk<=" + fsk + ";";
