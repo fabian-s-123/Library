@@ -58,12 +58,13 @@ public class BATGA {
             System.out.println("0 - quit");
             String input = "";
             boolean validInput = false;
-            while (!validInput) {
+            do {
                 input = scanner.nextLine();
                 validInput = input.equals("0") || input.equals("1") || input.equals("2") || input.equals("3") || input.equals("4");
                 switch (input) {
                     case "0":
                         firstStage = false;
+                        System.out.println("Good bye.");
                         dbConnector.close();
                         System.exit(0);
                         break;
@@ -80,7 +81,7 @@ public class BATGA {
                         System.out.println("Not a valid command.");
                         break;
                 }
-                do {
+                while (secStage) {
                     System.out.println("Hello " + CustomerDAO.selectFirstName(st, idCustomer) + "! What do you wish to do?");
                     System.out.println("1 - loan book");
                     System.out.println("2 - return book");
@@ -116,8 +117,8 @@ public class BATGA {
                             System.out.println("Not a valid command.");
                             break;
                     }
-                } while (secStage);
-            }
+                }
+            } while (!validInput);
         } while (firstStage);
         dbConnector.close();
         System.exit(0);

@@ -68,6 +68,17 @@ public class LoanedDAO extends DAO {
         executeStatement(query, "Ein Datensatz loaned wurde der Tabelle loaned zugefügt. (offene Rückgabe)");
     }
 
+    public void createNewRecordLoaned(int idCustomer, int idBook, LocalDateTime loanedOn) {
+        Timestamp loanedOnTS = Timestamp.valueOf(loanedOn);
+        String query1 = "insert into loaned (idCustomer, idBook, loanedOn, extraTime) values (";
+        String query2 = idCustomer + ", " +
+                idBook + ", " +
+                "\"" + loanedOnTS + "\", " +
+                false + ");";
+        String query = query1 + query2;
+        executeStatement(query, "One moment please...\nHere is your book.\n");
+    }
+
     public LinkedList<Loaned> getListeoffeneRückgabenKurz() {
         LinkedList<Loaned> listLoaned = new LinkedList<>();
         String query = "select * from loaned";

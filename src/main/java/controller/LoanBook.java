@@ -44,17 +44,28 @@ public class LoanBook {
         for (Integer x : listAllBooksAfterFSKCheck) {
             b.printListBAC(BACDAO.selectBacId(st, x));
         }
+        System.out.println();
 
         //select the book for loan
-        System.out.println("\nPlease select the book you would like to loan.");
-        int choice = scanner.nextInt();
-        loDAO.createRecordLoanedWithoutReturn(idCustomer, choice, now);
+        boolean validInput = false;
+        int choice = 0;
+        do {
+            System.out.println("Please select the book you would like to loan.");
+            choice = scanner.nextInt();
+            if (listAllBooksAfterFSKCheck.contains(choice)) {
+                validInput = true;
+            } else {
+                System.out.println("This book is not available.");
+            }
+        } while (!validInput);
+        loDAO.createNewRecordLoaned(idCustomer, choice, now);
+        System.out.println("Returning to menu...");
     }
 
     private List<Integer> checkFSK(Statement st, int idCustomer, LocalDateTime now) throws SQLException {
         Timestamp timestamp = CustomerDAO.selectBirthDay(st, idCustomer);
         LocalDateTime birthDayCustomer = timestamp.toLocalDateTime();
-        List<Integer> booksAfterFSKCheck = new LinkedList<>();
+        List<Integer> booksAfterFSKCheck = new ArrayList<>();
         int fsk = -1;
         if (birthDayCustomer.plusYears(18).isBefore(now)) {
             fsk = 18;

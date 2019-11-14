@@ -21,24 +21,25 @@ public class Authentication {
     private int checkIdCustomer(Statement st, Scanner scanner, DBConnector dbConnector) throws SQLException {
         int idCustomerDB = 0;
         System.out.println("Please enter your customer ID:");
-        for (int i = 0; i < 5; i++) {
-            int idCustomerInput = scanner.nextInt();
-            if (CustomerDAO.selectIdCustomer(st).contains(idCustomerInput)) {
-                idCustomerDB = idCustomerInput;
-                break;
-            } else {
-                System.out.println("Sorry, no customer found with this ID.");
-                if (i == 4) {
-                    System.out.println("Too many attempts!");
-                    dbConnector.close();
-                    System.exit(0);
+            for (int i = 0; i < 5; i++) {
+                int idCustomerInput = scanner.nextInt();
+                if (CustomerDAO.selectIdCustomer(st).contains(idCustomerInput)) {
+                    idCustomerDB = idCustomerInput;
+                    break;
+                } else {
+                    System.out.println("Sorry, no customer found with this ID.");
+                    if (i == 4) {
+                        System.out.println("Too many attempts!");
+                        dbConnector.close();
+                        System.exit(0);
+                    }
                 }
             }
-        }
         return idCustomerDB;
     }
 
-    private void checkPinCode(Statement st, int idCustomer, Scanner scanner, DBConnector dbConnector) throws SQLException {
+    private void checkPinCode(Statement st, int idCustomer, Scanner scanner, DBConnector dbConnector) throws
+            SQLException {
         System.out.println("Please enter your pin code:");
         for (int i = 0; i < 3; i++) {
             String pinCodeInput = scanner.next();
@@ -56,6 +57,4 @@ public class Authentication {
             }
         }
     }
-
-
 }
