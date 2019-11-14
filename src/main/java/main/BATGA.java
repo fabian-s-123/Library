@@ -106,8 +106,9 @@ public class BATGA {
                             break;
                     }
                 }
-                dbConnector.close();
+
             }
         }
+        // dbConnector.close();
     }
 }

@@ -1,7 +1,7 @@
 package main;
 
 import controller.DiverseLists;
-import controller.NewRecord;
+import controller.RecordNewUpdateDelete;
 import daos.*;
 
 import java.util.Scanner;
@@ -22,7 +22,7 @@ public class Administration {
         CategoryDAO caDAO = new CategoryDAO();
         LoanedDAO loDAO = new LoanedDAO();
         DiverseLists diLi = new DiverseLists();
-        NewRecord newRec = new NewRecord();
+        RecordNewUpdateDelete recNUD = new RecordNewUpdateDelete();
 
         boolean verbleibImProgramm = true;
         boolean verbleibInAuswahlstufe = true;
@@ -151,31 +151,44 @@ public class Administration {
                             System.out.println("Hier ist das Erstellen eines neuen DS in (" + auswahlString1[auswahl1 - 1].toUpperCase() + ") vorgesehen");
                             switch (auswahl1) {
                                 case 1: //book
-                                    newRec.createNewRecordBook(boDAO);
+                                    recNUD.createNewRecordBook(boDAO);
                                     break;
                                 case 2: //author
-                                    newRec.createNewRecordAuthor(auDAO);
+                                    recNUD.createNewRecordAuthor(auDAO);
                                     break;
                                 case 3: //category
-                                    newRec.createNewRecordCategory(caDAO);
+                                    recNUD.createNewRecordCategory(caDAO);
                                     break;
                                 case 4: //customer
-                                    newRec.createNewRecordCustomer(cuDAO);
+                                    recNUD.createNewRecordCustomer(cuDAO);
                                     break;
                                 case 5: //loaned
-                                    newRec.createNewRecordLoaned(loDAO);
+                                    recNUD.createNewRecordLoaned(loDAO);
                                     break;
                             }
-
-
-
-
                             break;
                         case 3:
                             System.out.println("Hier ist das Editieren eines einzelnen DS in (" + auswahlString1[auswahl1 - 1].toUpperCase() + ") vorgesehen");
                             break;
                         case 4:
                             System.out.println("Hier ist das Löschen eines einzelnen DS in (" + auswahlString1[auswahl1 - 1].toUpperCase() + ")vorgesehen");
+                            switch (auswahl1) {
+                                case 1: //book
+                                    recNUD.deleteRecordBook(boDAO, diLi);
+                                    break;
+                                case 2: //author
+                                    recNUD.deleteRecordAuthor(auDAO);
+                                    break;
+                                case 3: //category
+                                    recNUD.deleteRecordCategory(caDAO);
+                                    break;
+                                case 4: //customer
+                                    recNUD.deleteRecordCustomer(cuDAO);
+                                    break;
+                                case 5: //loaned
+                                    recNUD.deleteRecordLoaned(loDAO);
+                                    break;
+                            }
                             break;
                     }
                 } while (verbleibInAuswahlstufe);

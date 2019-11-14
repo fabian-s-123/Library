@@ -88,10 +88,11 @@ public class DiverseLists {
         listCategoryBook.get(0).ausgabeListBookAuthorCategory(listCategoryBook);
     }
 
-    public void createListeBookAllRecords(BookDAO boDAO){
+    public LinkedList<BookAuthorCategory> createListeBookAllRecords(BookDAO boDAO){
         System.out.println("Bereich book - alle Datensätze der Tabelle (mit ergänzenden Angaben aus author und category, sortiert nach BuchID");
         LinkedList<BookAuthorCategory> listAllBooks = boDAO.getListBAC();
         listAllBooks.get(0).ausgabeListBookAuthorCategory(listAllBooks);
+        return listAllBooks;
     }
 
     public void createListeAuthorAllRecords(AuthorDAO auDAO){
