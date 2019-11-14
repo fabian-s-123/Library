@@ -41,6 +41,7 @@ public class DiverseLists {
                     //System.out.println("           die Datensätze gehören zusammen");
                     if (listAllLCB.get(j).getReturnedOn() == null) {   //aktuelles Buch ist gerade entliehen
                         //System.out.println("                   Das Returned-Datum ist null");
+
                         listAllBooks.remove(i);                        //aktuelles Buch aus der Bücherliste löschen, da es nicht zum Ausleihen vorhanden ist
                         j = listAllLCB.size();                         //j auf Abbruch dieser Schleife setzen
                         i--;                                           //i um ein reduzieren, damit beim nächsten durchlauf der nächste DS genommen wird
@@ -87,5 +88,11 @@ public class DiverseLists {
         System.out.println("Übersicht8: " + meldung);
         LinkedList<BookAuthorCategory> listCategoryBook = boDAO.getListCategoryBook();
         listCategoryBook.get(0).ausgabeListBookAuthorCategory(listCategoryBook);
+    }
+
+    public void createListeBookAllRecords(BookDAO boDAO){
+        System.out.println("Bereich book - alle Datensätze (mit ergänzenden Angaben aus author und category, sortiert nach BuchID");
+        LinkedList<BookAuthorCategory> listAllBooks = boDAO.getListBAC();
+        listAllBooks.get(0).ausgabeListBookAuthorCategory(listAllBooks);
     }
 }
