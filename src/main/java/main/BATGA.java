@@ -48,10 +48,11 @@ public class BATGA {
          * test end
          */
 
-
+        int counter = 0;
         int idCustomer = 0;
-
-        while (true) {
+        boolean firstStage = false;
+        boolean secStage = false;
+        do {
             System.out.println("Welcome to Lukas' Library. My name is main.BATGA, what would you like to do?");
             System.out.println("1 - log in");
             System.out.println("0 - quit");
@@ -62,29 +63,39 @@ public class BATGA {
                 validInput = input.equals("0") || input.equals("1") || input.equals("2") || input.equals("3") || input.equals("4");
                 switch (input) {
                     case "0":
+                        firstStage = false;
                         dbConnector.close();
                         System.exit(0);
                         break;
                     case "1":
                         idCustomer = aut.handleAuthentication(st, scanner);
-                        break;
+                        if (idCustomer > 0){
+                            counter++;
+                            if (counter>0){
+                                secStage = true;
+                            }
+                        }
+                            break;
                     default:
                         System.out.println("Not a valid command.");
                         break;
                 }
-                if (idCustomer > 0) {
+                do {
                     System.out.println("Hello " + CustomerDAO.selectFirstName(st, idCustomer) + "! What do you wish to do?");
                     System.out.println("1 - loan book");
                     System.out.println("2 - return book");
                     System.out.println("3 - extend loan");
                     System.out.println("4 - browse book collection");
                     System.out.println("0 - log out");
-                    int choice2 = scanner.nextInt();
-                    switch (choice2) {
-                        case 0:
+                    String input2 = scanner.nextLine();
+                    switch (input2) {
+                        case "0":
                             idCustomer = 0;
+                            secStage = false;
+                            firstStage = true;
+                            System.out.println("Log out successful.");
                             break;
-                        case 1:
+                        case "1":
                             if (loanBook.isAllowedToLoan(st, idCustomer)) {
                                 loanBook.loanBook(st, scanner, idCustomer, loDAO, boDAO, bacDAO);
                             } else {
@@ -92,22 +103,26 @@ public class BATGA {
                                         "please return a book first, before you loan out another one.");
                             } //TODO jump back to this menu after loaning
                             break;
-                        case 2:
+                        case "2":
                             //handle return book
                             break;
-                        case 3:
+                        case "3":
                             //handle extend loan
                             break;
-                        case 4:
+                        case "4":
                             //extend browse book collection
                             break;
                         default:
                             System.out.println("Not a valid command.");
                             break;
                     }
-                }
-                dbConnector.close();
+                } while (secStage);
             }
-        }
+        } while (firstStage);
+        dbConnector.close();
+        System.exit(0);
     }
 }
+//dbConnector.close();
+
+

@@ -14,7 +14,7 @@ public class Authentication {
         dbConnector = DBConnector.getInstance();
         int idCustomerDB = checkIdCustomer(st, scanner, dbConnector);
         checkPinCode(st, idCustomerDB, scanner, dbConnector);
-        System.out.println("Authentication successful.");
+        System.out.println("Authentication successful.\n");
         return idCustomerDB;
     }
 
