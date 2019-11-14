@@ -1,5 +1,6 @@
 package daos;
 
+import entities.Author;
 import entities.Customer;
 
 import java.sql.*;
@@ -19,7 +20,7 @@ public class CustomerDAO extends DAO {
                 "email varchar(50) not null, " +
                 "firstName varchar(25) not null, " +
                 "lastName varchar(25) not null, " +
-                "birthDay timestamp not null, " +
+                "birthDay timestamp not null default 0, " +
                 "street varchar(50) not null, " +
                 "apNr varchar(7) not null, " +
                 "zip int(5) not null, " +
@@ -127,4 +128,45 @@ public class CustomerDAO extends DAO {
         return birthDay;
     }
 
+    public LinkedList<Customer> getListAllCustomers() {
+        LinkedList<Customer> listAllCustomers = new LinkedList<>();
+        String query = "select * from customer order by customer.lastName ASC";
+        listAllCustomers = createLinkedListAllCustomers(query);
+        return listAllCustomers;
+    }
+
+    public LinkedList<Customer> createLinkedListAllCustomers(String query) {
+        LinkedList<Customer> listAC = new LinkedList<>();
+        try {
+            Statement st = dbConnector.getConnection().createStatement();
+            ResultSet rs = st.executeQuery(query);
+            while (rs.next()) {
+                int idCustomer = rs.getInt(1);
+                String pinCode = rs.getString(2);
+                String email = rs.getString(3);
+                String firstName = rs.getString(4);
+                String lastName = rs.getString(5);
+                Timestamp birthDay = rs.getTimestamp(6);
+                String street = rs.getString(7);
+                String apNr = rs.getString(8);
+                int zip = rs.getInt(9);
+                String city = rs.getString(10);
+                long creditCardNr = rs.getLong(11);
+                int CVC = rs.getInt(12);
+                int expiryDateYear = rs.getInt(13);
+                int expiryDateMonth = rs.getInt(14);
+                LocalDateTime created_at = rs.getTimestamp(15).toLocalDateTime();
+                LocalDateTime updated_at = rs.getTimestamp(16).toLocalDateTime();
+                Customer temp = new Customer(idCustomer, pinCode, email, firstName, lastName, birthDay, street, apNr, zip, city, creditCardNr, CVC, expiryDateYear, expiryDateMonth , created_at, updated_at);
+                listAC.add(temp);
+            }
+            st.close();
+        } catch (SQLException sqle) {
+            System.out.println("SQLException: " + sqle.getMessage());
+            System.out.println("SQLState: " + sqle.getSQLState());
+            System.out.println("VendorError: " + sqle.getErrorCode());
+            sqle.printStackTrace();
+        }
+        return listAC;
+    }
 }

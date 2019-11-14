@@ -82,10 +82,10 @@ public class CreateDataBases {
 //        boDAO.createRecordBook("Abnehmen mit Brot und Kuchen Teil 1", 10, 1, 9783000579141L, 0, "DplusA Verlag", "2018", "2015", 128, "deutsch", 1, 1);
 
 //        cuDAO.createRecordCustomer("abcdef", "ulrike_klaus@gmx.at", "Ulrike", "Klaus", LocalDateTime.of(1973, 2, 27, 15, 32), "Rebhalde", "51", 6832, "Röthis", 4568123587459658L, 547, 2020, 12);
-//        cuDAO.createRecordCustomer("abcdef", "fabian.sinz@gmx.at", "Fabian", "Sinz", LocalDateTime.of(1985, 3, 3, 3, 30), "Dorfweg", "7", 6850, "Dornbirn", 9547853214687411L, 242, 2020, 12);
-//        cuDAO.createRecordCustomer("abcdef", "emoeke.sowieso@huch.ch", "Emöke", "Sowieso", LocalDateTime.of(1995, 4, 4, 4, 40), "Kirchstraße", "4", 4444, "Bad Ragaz", 4563214569874123L, 363, 2020, 4);
-//        cuDAO.createRecordCustomer("abcedf", "max@muster.de", "Max", "Muster", LocalDateTime.of(2010, 10, 10, 10, 10), "Waldweg", "27", 6900, "Bregenz", 0, 0, 0, 0);
-//        cuDAO.createRecordCustomer("abcdef", "netterNachbar@gmx.at", "Heinz", "Nachbar", LocalDateTime.of(1970, 7, 10, 0, 0), "Rebhalde", "51",  6832, "Röthis", 0, 0, 0, 0);
+//        cuDAO.createRecordCustomer("abcdeg", "fabian.sinz@gmx.at", "Fabian", "Sinz", LocalDateTime.of(1985, 3, 3, 3, 30), "Dorfweg", "7", 6850, "Dornbirn", 9547853214687411L, 242, 2020, 12);
+//        cuDAO.createRecordCustomer("abcdeh", "emoeke.sowieso@huch.ch", "Emöke", "Sowieso", LocalDateTime.of(1995, 4, 4, 4, 40), "Kirchstraße", "4", 4444, "Bad Ragaz", 4563214569874123L, 363, 2020, 4);
+//        cuDAO.createRecordCustomer("abcedi", "max@muster.de", "Max", "Muster", LocalDateTime.of(2010, 10, 10, 10, 10), "Waldweg", "27", 6900, "Bregenz", 0, 0, 0, 0);
+//        cuDAO.createRecordCustomer("abcdej", "netterNachbar@gmx.at", "Heinz", "Nachbar", LocalDateTime.of(1970, 7, 10, 0, 0), "Rebhalde", "51",  6832, "Röthis", 0, 0, 0, 0);
 
 //        loDAO.createRecordLoanedWithReturn(1, 1, LocalDateTime.of(2019, 10, 10, 14, 0), LocalDateTime.of(2019, 10, 20, 15, 0));
 //        loDAO.createRecordLoanedWithReturn(1, 3, LocalDateTime.of(2019, 10, 10, 14, 0), LocalDateTime.of(2019, 10, 20, 15, 0));

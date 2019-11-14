@@ -46,7 +46,6 @@ public class Administration {
 
             if (auswahl1 == 0) {
                 verbleibImProgramm = false;
-
             } else if (auswahl1 == 6) {
                 do { //Verbleib in Auswahlstufe
                     verbleibInAuswahlstufe = true;
@@ -118,7 +117,7 @@ public class Administration {
                         if (auswahl2 >= 0 && auswahl2 < 5) {
                             isEingabeGueltig = true;
                         } else {
-                            System.out.println("Deine Eingabe war ungültig, bitte wiederhole deine Auswahl!");
+                            System.out.println("Deine Eingabe war ungültig, bitte wiederhole die Auswahl!");
                         }
                     } while (!isEingabeGueltig);
                     switch (auswahl2) {
@@ -133,13 +132,13 @@ public class Administration {
                                     diLi.createListeBookAllRecords(boDAO);
                                     break;
                                 case 2: //author
-                                    //diLi.createListeBookAllRecords(boDAO);
+                                    diLi.createListeAuthorAllRecords(auDAO);
                                     break;
                                 case 3: //category
-                                    //diLi.createListeBookAllRecords(boDAO);
+                                    diLi.createListeCategoryAllRecords(caDAO);
                                     break;
                                 case 4: //customer
-                                    //diLi.createListeBookAllRecords(boDAO);
+                                    diLi.createListeCustomerAllRecords(cuDAO);
                                     break;
                                 case 5: //loaned
                                     //diLi.createListeBookAllRecords(boDAO);

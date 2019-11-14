@@ -1,5 +1,14 @@
 package daos;
 
+import entities.Author;
+import entities.BookAuthorCategory;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.time.LocalDateTime;
+import java.util.LinkedList;
+
 public class AuthorDAO extends DAO {
 
     public AuthorDAO() {
@@ -25,5 +34,37 @@ public class AuthorDAO extends DAO {
                 +birthYear + ");";
         String query = query1 + query2;
         executeStatement(query, "Ein Datensatz entities.Author wurde der Tabelle entities.Author zugefügt.");
+    }
+
+    public LinkedList<Author> getListAllAuthors() {
+        LinkedList<Author> listAllAuthors = new LinkedList<>();
+        String query = "select * from author order by author.lastName ASC";
+        listAllAuthors = createLinkedListAllAuthors(query);
+        return listAllAuthors;
+    }
+
+    public LinkedList<Author> createLinkedListAllAuthors(String query) {
+        LinkedList<Author> listAA = new LinkedList<>();
+        try {
+            Statement st = dbConnector.getConnection().createStatement();
+            ResultSet rs = st.executeQuery(query);
+            while (rs.next()) {
+                int idAuthor = rs.getInt(1);
+                String firstName = rs.getString(2);
+                String lastName = rs.getString(3);
+                int birthYear = rs.getInt(4);
+                LocalDateTime created_at = rs.getTimestamp(5).toLocalDateTime();
+                LocalDateTime updated_at = rs.getTimestamp(6).toLocalDateTime();
+                Author temp = new Author(  idAuthor, firstName, lastName, birthYear, created_at, updated_at);
+                listAA.add(temp);
+            }
+            st.close();
+        } catch (SQLException sqle) {
+            System.out.println("SQLException: " + sqle.getMessage());
+            System.out.println("SQLState: " + sqle.getSQLState());
+            System.out.println("VendorError: " + sqle.getErrorCode());
+            sqle.printStackTrace();
+        }
+        return listAA;
     }
 }
