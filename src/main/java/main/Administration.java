@@ -83,6 +83,7 @@ public class Administration {
                             break;
                         case 4:
                             System.out.println("Hier ist die Liste zu  (" + auswahlString1[auswahl1 - 1].toUpperCase() + " - " + auswahlString2[auswahl3 - 1] + ")vorgesehen");
+                            diLi.createListWelcheBuechersindderzeitimHaus(boDAO, loDAO, auswahlString2[auswahl3 - 1]);
                             break;
                         case 5:
                             System.out.println("Hier ist die Liste zu  (" + auswahlString1[auswahl1 - 1].toUpperCase() + " - " + auswahlString2[auswahl3- 1] + ").");
