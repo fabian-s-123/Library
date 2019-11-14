@@ -68,11 +68,22 @@ public class BookDAO extends DAO {
         return ids;
     }
 
+    public static List<Integer> selectBooksFSK(Statement st, int fsk) throws SQLException {
+        List<Integer> ids = new ArrayList<>();
+        String query = "SELECT idBook FROM book WHERE fsk<=" + fsk + ";";
+        ResultSet rs = st.executeQuery(query);
+        while (rs.next())
+        {
+            int idBook = rs.getInt("idBook");
+            ids.add(idBook);
+        }
+        return ids;
+    }
+
     public LinkedList<BookAuthorCategory> getListBAC() {
         LinkedList<BookAuthorCategory> listBAC = new LinkedList<>();
         String query = "select * from ((book inner join author on book.idAuthor=author.idAuthor) inner join category on book.idCategory = category.idCategory) order by book.idBook ASC";
         listBAC = createLinkedListBAC(query);
-
         return listBAC;
     }
 
@@ -113,16 +124,96 @@ public class BookDAO extends DAO {
         }
         return listBAC;
     }
-    public static List<Integer> selectBooksFSK(Statement st, int fsk) throws SQLException {
-        List<Integer> ids = new ArrayList<>();
-        String query = "SELECT idBook FROM book WHERE fsk<=" + fsk + ";";
-        ResultSet rs = st.executeQuery(query);
-        while (rs.next())
-        {
-            int idBook = rs.getInt("idBook");
-            ids.add(idBook);
-        }
-        return ids;
+
+    public LinkedList<BookAuthorCategory> getListAuthorBook() {
+        LinkedList<BookAuthorCategory> listAuthorBook = new LinkedList<>();
+        String query = "select * from ((author inner join book on author.idAuthor=book.idAuthor) inner join category on book.idCategory = category.idCategory) order by author.lastName ASC";
+        listAuthorBook = createLinkedListABC(query);
+        return listAuthorBook;
     }
+
+    public LinkedList<BookAuthorCategory> createLinkedListABC(String query) {
+        LinkedList<BookAuthorCategory> listABC = new LinkedList<>();
+        try {
+            Statement st = dbConnector.getConnection().createStatement();
+            ResultSet rs = st.executeQuery(query);
+            while (rs.next()) {
+                int idAuthor = rs.getInt(1);
+                String firstName = rs.getString(2);
+                String lastName = rs.getString(3);
+                int birthYear = rs.getInt(4);
+                int idBook = rs.getInt(7);
+                String title = rs.getString(8);
+                int idCategory = rs.getInt(10);
+                String description = rs.getString(23);
+                long isbn = rs.getLong(11);
+                int fsk = rs.getInt(12);
+                String publisher = rs.getString(13);
+                String edition = rs.getString(14);
+                String firstEdition = rs.getString(15);
+                int amountPages = rs.getInt(16);
+                String language = rs.getString(17);
+                int idRow = rs.getInt(18);
+                int idColumn = rs.getInt(19);
+                LocalDateTime created_at = rs.getTimestamp(5).toLocalDateTime();
+                LocalDateTime updated_at = rs.getTimestamp(6).toLocalDateTime();
+                BookAuthorCategory temp = new BookAuthorCategory(idBook, title, idAuthor, firstName, lastName, birthYear, idCategory, description, isbn, fsk, publisher, edition, firstEdition, amountPages, language, idRow, idColumn, created_at, updated_at);
+                listABC.add(temp);
+            }
+            st.close();
+        } catch (SQLException sqle) {
+            System.out.println("SQLException: " + sqle.getMessage());
+            System.out.println("SQLState: " + sqle.getSQLState());
+            System.out.println("VendorError: " + sqle.getErrorCode());
+            sqle.printStackTrace();
+        }
+        return listABC;
+    }
+
+    public LinkedList<BookAuthorCategory> getListCategoryBook() {
+        LinkedList<BookAuthorCategory> listCategoryBook = new LinkedList<>();
+        String query = "select * from ((category inner join book on category.idCategory=book.idCategory) inner join author on book.idAuthor = author.idAuthor) order by category.description ASC";
+        listCategoryBook = createLinkedListCBA(query);
+        return listCategoryBook;
+    }
+
+    public LinkedList<BookAuthorCategory> createLinkedListCBA(String query) {
+        LinkedList<BookAuthorCategory> listCBA = new LinkedList<>();
+        try {
+            Statement st = dbConnector.getConnection().createStatement();
+            ResultSet rs = st.executeQuery(query);
+            while (rs.next()) {
+                int idCategory = rs.getInt(1);
+                String description = rs.getString(2);
+                LocalDateTime created_at = rs.getTimestamp(3).toLocalDateTime();
+                LocalDateTime updated_at = rs.getTimestamp(4).toLocalDateTime();
+                int idBook = rs.getInt(5);
+                String title = rs.getString(6);
+                int idAuthor = rs.getInt(7);
+                String firstName = rs.getString(21);
+                String lastName = rs.getString(22);
+                int birthYear = rs.getInt(23);
+                long isbn = rs.getLong(9);
+                int fsk = rs.getInt(10);
+                String publisher = rs.getString(11);
+                String edition = rs.getString(12);
+                String firstEdition = rs.getString(13);
+                int amountPages = rs.getInt(14);
+                String language = rs.getString(15);
+                int idRow = rs.getInt(16);
+                int idColumn = rs.getInt(17);
+                BookAuthorCategory temp = new BookAuthorCategory(idBook, title, idAuthor, firstName, lastName, birthYear, idCategory, description, isbn, fsk, publisher, edition, firstEdition, amountPages, language, idRow, idColumn, created_at, updated_at);
+                listCBA.add(temp);
+            }
+            st.close();
+        } catch (SQLException sqle) {
+            System.out.println("SQLException: " + sqle.getMessage());
+            System.out.println("SQLState: " + sqle.getSQLState());
+            System.out.println("VendorError: " + sqle.getErrorCode());
+            sqle.printStackTrace();
+        }
+        return listCBA;
+    }
+
 }
 

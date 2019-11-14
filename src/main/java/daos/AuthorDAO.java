@@ -1,8 +1,6 @@
 package daos;
 
-import java.sql.Connection;
-
-public class AuthorDAO extends DAO{
+public class AuthorDAO extends DAO {
 
     public AuthorDAO() {
     }
@@ -20,11 +18,11 @@ public class AuthorDAO extends DAO{
         executeStatement(query, "Die Tabelle entities.Author wurde angelegt.");
     }
 
-    public void createRecordAuthor(String firstname, String lastname, int birthYear){
+    public void createRecordAuthor(String firstname, String lastname, int birthYear) {
         String query1 = "insert into author (firstname, lastname, birthYear) values (";
         String query2 = "\"" + firstname + "\", " +
                 "\"" + lastname + "\"," +
-                + birthYear + ");";
+                +birthYear + ");";
         String query = query1 + query2;
         executeStatement(query, "Ein Datensatz entities.Author wurde der Tabelle entities.Author zugefügt.");
     }
