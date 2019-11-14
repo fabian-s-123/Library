@@ -109,7 +109,7 @@ public class LoanedDAO extends DAO {
 
     public LinkedList<LoanedCustomerBook> getListeLCB_sortCustomer() {
         LinkedList<LoanedCustomerBook> listLCB = new LinkedList<>();
-        String query = "select * from (((loaned inner join customer on loaned.idCustomer=customer.idCustomer) inner join book on loaned.idBook = book.idBook) inner join author on book.idAuthor = author.idAuthor) order by loaned.idCustomer ASC";
+        String query = "select * from (((loaned inner join customer on loaned.idCustomer=customer.idCustomer) inner join book on loaned.idBook = book.idBook) inner join author on book.idAuthor = author.idAuthor) order by customer.lastName, loaned.idBook";
         listLCB = createLinkedListLCB(query);
         return listLCB;
     }

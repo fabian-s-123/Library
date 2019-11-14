@@ -1,6 +1,7 @@
 package main;
 
 import controller.DiverseLists;
+import controller.NewRecord;
 import daos.*;
 
 import java.util.Scanner;
@@ -21,6 +22,7 @@ public class Administration {
         CategoryDAO caDAO = new CategoryDAO();
         LoanedDAO loDAO = new LoanedDAO();
         DiverseLists diLi = new DiverseLists();
+        NewRecord newRec = new NewRecord();
 
         boolean verbleibImProgramm = true;
         boolean verbleibInAuswahlstufe = true;
@@ -141,12 +143,33 @@ public class Administration {
                                     diLi.createListeCustomerAllRecords(cuDAO);
                                     break;
                                 case 5: //loaned
-                                    //diLi.createListeBookAllRecords(boDAO);
+                                    diLi.createListeLoanedAllRecords(loDAO);
                                     break;
                             }
                             break;
                         case 2:
                             System.out.println("Hier ist das Erstellen eines neuen DS in (" + auswahlString1[auswahl1 - 1].toUpperCase() + ") vorgesehen");
+                            switch (auswahl1) {
+                                case 1: //book
+                                    newRec.createNewRecordBook(boDAO);
+                                    break;
+                                case 2: //author
+                                    newRec.createNewRecordAuthor(auDAO);
+                                    break;
+                                case 3: //category
+                                    newRec.createNewRecordCategory(caDAO);
+                                    break;
+                                case 4: //customer
+                                    newRec.createNewRecordCustomer(cuDAO);
+                                    break;
+                                case 5: //loaned
+                                    newRec.createNewRecordLoaned(loDAO);
+                                    break;
+                            }
+
+
+
+
                             break;
                         case 3:
                             System.out.println("Hier ist das Editieren eines einzelnen DS in (" + auswahlString1[auswahl1 - 1].toUpperCase() + ") vorgesehen");

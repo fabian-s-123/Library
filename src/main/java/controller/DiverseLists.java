@@ -111,4 +111,10 @@ public class DiverseLists {
         LinkedList<Customer> listAllCustomers = cuDAO.getListAllCustomers();
         listAllCustomers.get(0).ausgabeListAllCustomers(listAllCustomers);
     }
+    public void createListeLoanedAllRecords(LoanedDAO loDAO){
+        System.out.println("Bereich loaned - alle Datensätze der Tabelle (alphabetisch sortiert nach dem Nachnamen des Kunden");
+        LinkedList<LoanedCustomerBook> listLCB = loDAO.getListeLCB_sortCustomer();
+        listLCB.get(0).ausgabeListLCB2(listLCB);
+    }
+
 }
