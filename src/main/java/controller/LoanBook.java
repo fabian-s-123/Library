@@ -24,7 +24,6 @@ public class LoanBook {
         List<Integer> listAllBooksAfterFSKCheck;
         ArrayList<Integer> listBooksLoaned = new ArrayList<>();
         listAllBooksAfterFSKCheck = checkFSK(st, idCustomer, now);
-        List<BookAuthorCategory> finalList = new LinkedList<>();
 
         for (Integer x : BookDAO.selectIdBooks(st)) {
             if (LoanedDAO.selectIdBooksLoaned(st).contains(x)) {
@@ -32,20 +31,22 @@ public class LoanBook {
             }
         }
         for (Integer y : listBooksLoaned) {
-            for (Timestamp time : LoanedDAO.selectBookReturned(st, "idCustomer", y, 1)) {
+            for (Timestamp time : LoanedDAO.selectBookReturned(st, "idBook", y, 1)) {
                 if (time == null) {
                     listAllBooksAfterFSKCheck.remove(y);
                 }
             }
         }
+
+        //printing the list of book available for this customer
         BookAuthorCategory b = new BookAuthorCategory();
         b.printHeadBAC();
         for (Integer x : listAllBooksAfterFSKCheck) {
             b.printListBAC(BACDAO.selectBacId(st, x));
         }
 
+        //select the book for loan
         System.out.println("\nPlease select the book you would like to loan.");
-
         int choice = scanner.nextInt();
         loDAO.createRecordLoanedWithoutReturn(idCustomer, choice, now);
     }
