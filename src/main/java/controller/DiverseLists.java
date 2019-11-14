@@ -2,9 +2,7 @@ package controller;
 
 import daos.BookDAO;
 import daos.LoanedDAO;
-import entities.Book;
 import entities.BookAuthorCategory;
-import entities.Loaned;
 import entities.LoanedCustomerBook;
 
 import java.util.LinkedList;
@@ -30,32 +28,71 @@ public class DiverseLists {
         listLCB.get(0).ausgabeListLCB3(listLCB);
     }
 
-    public void createListWelcheBuechersindderzeitimHaus(BookDAO boDAO, LoanedDAO loDAO, String meldung){
+    public void createListWelcheBuechersindderzeitimHaus(BookDAO boDAO, LoanedDAO loDAO, String meldung) {
         System.out.println("Übersicht4: " + meldung);
         LinkedList<BookAuthorCategory> listAllBooks = boDAO.getListBAC();
         LinkedList<LoanedCustomerBook> listAllLCB = loDAO.getListeLCB_sortBook();
-        for(int i=0; i<listAllBooks.size(); i++){
+        for (int i = 0; i < listAllBooks.size(); i++) {
             int idBookActual = listAllBooks.get(i).getIdBook();
-            System.out.println("Aktuelle Buch-ID aus ListeAllerBuecher" + idBookActual);
-            for (int j=0; j<listAllLCB.size(); j++){
-                System.out.println("   Aktuelle Buch-ID aus den Entleihungen" + listAllBooks.get(j).getIdBook());
-                if (idBookActual == listAllBooks.get(j).getIdBook()) { //aktuelles Buch gehört zum aktuellen DS aus den Entleihungen
-                    System.out.println("           die Datensätze gehören zusammen");
+            //System.out.println("Aktuelle Buch-ID aus ListeAllerBuecher" + idBookActual);
+            for (int j = 0; j < listAllLCB.size(); j++) {
+                //System.out.println("   Aktuelle Buch-ID aus den Entleihungen" + listAllBooks.get(j).getIdBook());
+                if (idBookActual == listAllLCB.get(j).getIdBook()) { //aktuelles Buch gehört zum aktuellen DS aus den Entleihungen
+                    //System.out.println("           die Datensätze gehören zusammen");
                     if (listAllLCB.get(j).getReturnedOn() == null) {   //aktuelles Buch ist gerade entliehen
-                    System.out.println("                   Das Returned-Datum ist null");
-//                        listAllBooks.remove(i);                        //aktuelles Buch aus der Bücherliste löschen, da es nicht zum Ausleihen vorhanden ist
+                        //System.out.println("                   Das Returned-Datum ist null");
+
+                        listAllBooks.remove(i);                        //aktuelles Buch aus der Bücherliste löschen, da es nicht zum Ausleihen vorhanden ist
                         j = listAllLCB.size();                         //j auf Abbruch dieser Schleife setzen
-//                        i--;                                           //i um ein reduzieren, damit beim nächsten durchlauf der nächste DS genommen wird
+                        i--;                                           //i um ein reduzieren, damit beim nächsten durchlauf der nächste DS genommen wird
                     }
                 }
             }
         }
-        listAllBooks.get(0).ausgabeListAllBooks(listAllBooks);
+        listAllBooks.get(0).ausgabeListBookAuthorCategory(listAllBooks);
     }
 
     public void createListWelcheBuecherwurdenueberhauptverliehen(LoanedDAO loDAO, String meldung) {
         System.out.println("Übersicht5: " + meldung);
         LinkedList<LoanedCustomerBook> listLCB = loDAO.getListeLCB_sortBook();
         listLCB.get(0).ausgabeListLCB5(listLCB);
+    }
+
+    public void createListeWelcheBuecherwurdengarnichtverliehen(BookDAO boDAO, LoanedDAO loDAO, String meldung) {
+        System.out.println("Übersicht6: " + meldung);
+        LinkedList<BookAuthorCategory> listAllBooks = boDAO.getListBAC();
+        LinkedList<LoanedCustomerBook> listAllLCB = loDAO.getListeLCB_sortBook();
+        for (int i = 0; i < listAllBooks.size(); i++) {
+            int idBookActual = listAllBooks.get(i).getIdBook();
+            //System.out.println("Aktuelle Buch-ID aus ListeAllerBuecher" + idBookActual);
+            for (int j = 0; j < listAllLCB.size(); j++) {
+                //System.out.println("   Aktuelle Buch-ID aus den Entleihungen" + listAllBooks.get(j).getIdBook());
+                if (idBookActual == listAllLCB.get(j).getIdBook()) { //aktuelles Buch gehört zum aktuellen DS aus den Entleihungen
+                    //System.out.println("           die Datensätze gehören zusammen --> Buch wurde oder ist entliehen, Buch muss aus der Liste der noch nie verliehenen Bücher");
+                    listAllBooks.remove(i);                        //aktuelles Buch aus der Bücherliste löschen, da es nicht zum Ausleihen vorhanden ist
+                    j = listAllLCB.size();                         //j auf Abbruch dieser Schleife setzen
+                    i--;                                           //i um ein reduzieren, damit beim nächsten durchlauf der nächste DS genommen wird
+                }
+            }
+        }
+        listAllBooks.get(0).ausgabeListBookAuthorCategory(listAllBooks);
+    }
+
+    public void createListeVomAutorsindwelcheBuechergelistet(BookDAO boDAO, String meldung) {
+        System.out.println("Übersicht7: " + meldung);
+        LinkedList<BookAuthorCategory> listAuthorBook = boDAO.getListAuthorBook();
+        listAuthorBook.get(0).ausgabeListBookAuthorCategory(listAuthorBook);
+    }
+
+    public void createListeInwelcherKategoriesindwelcheBuechergelistet(BookDAO boDAO, String meldung) {
+        System.out.println("Übersicht8: " + meldung);
+        LinkedList<BookAuthorCategory> listCategoryBook = boDAO.getListCategoryBook();
+        listCategoryBook.get(0).ausgabeListBookAuthorCategory(listCategoryBook);
+    }
+
+    public void createListeBookAllRecords(BookDAO boDAO){
+        System.out.println("Bereich book - alle Datensätze (mit ergänzenden Angaben aus author und category, sortiert nach BuchID");
+        LinkedList<BookAuthorCategory> listAllBooks = boDAO.getListBAC();
+        listAllBooks.get(0).ausgabeListBookAuthorCategory(listAllBooks);
     }
 }

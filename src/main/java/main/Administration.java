@@ -58,7 +58,7 @@ public class Administration {
                             System.out.println("                  " + (i + 1) + " = " + auswahlString2[i]);
                         }
                         auswahl3 = sc.nextInt();
-                        if (auswahl3 >= 0 && auswahl3 < 8) {
+                        if (auswahl3 >= 0 && auswahl3 < 9) {
                             isEingabeGueltig = true;
                         } else {
                             System.out.println("Deine Eingabe war ungültig, bitte wiederhole die Auswahl!");
@@ -82,21 +82,24 @@ public class Administration {
                             diLi.createListWelcheBuechersindderzeitausgeliehen(loDAO, auswahlString2[auswahl3 - 1]);
                             break;
                         case 4:
-                            System.out.println("Hier ist die Liste zu  (" + auswahlString1[auswahl1 - 1].toUpperCase() + " - " + auswahlString2[auswahl3 - 1] + ")vorgesehen");
+                            System.out.println("Hier ist die Liste zu  (" + auswahlString1[auswahl1 - 1].toUpperCase() + " - " + auswahlString2[auswahl3 - 1] + ").");
                             diLi.createListWelcheBuechersindderzeitimHaus(boDAO, loDAO, auswahlString2[auswahl3 - 1]);
                             break;
                         case 5:
-                            System.out.println("Hier ist die Liste zu  (" + auswahlString1[auswahl1 - 1].toUpperCase() + " - " + auswahlString2[auswahl3- 1] + ").");
+                            System.out.println("Hier ist die Liste zu  (" + auswahlString1[auswahl1 - 1].toUpperCase() + " - " + auswahlString2[auswahl3 - 1] + ").");
                             diLi.createListWelcheBuecherwurdenueberhauptverliehen(loDAO, auswahlString2[auswahl3 - 1]);
                             break;
                         case 6:
-                            System.out.println("Hier ist die Liste zu  (" + auswahlString1[auswahl1 - 1].toUpperCase() + " - " + auswahlString2[auswahl3 - 1] + ")vorgesehen");
+                            System.out.println("Hier ist die Liste zu  (" + auswahlString1[auswahl1 - 1].toUpperCase() + " - " + auswahlString2[auswahl3 - 1] + ").");
+                            diLi.createListeWelcheBuecherwurdengarnichtverliehen(boDAO, loDAO, auswahlString2[auswahl3 - 1]);
                             break;
                         case 7:
-                            System.out.println("Hier ist die Liste zu  (" + auswahlString1[auswahl1 - 1].toUpperCase() + " - " + auswahlString2[auswahl3 - 1] + ")vorgesehen");
+                            System.out.println("Hier ist die Liste zu  (" + auswahlString1[auswahl1 - 1].toUpperCase() + " - " + auswahlString2[auswahl3 - 1] + ").");
+                            diLi.createListeVomAutorsindwelcheBuechergelistet(boDAO, auswahlString2[auswahl3 - 1]);
                             break;
                         case 8:
-                            System.out.println("Hier ist die Liste zu  (" + auswahlString1[auswahl1 - 1].toUpperCase() + " - " + auswahlString2[auswahl3 - 1] + ")vorgesehen");
+                            System.out.println("Hier ist die Liste zu  (" + auswahlString1[auswahl1 - 1].toUpperCase() + " - " + auswahlString2[auswahl3 - 1] + ").");
+                            diLi.createListeInwelcherKategoriesindwelcheBuechergelistet(boDAO, auswahlString2[auswahl3 - 1]);
                             break;
                     }
                 } while (verbleibInAuswahlstufe);
@@ -125,6 +128,23 @@ public class Administration {
                             break;
                         case 1:
                             System.out.println("Hier ist die Liste aller DS zu (" + auswahlString1[auswahl1 - 1].toUpperCase() + ") vorgesehen");
+                            switch (auswahl1) {
+                                case 1: //book
+                                    diLi.createListeBookAllRecords(boDAO);
+                                    break;
+                                case 2: //author
+                                    //diLi.createListeBookAllRecords(boDAO);
+                                    break;
+                                case 3: //category
+                                    //diLi.createListeBookAllRecords(boDAO);
+                                    break;
+                                case 4: //customer
+                                    //diLi.createListeBookAllRecords(boDAO);
+                                    break;
+                                case 5: //loaned
+                                    //diLi.createListeBookAllRecords(boDAO);
+                                    break;
+                            }
                             break;
                         case 2:
                             System.out.println("Hier ist das Erstellen eines neuen DS in (" + auswahlString1[auswahl1 - 1].toUpperCase() + ") vorgesehen");
