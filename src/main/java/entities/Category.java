@@ -1,6 +1,8 @@
 package entities;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.LinkedList;
 
 public class Category {
       private int idCategory;
@@ -13,6 +15,25 @@ public class Category {
         this.description = description;
         this.created_at = created_at;
         this.updated_at = updated_at;
+    }
+
+    public void ausgabeListAllCategories(LinkedList<Category> listAllCategories){
+        ausgabeKopfListCategory();
+        for (int i = 0; i < listAllCategories.size(); i++) {
+            Category temp = listAllCategories.get(i);
+            ausgabeZeileListCategory(temp);
+        }
+        System.out.print("Ende der Liste\n\n");
+    }
+
+    public void ausgabeKopfListCategory(){
+        System.out.println("ID       Beschreibung        erstellt am          updated am");
+    }
+
+    public void ausgabeZeileListCategory(Category temp) {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd.MM.yy  HH:mm:ss");
+        System.out.printf("%-8d %-30s   %18s   %18s\n", +
+                temp.idCategory,  temp.description, temp.created_at.format(dtf), temp.updated_at.format(dtf));
     }
 
     public int getIdCategory() {
