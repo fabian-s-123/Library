@@ -53,7 +53,6 @@ public class LoanedCustomerBook {
         System.out.printf("  %18s     %18s\n", temp.created_at.format(dtf), temp.updated_at.format(dtf));
     }
 
-
     public void ausgabeListLCB1(LinkedList<LoanedCustomerBook> listLCB) { //1 = nur offene Leihvorgänge (offene Leihvorgänge sortiert nach Kunden)
         ausgabeKopfListLCB();
         for (int i = 0; i < listLCB.size(); i++) {

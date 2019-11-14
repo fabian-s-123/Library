@@ -1,12 +1,18 @@
 package entities;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.LinkedList;
 
-public class Book {
+public class BookAuthorCategory {
     private int idBook;
     private String title;
     private int idAuthor;
+    private String firstName;
+    private String lastName;
+    private int birthYear;
     private int idCategory;
+    private String description;
     private long isbn;
     private int fsk;
     private String publisher;
@@ -19,11 +25,15 @@ public class Book {
     private LocalDateTime created_at;
     private LocalDateTime updated_at;
 
-    public Book(int idBook, String title, int idAuthor, int idCategory, long isbn, int fsk, String publisher, String edition, String firstEdition, int amountPages, String language, int idRow, int idColumn, LocalDateTime created_at, LocalDateTime updated_at) {
+    public BookAuthorCategory(int idBook, String title, int idAuthor, String firstName, String lastName, int birthYear, int idCategory, String description, long isbn, int fsk, String publisher, String edition, String firstEdition, int amountPages, String language, int idRow, int idColumn, LocalDateTime created_at, LocalDateTime updated_at) {
         this.idBook = idBook;
         this.title = title;
         this.idAuthor = idAuthor;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.birthYear = birthYear;
         this.idCategory = idCategory;
+        this.description = description;
         this.isbn = isbn;
         this.fsk = fsk;
         this.publisher = publisher;
@@ -35,6 +45,26 @@ public class Book {
         this.idColumn = idColumn;
         this.created_at = created_at;
         this.updated_at = updated_at;
+    }
+
+    public void ausgabeKopfListAllBooks(){
+        System.out.println("ID    Titel                                              Vorname         Name            Geb.  Kategorie           ISBN          FSK  Verlag          Edition               Sei-    Sprache    erstellt             updated");
+        System.out.println("book                                                     Author                          Jahr  ID Beschreibung                                                  First       ten                am                   am");
+    }
+
+    public void ausgabeZeileListAllBooks(BookAuthorCategory temp) {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd.MM.yy  HH:mm:ss");
+        System.out.printf("%-5d %-50s %-15s %-15s %4d %2d   %-15s %-13d  %2d  %-15s %-10s %-10s %-5d   %-10s %18s   %18s\n", +
+                temp.idBook, temp.title, temp.firstName, temp.lastName, temp.birthYear, temp.idCategory, temp.description, temp.isbn, temp.fsk, temp.publisher, temp.edition, temp.firstEdition, temp.amountPages, temp.language, temp.created_at.format(dtf), temp.updated_at.format(dtf));
+    }
+
+    public void ausgabeListAllBooks(LinkedList<BookAuthorCategory> listAllBooks){
+        ausgabeKopfListAllBooks();
+        for (int i = 0; i < listAllBooks.size(); i++) {
+            BookAuthorCategory temp = listAllBooks.get(i);
+            ausgabeZeileListAllBooks(temp);
+            }
+        System.out.print("Ende der Liste\n\n");
     }
 
     public int getIdBook() {
@@ -61,12 +91,44 @@ public class Book {
         this.idAuthor = idAuthor;
     }
 
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public int getBirthYear() {
+        return birthYear;
+    }
+
+    public void setBirthYear(int birthYear) {
+        this.birthYear = birthYear;
+    }
+
     public int getIdCategory() {
         return idCategory;
     }
 
     public void setIdCategory(int idCategory) {
         this.idCategory = idCategory;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public long getIsbn() {
