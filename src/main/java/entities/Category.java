@@ -27,7 +27,7 @@ public class Category {
     }
 
     public void ausgabeKopfListCategory(){
-        System.out.println("ID       Beschreibung        erstellt am          updated am");
+        System.out.println("ID       Beschreibung                     erstellt am          updated am");
     }
 
     public void ausgabeZeileListCategory(Category temp) {

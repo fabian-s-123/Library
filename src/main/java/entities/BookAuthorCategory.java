@@ -72,21 +72,21 @@ public class BookAuthorCategory {
     }
 
     public void ausgabeKopfListBookAuthorCategory(){
-        System.out.println("ID    Titel                                              Vorname         Name            Geb.  Kategorie                     ISBN          FSK  Verlag                    Edition               Sei-    Sprache    erstellt             updated");
-        System.out.println("book                                                     Author                          Jahr  ID Beschreibung                                                                      First       ten                am                   am");
+        System.out.println("Lfd ID    Titel                                              Vorname         Name            Geb.  Kategorie                     ISBN          FSK  Verlag                    Edition               Sei-    Sprache    erstellt             updated");
+        System.out.println("Nr  book                                                     Author                          Jahr  ID Beschreibung                                                                      First       ten                am                   am");
     }
 
-    public void ausgabeZeileListBookAuthorCategory(BookAuthorCategory temp) {
+    public void ausgabeZeileListBookAuthorCategory(BookAuthorCategory temp, int i) {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd.MM.yy  HH:mm:ss");
-        System.out.printf("%-5d %-50s %-15s %-15s %4d %2d   %-25s %-13d  %2d  %-25s %-10s %-10s %-5d   %-10s %18s   %18s\n", +
-                temp.idBook, temp.title, temp.firstName, temp.lastName, temp.birthYear, temp.idCategory, temp.description, temp.isbn, temp.fsk, temp.publisher, temp.edition, temp.firstEdition, temp.amountPages, temp.language, temp.created_at.format(dtf), temp.updated_at.format(dtf));
+        System.out.printf("%-3d %-5d %-50s %-15s %-15s %4d %2d   %-25s %-13d  %2d  %-25s %-10s %-10s %-5d   %-10s %18s   %18s\n", +
+                i, temp.idBook, temp.title, temp.firstName, temp.lastName, temp.birthYear, temp.idCategory, temp.description, temp.isbn, temp.fsk, temp.publisher, temp.edition, temp.firstEdition, temp.amountPages, temp.language, temp.created_at.format(dtf), temp.updated_at.format(dtf));
     }
 
     public void ausgabeListBookAuthorCategory(List<BookAuthorCategory> listAllBooks){
         ausgabeKopfListBookAuthorCategory();
         for (int i = 0; i < listAllBooks.size(); i++) {
             BookAuthorCategory temp = listAllBooks.get(i);
-            ausgabeZeileListBookAuthorCategory(temp);
+            ausgabeZeileListBookAuthorCategory(temp, i+1);
             }
         System.out.print("Ende der Liste\n\n");
     }

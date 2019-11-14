@@ -43,7 +43,6 @@ public class LoanedDAO extends DAO {
         executeStatement(query, "Ein Datensatz loaned wurde der Tabelle loaned zugefügt. (Rückgabedatum eingetragen)");
     }
 
-
     public void createRecordLoanedWithExtraTime(int idCustomer, int idBook, LocalDateTime loanedOn, LocalDateTime returnedOn) {
         Timestamp loanedOnTS = Timestamp.valueOf(loanedOn);
         Timestamp returnedOnTS = Timestamp.valueOf(returnedOn);

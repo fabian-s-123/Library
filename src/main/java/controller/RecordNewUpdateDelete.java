@@ -1,10 +1,13 @@
 package controller;
 
 import daos.*;
+import entities.BookAuthorCategory;
+
 import java.time.LocalDateTime;
+import java.util.LinkedList;
 import java.util.Scanner;
 
-public class NewRecord {
+public class RecordNewUpdateDelete {
 
     public void createNewRecordBook(BookDAO boDAO) {
         System.out.println("Erfassung der notwendigen Daten für einen neuen Eintrag in book"); //TODO mögliche Fehleingaben bei der Erfassung abfangen, wenn mal Zeit ist
@@ -33,7 +36,7 @@ public class NewRecord {
         String language = sc_String.nextLine();
         System.out.print("Lagerort - ROW:     ");
         int idRow = sc_int.nextInt();
-        System.out.print("            COLUMN: ");
+        System.out.print("           COLUMN:  ");
         int idColumn = sc_int.nextInt();
         boDAO.createRecordBook(title, idAuthor, idCategory, isbn, fsk, publisher, edition, firstEdition, amountPages, language, idRow, idColumn);
     }
@@ -54,6 +57,7 @@ public class NewRecord {
     public void createNewRecordCategory(CategoryDAO caDAO) {
         System.out.println("Erfassung der notwendigen Daten für einen neuen Eintrag in category"); //TODO mögliche Fehleingaben bei der Erfassung abfangen, wenn mal Zeit ist
         Scanner sc_String = new Scanner(System.in);
+        System.out.print("Beschreibung der Kategorie: ");
         String description = sc_String.nextLine();
         caDAO.createRecordCategory(description);
     }
@@ -98,16 +102,49 @@ public class NewRecord {
 
     public void createNewRecordLoaned(LoanedDAO loDAO) {
         System.out.println("Erfassung der notwendigen Daten für einen neuen Eintrag in loaned"); //TODO mögliche Fehleingaben bei der Erfassung abfangen, wenn mal Zeit ist
-        System.out.println("Stelle sicher, dass die Book/Buch- und die Customer/Kuden-ID für den zu erfassenden Leihvorgang bekannt ist, bei entsprechenden Zeitressourcen wird hier weitergearbeitet.");
+        System.out.println("Stelle sicher, dass die Buch-/Book- und die Kunden-/Customer-ID für den zu erfassenden Leihvorgang bekannt ist, bei entsprechenden Zeitressourcen wird hier weitergearbeitet.");
         Scanner sc_String = new Scanner(System.in);
         Scanner sc_int = new Scanner(System.in);
-         int idCustomer;
-         int idBook;
-         LocalDateTime loanedOn;
-         LocalDateTime returnedOn;
-         boolean extraTime;
-         LocalDateTime created_at;
-         LocalDateTime updated_at;
+        System.out.print("ID Kunde/customer:   ");
+        int idCustomer = sc_int.nextInt();
+        System.out.print("ID Buch/book:        ");
+        int idBook = sc_int.nextInt();
+        System.out.print("Ausleih-TAG:         ");
+        int leihTag = sc_int.nextInt();
+        System.out.print("Ausleih-MONAT:       ");
+        int leihMonat = sc_int.nextInt();
+        System.out.print("Ausleih-JAHR:        ");
+        int leihJahr = sc_int.nextInt();
+        loDAO.createRecordLoanedWithoutReturn(idCustomer, idBook, LocalDateTime.of(leihJahr, leihMonat, leihTag, 0, 0));
     }
 
+
+    public void deleteRecordBook(BookDAO boDAO, DiverseLists diLi) {
+        LinkedList<BookAuthorCategory> listAllBooks = diLi.createListeBookAllRecords(boDAO);
+        Scanner sc_int = new Scanner(System.in);
+
+        boolean eingabegueltig = true;
+        do {
+            eingabegueltig = true;
+            System.out.print("Welche laufende Nr. aus der vorstehenden Liste soll gelöscht werden? ");
+            int zuLoeschendeNr = sc_int.nextInt();
+            if (zuLoeschendeNr < 1 || zuLoeschendeNr > listAllBooks.size()) {
+                System.out.println("Die Eingabe war ungültig, bitte wiederholen! ");
+                eingabegueltig = false;
+            }
+        } while (!eingabegueltig);
+    }
+    // hier geht es dann weiter - aus der Liste die ID des zu löschenden Buches heraussuchen und dann in Tabelle löschen
+
+    public void deleteRecordAuthor(AuthorDAO auDAO) {
+    }
+
+    public void deleteRecordCategory(CategoryDAO caDAO) {
+    }
+
+    public void deleteRecordCustomer(CustomerDAO cuDAO) {
+    }
+
+    public void deleteRecordLoaned(LoanedDAO loDAO) {
+    }
 }
