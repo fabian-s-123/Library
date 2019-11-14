@@ -20,7 +20,7 @@ public class LoanBook {
 
     public void loanBook(Statement st, Scanner scanner, int idCustomer, LoanedDAO loDAO, BookDAO boDAO, BACDAO bacDAO) throws SQLException {
         LocalDateTime now = LocalDateTime.now();
-        System.out.println("These books are available for loaning:\n");
+        System.out.println("Of course, these books are available for loaning:\n");
         List<Integer> listAllBooksAfterFSKCheck;
         ArrayList<Integer> listBooksLoaned = new ArrayList<>();
         listAllBooksAfterFSKCheck = checkFSK(st, idCustomer, now);
@@ -59,7 +59,7 @@ public class LoanBook {
             }
         } while (!validInput);
         loDAO.createNewRecordLoaned(idCustomer, choice, now);
-        System.out.println("Returning to menu...");
+        System.out.println("BATGA is returning to menu...");
     }
 
     private List<Integer> checkFSK(Statement st, int idCustomer, LocalDateTime now) throws SQLException {
