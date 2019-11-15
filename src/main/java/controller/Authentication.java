@@ -9,21 +9,21 @@ import java.util.Scanner;
 
 public class Authentication {
 
-    public int handleAuthentication(Statement st, Scanner scanner) throws SQLException {
+    public int handleAuthentication(Statement st, Scanner scanner, CustomerDAO customerDAO) throws SQLException {
         DBConnector dbConnector;
         dbConnector = DBConnector.getInstance();
-        int idCustomerDB = checkIdCustomer(st, scanner, dbConnector);
-        checkPinCode(st, idCustomerDB, scanner, dbConnector);
+        int idCustomerDB = checkIdCustomer(st, scanner, dbConnector, customerDAO);
+        checkPinCode(st, idCustomerDB, scanner, dbConnector, customerDAO);
         System.out.println("Authentication successful.\n");
         return idCustomerDB;
     }
 
-    private int checkIdCustomer(Statement st, Scanner scanner, DBConnector dbConnector) throws SQLException {
+    private int checkIdCustomer(Statement st, Scanner scanner, DBConnector dbConnector, CustomerDAO customerDAO) throws SQLException {
         int idCustomerDB = 0;
         System.out.println("Please enter your customer ID:");
             for (int i = 0; i < 5; i++) {
                 int idCustomerInput = scanner.nextInt();
-                if (CustomerDAO.selectIdCustomer(st).contains(idCustomerInput)) {
+                if (customerDAO.selectIdCustomer(st).contains(idCustomerInput)) {
                     idCustomerDB = idCustomerInput;
                     break;
                 } else {
@@ -38,12 +38,12 @@ public class Authentication {
         return idCustomerDB;
     }
 
-    private void checkPinCode(Statement st, int idCustomer, Scanner scanner, DBConnector dbConnector) throws
+    private void checkPinCode(Statement st, int idCustomer, Scanner scanner, DBConnector dbConnector, CustomerDAO customerDAO) throws
             SQLException {
         System.out.println("Please enter your pin code:");
         for (int i = 0; i < 3; i++) {
             String pinCodeInput = scanner.next();
-            String pinCodeDB = CustomerDAO.selectPinCode(st, idCustomer);
+            String pinCodeDB = customerDAO.selectPinCode(st, idCustomer);
             if (pinCodeInput.equals(pinCodeDB)) {
                 System.out.println("Pin code correct.");
                 break;

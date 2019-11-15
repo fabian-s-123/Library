@@ -167,7 +167,7 @@ public class LoanedDAO extends DAO {
         return listLCB;
     }
 
-    public static List<Integer> selectIdBooksLoaned(Statement st) throws SQLException {
+    public List<Integer> selectIdBooksLoaned(Statement st) throws SQLException {
         List<Integer> ids = new ArrayList<Integer>();
         String query = "SELECT idBook FROM loaned;";
         ResultSet rs = st.executeQuery(query);
@@ -179,7 +179,7 @@ public class LoanedDAO extends DAO {
         return ids;
     }
 
-    public static List<Timestamp> selectBookReturned(Statement st, String column, int condition, int limit) throws SQLException {
+    public List<Timestamp> selectBookReturned(Statement st, String column, int condition, int limit) throws SQLException {
         List<Timestamp> ids = new ArrayList<>();
         String query = "SELECT returnedOn FROM loaned WHERE " + column + "="+ condition + " ORDER BY `idLoaned` DESC LIMIT " + limit + ";";
         ResultSet rs = st.executeQuery(query);
@@ -190,7 +190,18 @@ public class LoanedDAO extends DAO {
         return ids;
     }
 
-    public static int selectCountIdCustomer(Statement st, int idCustomer) throws SQLException {
+    public List<Timestamp> selectBookLoaned(Statement st, int idLoaned, int condition, int limit) throws SQLException {
+        List<Timestamp> ids = new ArrayList<>();
+        String query = "SELECT loanedOn FROM loaned WHERE idLoaned=" + idLoaned + ";";
+        ResultSet rs = st.executeQuery(query);
+        while (rs.next()){
+            Timestamp loanedOn = rs.getTimestamp("loanedOn");
+            ids.add(loanedOn);
+        }
+        return ids;
+    }
+
+    public int selectCountIdCustomer(Statement st, int idCustomer) throws SQLException {
         int result = 0;
         String query = "SELECT COUNT(idCustomer) FROM loaned WHERE idCustomer=" + idCustomer + ";";
         ResultSet rs = st.executeQuery(query);
@@ -198,5 +209,16 @@ public class LoanedDAO extends DAO {
             result = rs.getInt(1);
         }
         return result;
+    }
+
+    public List<Integer> selectOpenIdBookPerCustomer(Statement st, int idCustomer) throws SQLException {
+        List<Integer> ids = new ArrayList<>();
+        String query = "SELECT idBook FROM loaned WHERE idCustomer=" + idCustomer + " AND returnedOn='0000-00-00 00:00:00' ORDER BY `idLoaned` ASC;";
+        ResultSet rs = st.executeQuery(query);
+        while (rs.next()){
+            int idBook = rs.getInt("idBook");
+            ids.add(idBook);
+        }
+        return ids;
     }
 }
