@@ -211,7 +211,6 @@ public class LoanedDAO extends DAO {
         return result;
     }
 
-<<<<<<< HEAD
     public boolean checkIsIDLoanedInTable(int zuLoeschendeIdLoaned) {
         boolean loanedIsInTable;
         String query = "select count(*) as anzahlDS from loaned where idLoaned = " + zuLoeschendeIdLoaned;
@@ -222,7 +221,8 @@ public class LoanedDAO extends DAO {
             loanedIsInTable = false;
         }
         return loanedIsInTable;
-=======
+    }
+
     public List<Integer> selectOpenIdBookPerCustomer(Statement st, int idCustomer) throws SQLException {
         List<Integer> ids = new ArrayList<>();
         String query = "SELECT idBook FROM loaned WHERE idCustomer=" + idCustomer + " AND returnedOn='0000-00-00 00:00:00' ORDER BY `idLoaned` ASC;";
@@ -232,6 +232,5 @@ public class LoanedDAO extends DAO {
             ids.add(idBook);
         }
         return ids;
->>>>>>> a80544fcf2a473d88a9027497412fb3b1c141de4
     }
 }
