@@ -29,8 +29,7 @@ public abstract class DAO {
         }
     }
 
-    public int zaehlenDS(String dateiname) {
-        String query = "select count(*) as anzahlDS from " + dateiname;
+    public int zaehlenDS(String query) {
         int anzahlDS = 0;
         try {
             Statement st = dbConnector.getConnection().createStatement();
@@ -38,7 +37,7 @@ public abstract class DAO {
             while (rs.next()) {
                 anzahlDS = rs.getInt("anzahlDS");
             }
-            System.out.println("Die Datei " + dateiname + " hat " + anzahlDS + " Einträge.");
+            System.out.println("Das Ergebnis von zaehlenDS: " + anzahlDS);
             st.close();
         } catch (SQLException sqle) {
             System.err.println("SQLException: " + sqle.getMessage());

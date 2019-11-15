@@ -169,4 +169,16 @@ public class CustomerDAO extends DAO {
         }
         return listAC;
     }
+
+    public boolean checkIsIDCustomerInTable(int zuLoeschendeIdCustomer) {
+        boolean customerIsInTable;
+        String query = "select count(*) as anzahlDS from customer where idCustomer = " + zuLoeschendeIdCustomer;
+        int anzahlDS = zaehlenDS(query);
+        if (anzahlDS > 0) {
+            customerIsInTable = true;
+        } else {
+            customerIsInTable = false;
+        }
+        return customerIsInTable;
+    }
 }

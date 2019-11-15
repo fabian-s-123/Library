@@ -151,24 +151,41 @@ public class Administration {
                             System.out.println("Hier ist das Erstellen eines neuen DS in (" + auswahlString1[auswahl1 - 1].toUpperCase() + ") vorgesehen");
                             switch (auswahl1) {
                                 case 1: //book
-                                    recNUD.createNewRecordBook(boDAO);
+                                    recNUD.createNewRecordBook(boDAO, true);
                                     break;
                                 case 2: //author
-                                    recNUD.createNewRecordAuthor(auDAO);
+                                    recNUD.createNewRecordAuthor(auDAO, true);
                                     break;
                                 case 3: //category
-                                    recNUD.createNewRecordCategory(caDAO);
+                                    recNUD.createNewRecordCategory(caDAO, true, 0);
                                     break;
                                 case 4: //customer
-                                    recNUD.createNewRecordCustomer(cuDAO);
+                                    recNUD.createNewRecordCustomer(cuDAO, true);
                                     break;
                                 case 5: //loaned
-                                    recNUD.createNewRecordLoaned(loDAO);
+                                    recNUD.createNewRecordLoaned(loDAO, true);
                                     break;
                             }
                             break;
                         case 3:
                             System.out.println("Hier ist das Editieren eines einzelnen DS in (" + auswahlString1[auswahl1 - 1].toUpperCase() + ") vorgesehen");
+                            switch (auswahl1) {
+                                case 1: //book
+                                    recNUD.editRecordBook(boDAO, diLi);
+                                    break;
+                                case 2: //author
+                                    recNUD.editRecordAuthor(auDAO, diLi);
+                                    break;
+                                case 3: //category
+                                    recNUD.editRecordCategory(caDAO, diLi);
+                                    break;
+                                case 4: //customer
+                                    recNUD.editRecordCustomer(cuDAO, diLi);
+                                    break;
+                                case 5: //loaned
+                                    recNUD.editRecordLoaned(loDAO, diLi);
+                                    break;
+                            }
                             break;
                         case 4:
                             System.out.println("Hier ist das Löschen eines einzelnen DS in (" + auswahlString1[auswahl1 - 1].toUpperCase() + ")vorgesehen");
@@ -177,16 +194,16 @@ public class Administration {
                                     recNUD.deleteRecordBook(boDAO, diLi);
                                     break;
                                 case 2: //author
-                                    recNUD.deleteRecordAuthor(auDAO);
+                                    recNUD.deleteRecordAuthor(auDAO, diLi);
                                     break;
                                 case 3: //category
-                                    recNUD.deleteRecordCategory(caDAO);
+                                    recNUD.deleteRecordCategory(caDAO, diLi);
                                     break;
                                 case 4: //customer
-                                    recNUD.deleteRecordCustomer(cuDAO);
+                                    recNUD.deleteRecordCustomer(cuDAO, diLi);
                                     break;
                                 case 5: //loaned
-                                    recNUD.deleteRecordLoaned(loDAO);
+                                    recNUD.deleteRecordLoaned(loDAO, diLi);
                                     break;
                             }
                             break;

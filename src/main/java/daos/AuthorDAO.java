@@ -67,4 +67,16 @@ public class AuthorDAO extends DAO {
         }
         return listAA;
     }
+
+    public boolean checkIsIDAuthorInTable(int zuLoeschendeIdAuthor) {
+        boolean authorIsInTable;
+        String query = "select count(*) as anzahlDS from author where idAuthor = " + zuLoeschendeIdAuthor;
+        int anzahlDS = zaehlenDS(query);
+        if (anzahlDS > 0) {
+            authorIsInTable = true;
+        } else {
+            authorIsInTable = false;
+        }
+        return authorIsInTable;
+    }
 }

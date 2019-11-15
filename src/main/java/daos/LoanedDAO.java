@@ -199,4 +199,16 @@ public class LoanedDAO extends DAO {
         }
         return result;
     }
+
+    public boolean checkIsIDLoanedInTable(int zuLoeschendeIdLoaned) {
+        boolean loanedIsInTable;
+        String query = "select count(*) as anzahlDS from loaned where idLoaned = " + zuLoeschendeIdLoaned;
+        int anzahlDS = zaehlenDS(query);
+        if (anzahlDS > 0) {
+            loanedIsInTable = true;
+        } else {
+            loanedIsInTable = false;
+        }
+        return loanedIsInTable;
+    }
 }

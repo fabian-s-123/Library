@@ -37,9 +37,8 @@ public class BookDAO extends DAO {
     }
 
     public void createRecordBook(String title, int idAuthor, int idCategory, long isbn, int fsk, String publisher,
-                                     String edition, String firstEdition, int amountPages, String language, int idRow, int idColumn){
+                                 String edition, String firstEdition, int amountPages, String language, int idRow, int idColumn) {
         String query1 = "insert into book (title, idAuthor, idCategory, isbn, fsk, publisher, edition, firstEdition, amountPages, language, idRow, idColumn) values (";
-
         String query2 = "\"" + title + "\", " +
                 idAuthor + ", " +
                 idCategory + ", " +
@@ -52,7 +51,7 @@ public class BookDAO extends DAO {
                 "\"" + language + "\", " +
                 idRow + ", " +
                 idColumn + ");";
-                String query = query1 + query2;
+        String query = query1 + query2;
         executeStatement(query, "Ein Datensatz book der Tabelle book zugefügt.");
     }
 
@@ -60,8 +59,7 @@ public class BookDAO extends DAO {
         List<Integer> ids = new ArrayList<Integer>();
         String query = "SELECT idBook FROM book;";
         ResultSet rs = st.executeQuery(query);
-        while (rs.next())
-        {
+        while (rs.next()) {
             int idBook = rs.getInt("idBook");
             ids.add(idBook);
         }
@@ -72,8 +70,7 @@ public class BookDAO extends DAO {
         List<Integer> ids = new ArrayList<>();
         String query = "SELECT idBook FROM book WHERE fsk<=" + fsk + ";";
         ResultSet rs = st.executeQuery(query);
-        while (rs.next())
-        {
+        while (rs.next()) {
             int idBook = rs.getInt("idBook");
             ids.add(idBook);
         }
@@ -213,6 +210,18 @@ public class BookDAO extends DAO {
             sqle.printStackTrace();
         }
         return listCBA;
+    }
+
+    public boolean checkIsIDBookInTable(int zuLoeschendeIdBook) {
+        boolean bookIsInTable;
+        String query = "select count(*) as anzahlDS from book where idBook = " + zuLoeschendeIdBook;
+        int anzahlDS = zaehlenDS(query);
+        if (anzahlDS > 0) {
+            bookIsInTable = true;
+        } else {
+            bookIsInTable = false;
+        }
+        return bookIsInTable;
     }
 }
 

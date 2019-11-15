@@ -62,5 +62,17 @@ public class CategoryDAO extends DAO{
         return listAC;
     }
 
+    public boolean checkIsIDCategoryInTable(int zuLoeschendeIdCategory) {
+        boolean categoryIsInTable;
+        String query = "select count(*) as anzahlDS from category where idCategory = " + zuLoeschendeIdCategory;
+        int anzahlDS = zaehlenDS(query);
+        if (anzahlDS > 0) {
+            categoryIsInTable = true;
+        } else {
+            categoryIsInTable = false;
+        }
+        return categoryIsInTable;
+    }
+
 
 }
