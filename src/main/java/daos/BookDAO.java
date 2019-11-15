@@ -55,7 +55,7 @@ public class BookDAO extends DAO {
         executeStatement(query, "Ein Datensatz book der Tabelle book zugefügt.");
     }
 
-    public static List<Integer> selectIdBooks(Statement st) throws SQLException {
+    public List<Integer> selectIdBooks(Statement st) throws SQLException {
         List<Integer> ids = new ArrayList<Integer>();
         String query = "SELECT idBook FROM book;";
         ResultSet rs = st.executeQuery(query);

@@ -6,6 +6,8 @@ import daos.CustomerDAO;
 import daos.LoanedDAO;
 import entities.Book;
 import entities.BookAuthorCategory;
+import entities.Customer;
+import entities.Loaned;
 
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -18,20 +20,20 @@ import java.util.Scanner;
 
 public class LoanBook {
 
-    public void loanBook(Statement st, Scanner scanner, int idCustomer, LoanedDAO loDAO, BookDAO boDAO, BACDAO bacDAO) throws SQLException {
+    public void loanBook(Statement st, Scanner scanner, int idCustomer, LoanedDAO loanedDAO, CustomerDAO customerDAO, BookDAO bookDAO, BACDAO bacDAO, BookAuthorCategory b) throws SQLException {
         LocalDateTime now = LocalDateTime.now();
         System.out.println("Of course, these books are available for loaning:\n");
         List<Integer> listAllBooksAfterFSKCheck;
         ArrayList<Integer> listBooksLoaned = new ArrayList<>();
-        listAllBooksAfterFSKCheck = checkFSK(st, idCustomer, now);
+        listAllBooksAfterFSKCheck = checkFSK(st, idCustomer, customerDAO, now);
 
-        for (Integer x : BookDAO.selectIdBooks(st)) {
-            if (LoanedDAO.selectIdBooksLoaned(st).contains(x)) {
+        for (Integer x : bookDAO.selectIdBooks(st)) {
+            if (loanedDAO.selectIdBooksLoaned(st).contains(x)) {
                 listBooksLoaned.add(x);
             }
         }
         for (Integer y : listBooksLoaned) {
-            for (Timestamp time : LoanedDAO.selectBookReturned(st, "idBook", y, 1)) {
+            for (Timestamp time : loanedDAO.selectBookReturned(st, "idBook", y, 1)) {
                 if (time == null) {
                     listAllBooksAfterFSKCheck.remove(y);
                 }
@@ -39,10 +41,9 @@ public class LoanBook {
         }
 
         //printing the list of book available for this customer
-        BookAuthorCategory b = new BookAuthorCategory();
         b.printHeadBAC();
         for (Integer x : listAllBooksAfterFSKCheck) {
-            b.printListBAC(BACDAO.selectBacId(st, x));
+            b.printListBAC(bacDAO.selectBacId(st, x));
         }
         System.out.println();
 
@@ -58,12 +59,12 @@ public class LoanBook {
                 System.out.println("This book is not available.");
             }
         } while (!validInput);
-        loDAO.createNewRecordLoaned(idCustomer, choice, now);
-        System.out.println("BATGA is returning to menu...");
+        loanedDAO.createNewRecordLoaned(idCustomer, choice, now);
+        System.out.println("Press enter to continue");
     }
 
-    private List<Integer> checkFSK(Statement st, int idCustomer, LocalDateTime now) throws SQLException {
-        Timestamp timestamp = CustomerDAO.selectBirthDay(st, idCustomer);
+    private List<Integer> checkFSK(Statement st, int idCustomer, CustomerDAO customerDAO, LocalDateTime now) throws SQLException {
+        Timestamp timestamp = customerDAO.selectBirthDay(st, idCustomer);
         LocalDateTime birthDayCustomer = timestamp.toLocalDateTime();
         List<Integer> booksAfterFSKCheck = new ArrayList<>();
         int fsk = -1;
@@ -80,12 +81,12 @@ public class LoanBook {
         return booksAfterFSKCheck;
     }
 
-    public boolean isAllowedToLoan(Statement st, int idCustomer) throws SQLException {
+    public boolean isAllowedToLoan(Statement st, int idCustomer, LoanedDAO loanedDAO) throws SQLException {
         boolean isAllowed = false;
-        int booksLoanedAllTime = LoanedDAO.selectCountIdCustomer(st, idCustomer);
+        int booksLoanedAllTime = loanedDAO.selectCountIdCustomer(st, idCustomer);
         if (booksLoanedAllTime >= 4) {
             int booksCurrentlyLoaned = 0;
-            for (Timestamp time : LoanedDAO.selectBookReturned(st, "idCustomer", idCustomer, booksLoanedAllTime)) {
+            for (Timestamp time : loanedDAO.selectBookReturned(st, "idCustomer", idCustomer, booksLoanedAllTime)) {
                 if (time == null) {
                     booksCurrentlyLoaned++;
                 }

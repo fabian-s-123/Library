@@ -65,7 +65,7 @@ public class BACDAO extends DAO {
         executeStatement(query, "Ein Datensatz book der Tabelle book zugefügt.");
     }
 
-    public static List<BookAuthorCategory> selectBacId(Statement st, int id) throws SQLException {
+    public List<BookAuthorCategory> selectBacId(Statement st, int id) throws SQLException {
         List<BookAuthorCategory> ids = new ArrayList<>();
         String query = "SELECT * FROM bac WHERE idBook=" + id + ";";
         ResultSet rs = st.executeQuery(query);

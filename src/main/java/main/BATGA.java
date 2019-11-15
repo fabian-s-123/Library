@@ -1,8 +1,11 @@
 package main;
 
 import controller.Authentication;
+import controller.BrowseCollection;
 import controller.LoanBook;
+import controller.ReturnBook;
 import daos.*;
+import entities.BookAuthorCategory;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -21,19 +24,21 @@ public class BATGA {
         Scanner scanner = new Scanner(System.in);
         Authentication aut = new Authentication();
         LoanBook loanBook = new LoanBook();
+        BrowseCollection browse = new BrowseCollection();
+        ReturnBook returnBook = new ReturnBook();
+        BookAuthorCategory b = new BookAuthorCategory();
 
-        CustomerDAO cuDAO = new CustomerDAO();
-        BookDAO boDAO = new BookDAO();
-        AuthorDAO auDAO = new AuthorDAO();
-        CategoryDAO caDAO = new CategoryDAO();
-        LoanedDAO loDAO = new LoanedDAO();
+        CustomerDAO customerDAO = new CustomerDAO();
+        BookDAO bookDAO = new BookDAO();
+        AuthorDAO authorDAO = new AuthorDAO();
+        CategoryDAO categoryDAO = new CategoryDAO();
+        LoanedDAO loanedDAO = new LoanedDAO();
         BACDAO bacDAO = new BACDAO();
 
         /**
          * test start
          */
         /*
-
 
          */
         /**
@@ -47,6 +52,8 @@ public class BATGA {
         boolean validInput = false;
 
         while (runProgram) {
+
+            //Log in
             if (!isAuthenticated) {
                 System.out.println("Welcome to Lukas' Library. My name is BATGA. To proceed please log in first.");
                 System.out.println("1 - log in");
@@ -60,21 +67,25 @@ public class BATGA {
                             runProgram = false;
                             validInput = true;
                             isAuthenticated = false;
-                            break;
+                        break;
                         case "1":
-                            idCustomer = aut.handleAuthentication(st, scanner);
+                            idCustomer = aut.handleAuthentication(st, scanner, customerDAO);
                             isAuthenticated = true;
                             break;
                         default:
                             System.out.println("Not a valid command.");
                             break;
                     }
-                    scanner.nextLine();
+                    if (input.equals("1") || input.equals("2")) {
+                        scanner.nextLine();
+                    }
                 } while (!validInput);
             }
+
+            //Main Menu
             if (isAuthenticated && idCustomer > 0) {
                 do {
-                    System.out.println("Hello " + CustomerDAO.selectFirstName(st, idCustomer) + "! What do you wish to do?");
+                    System.out.println("Hello " + customerDAO.selectFirstName(st, idCustomer) + "! What do you wish to do?");
                     System.out.println("1 - loan book");
                     System.out.println("2 - return book");
                     System.out.println("3 - extend loan");
@@ -87,24 +98,27 @@ public class BATGA {
                             validInput = true;
                             isAuthenticated = false;
                             idCustomer = 0;
-                            System.out.println("Log out successful.");
+                            System.out.println("Log out successful.\nPress enter to continue.");
                             break;
                         case "1":
-                            if (loanBook.isAllowedToLoan(st, idCustomer)) {
-                                loanBook.loanBook(st, scanner, idCustomer, loDAO, boDAO, bacDAO);
+                            if (loanBook.isAllowedToLoan(st, idCustomer, loanedDAO)) {
+                                loanBook.loanBook(st, scanner, idCustomer, loanedDAO, customerDAO, bookDAO, bacDAO, b);
                             } else {
-                                System.out.println("Sorry " + CustomerDAO.selectFirstName(st, idCustomer) + ", you already have four books currently in loan. " +
+                                System.out.println("Sorry " + customerDAO.selectFirstName(st, idCustomer) + ", you already have four books currently in loan. " +
                                         "Please return a book first, before you loan out another one.");
                             }
+                            validInput = false;
                             break;
                         case "2":
-                            //handle return book
+                            returnBook.returnBook(st, idCustomer, b, bacDAO, loanedDAO, scanner);
+                            validInput = false;
                             break;
                         case "3":
                             //handle extend loan
                             break;
                         case "4":
-                            //extend browse book collection
+                            browse.browseCollection(st, bacDAO, bookDAO);
+                            validInput = false;
                             break;
                         default:
                             System.out.println("Not a valid command.");

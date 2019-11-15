@@ -56,7 +56,7 @@ public class CustomerDAO extends DAO {
         executeStatement(query, "Ein Datensatz customer der Tabelle customer zugefügt.");
     }
 
-    public static List<Customer> select(Statement st) throws SQLException {
+    public List<Customer> select(Statement st) throws SQLException {
         List<Customer> customers = new LinkedList<Customer>();
         String query = "SELECT * FROM customer";
         ResultSet rs = st.executeQuery(query);
@@ -83,7 +83,7 @@ public class CustomerDAO extends DAO {
         return customers;
     }
 
-    public static List<Integer> selectIdCustomer(Statement st) throws SQLException {
+    public List<Integer> selectIdCustomer(Statement st) throws SQLException {
         ArrayList<Integer> ids = new ArrayList<>();
         String query = "SELECT idCustomer FROM customer;";
         ResultSet rs = st.executeQuery(query);
@@ -95,7 +95,7 @@ public class CustomerDAO extends DAO {
         return ids;
     }
 
-    public static String selectPinCode(Statement st, int idCustomer) throws SQLException {
+    public String selectPinCode(Statement st, int idCustomer) throws SQLException {
         String query = "SELECT pinCode FROM customer WHERE idCustomer =" + idCustomer + ";";
         String pinCode = "";
         ResultSet rs = st.executeQuery(query);
@@ -106,7 +106,7 @@ public class CustomerDAO extends DAO {
         return pinCode;
     }
 
-    public static String selectFirstName(Statement st, int idCustomer) throws SQLException {
+    public String selectFirstName(Statement st, int idCustomer) throws SQLException {
         String query = "SELECT firstName FROM customer WHERE idCustomer =" + idCustomer + ";";
         String firstName = "";
         ResultSet rs = st.executeQuery(query);
@@ -117,7 +117,7 @@ public class CustomerDAO extends DAO {
         return firstName;
     }
 
-    public static Timestamp selectBirthDay(Statement st, int idCustomer) throws SQLException {
+    public Timestamp selectBirthDay(Statement st, int idCustomer) throws SQLException {
         String query = "SELECT birthDay FROM customer WHERE idCustomer =" + idCustomer + ";";
         Timestamp birthDay = null;
         ResultSet rs = st.executeQuery(query);
