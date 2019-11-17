@@ -2,14 +2,11 @@ package daos;
 
 import java.sql.*;
 
-import entities.Loaned;
-import entities.LoanedCustomerBook;
+import entities.*;
 
-import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
 
 public class LoanedDAO extends DAO {
@@ -41,7 +38,7 @@ public class LoanedDAO extends DAO {
                 "\"" + returnedOnTS + "\", " +
                 false + ");";
         String query = query1 + query2;
-        executeStatement(query, "Ein Datensatz loaned wurde der Tabelle loaned zugefügt. (Rückgabedatum eingetragen)");
+        executeStatement(query, "Ein Datensatz wurde der Tabelle loaned zugefügt. (Rückgabedatum eingetragen)");
     }
 
     public void createRecordLoanedWithExtraTime(int idCustomer, int idBook, LocalDateTime loanedOn, LocalDateTime returnedOn) {
@@ -54,7 +51,7 @@ public class LoanedDAO extends DAO {
                 "\"" + returnedOnTS + "\", " +
                 true + ");";
         String query = query1 + query2;
-        executeStatement(query, "Ein Datensatz loaned wurde der Tabelle loaned zugefügt. (mit Verlängerungsvermerk)");
+        executeStatement(query, "Ein Datensatz wurde der Tabelle loaned zugefügt. (mit Verlängerungsvermerk)");
         createRecordLoanedWithoutReturn(idCustomer, idBook, returnedOn);
     }
 
@@ -66,7 +63,7 @@ public class LoanedDAO extends DAO {
                 "\"" + loanedOnTS + "\", " +
                 false + ");";
         String query = query1 + query2;
-        executeStatement(query, "Ein Datensatz loaned wurde der Tabelle loaned zugefügt. (offene Rückgabe)");
+        executeStatement(query, "Ein Datensatz wurde der Tabelle loaned zugefügt. (offene Rückgabe)");
     }
 
     public void createNewRecordLoaned(int idCustomer, int idBook, LocalDateTime loanedOn) {
@@ -211,18 +208,6 @@ public class LoanedDAO extends DAO {
         return result;
     }
 
-    public boolean checkIsIDLoanedInTable(int zuLoeschendeIdLoaned) {
-        boolean loanedIsInTable;
-        String query = "select count(*) as anzahlDS from loaned where idLoaned = " + zuLoeschendeIdLoaned;
-        int anzahlDS = zaehlenDS(query);
-        if (anzahlDS > 0) {
-            loanedIsInTable = true;
-        } else {
-            loanedIsInTable = false;
-        }
-        return loanedIsInTable;
-    }
-
     public List<Integer> selectOpenIdBookPerCustomer(Statement st, int idCustomer) throws SQLException {
         List<Integer> ids = new ArrayList<>();
         String query = "SELECT idBook FROM loaned WHERE idCustomer=" + idCustomer + " AND returnedOn='0000-00-00 00:00:00' ORDER BY `idLoaned` ASC;";
@@ -243,7 +228,6 @@ public class LoanedDAO extends DAO {
                 "extraTime = " + extraTime;
         String query3 = " where idLoaned = " + idLoaned + ";";
         String query = query1 + query2 + query3;
-        System.out.println(query);
         executeStatement(query, "Ein Datensatz wurde in der Tabelle loaned editiert/geupdated.");
     }
 }

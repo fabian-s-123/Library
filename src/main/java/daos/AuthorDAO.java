@@ -1,7 +1,6 @@
 package daos;
 
-import entities.Author;
-import entities.BookAuthorCategory;
+import entities.*;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -24,7 +23,7 @@ public class AuthorDAO extends DAO {
                 "updated_at timestamp default current_timestamp on update current_timestamp, " +
                 "primary key (idAuthor)" +
                 ");";
-        executeStatement(query, "Die Tabelle entities.Author wurde angelegt.");
+        executeStatement(query, "Die Tabelle Author wurde angelegt.");
     }
 
     public void createRecordAuthor(String firstname, String lastname, int birthYear) {
@@ -33,7 +32,7 @@ public class AuthorDAO extends DAO {
                 "\"" + lastname + "\"," +
                 +birthYear + ");";
         String query = query1 + query2;
-        executeStatement(query, "Ein Datensatz entities.Author wurde der Tabelle entities.Author zugefügt.");
+        executeStatement(query, "Ein Datensatz wurde der Tabelle Author zugefügt.");
     }
 
     public void updateRecordAuthor(String firstname, String lastname, int birthYear, int idAuthor) {
@@ -43,8 +42,7 @@ public class AuthorDAO extends DAO {
                 "birthYear = " + birthYear;
         String query3 = " where idAuthor = " + idAuthor + ";";
         String query = query1 + query2 + query3;
-        System.out.println(query);
-        executeStatement(query, "Ein Datensatz author wurde in der Tabelle Author editiert/geupdated.");
+        executeStatement(query, "Ein Datensatz wurde in der Tabelle Author editiert/geupdated.");
     }
 
 
@@ -55,7 +53,7 @@ public class AuthorDAO extends DAO {
         return listAllAuthors;
     }
 
-    public LinkedList<Author> createLinkedListAllAuthors(String query) {
+    private LinkedList<Author> createLinkedListAllAuthors(String query) {
         LinkedList<Author> listAA = new LinkedList<>();
         try {
             Statement st = dbConnector.getConnection().createStatement();
@@ -78,17 +76,5 @@ public class AuthorDAO extends DAO {
             sqle.printStackTrace();
         }
         return listAA;
-    }
-
-    public boolean checkIsIDAuthorInTable(int zuLoeschendeIdAuthor) {
-        boolean authorIsInTable;
-        String query = "select count(*) as anzahlDS from author where idAuthor = " + zuLoeschendeIdAuthor;
-        int anzahlDS = zaehlenDS(query);
-        if (anzahlDS > 0) {
-            authorIsInTable = true;
-        } else {
-            authorIsInTable = false;
-        }
-        return authorIsInTable;
     }
 }

@@ -1,9 +1,7 @@
 package daos;
 
-import entities.Author;
-import entities.Category;
+import entities.*;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -30,7 +28,7 @@ public class CategoryDAO extends DAO {
         String query1 = "insert into category (description) values (";
         String query2 = "\"" + description + "\");";
         String query = query1 + query2;
-        executeStatement(query, "Ein Datensatz entities.Category wurde der Tabelle entities.Category zugefügt.");
+        executeStatement(query, "Ein Datensatz wurde der Tabelle Category zugefügt.");
     }
 
     public void updateRecordCategory(String description, int idCategory) {
@@ -38,8 +36,7 @@ public class CategoryDAO extends DAO {
         String query2 = "description = " + "\"" + description + "\" ";
         String query3 = " where idCategory = " + idCategory + ";";
         String query = query1 + query2 + query3;
-        System.out.println(query);
-        executeStatement(query, "Ein Datensatz category wurde in der Tabelle category editiert/geupdated.");
+        executeStatement(query, "Ein Datensatz wurde in der Tabelle category editiert/geupdated.");
     }
 
     public LinkedList<Category> getListAllCategories() {
@@ -70,17 +67,5 @@ public class CategoryDAO extends DAO {
             sqle.printStackTrace();
         }
         return listAC;
-    }
-
-    public boolean checkIsIDCategoryInTable(int zuLoeschendeIdCategory) {
-        boolean categoryIsInTable;
-        String query = "select count(*) as anzahlDS from category where idCategory = " + zuLoeschendeIdCategory;
-        int anzahlDS = zaehlenDS(query);
-        if (anzahlDS > 0) {
-            categoryIsInTable = true;
-        } else {
-            categoryIsInTable = false;
-        }
-        return categoryIsInTable;
     }
 }

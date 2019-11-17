@@ -7,7 +7,6 @@ import java.util.LinkedList;
 
 public class DiverseLists {
 
-
     public void createListWerHatDerzeitWelcheBuecherAusgeliehen(LoanedDAO loDAO, String meldung) {
         System.out.println("Übersicht1: " + meldung);
         LinkedList<LoanedCustomerBook> listLCB = loDAO.getListeLCB_sortCustomer();
@@ -88,38 +87,33 @@ public class DiverseLists {
         listCategoryBook.get(0).ausgabeListBookAuthorCategory(listCategoryBook);
     }
 
-    public LinkedList<BookAuthorCategory> createListeBookAllRecords(BookDAO boDAO){
+    public void createListeBookAllRecords(BookDAO boDAO) {
         System.out.println("Bereich book - alle Datensätze der Tabelle (mit ergänzenden Angaben aus author und category, sortiert nach BuchID");
         LinkedList<BookAuthorCategory> listAllBooks = boDAO.getListBAC();
         listAllBooks.get(0).ausgabeListBookAuthorCategory(listAllBooks);
-        return listAllBooks;
     }
 
-    public LinkedList<Author> createListeAuthorAllRecords(AuthorDAO auDAO){
+    public void createListeAuthorAllRecords(AuthorDAO auDAO) {
         System.out.println("Bereich author - alle Datensätze der Tabelle (alphabetisch sortiert nach dem Nachnamen des Autors");
         LinkedList<Author> listAllAuthors = auDAO.getListAllAuthors();
         listAllAuthors.get(0).ausgabeListAllAuthors(listAllAuthors);
-        return listAllAuthors;
     }
 
-    public LinkedList<Category> createListeCategoryAllRecords(CategoryDAO caDAO){
+    public void createListeCategoryAllRecords(CategoryDAO caDAO) {
         System.out.println("Bereich category - alle Datensätze der Tabelle (alphabetisch sortiert nach der Beschreibung der Kategorie");
         LinkedList<Category> listAllCategories = caDAO.getListAllCategories();
         listAllCategories.get(0).ausgabeListAllCategories(listAllCategories);
-        return listAllCategories;
     }
 
-    public LinkedList<Customer> createListeCustomerAllRecords(CustomerDAO cuDAO){
+    public void createListeCustomerAllRecords(CustomerDAO cuDAO) {
         System.out.println("Bereich customer - alle Datensätze der Tabelle (alphabetisch sortiert nach dem Nachnamen des Kunden");
         LinkedList<Customer> listAllCustomers = cuDAO.getListAllCustomers();
         listAllCustomers.get(0).ausgabeListAllCustomers(listAllCustomers);
-        return listAllCustomers;
     }
-    public LinkedList<LoanedCustomerBook> createListeLoanedAllRecords(LoanedDAO loDAO){
+
+    public void createListeLoanedAllRecords(LoanedDAO loDAO) {
         System.out.println("Bereich loaned - alle Datensätze der Tabelle (alphabetisch sortiert nach dem Nachnamen des Kunden");
         LinkedList<LoanedCustomerBook> listLCB = loDAO.getListeLCB_sortCustomer();
         listLCB.get(0).ausgabeListLCB2(listLCB);
-        return listLCB;
     }
-
 }

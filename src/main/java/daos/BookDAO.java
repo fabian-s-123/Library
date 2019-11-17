@@ -1,6 +1,6 @@
 package daos;
 
-import entities.BookAuthorCategory;
+import entities.*;
 
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -32,7 +32,7 @@ public class BookDAO extends DAO {
                 "updated_at timestamp default current_timestamp on update current_timestamp, " +
                 "primary key (idBook)" +
                 ");";
-        executeStatement(query, "Die Tabelle customer wurde angelegt.");
+        executeStatement(query, "Die Tabelle book wurde angelegt.");
     }
 
     public void createRecordBook(String title, int idAuthor, int idCategory, long isbn, int fsk, String publisher,
@@ -51,7 +51,7 @@ public class BookDAO extends DAO {
                 idRow + ", " +
                 idColumn + ");";
         String query = query1 + query2;
-        executeStatement(query, "Ein Datensatz book der Tabelle book zugefügt.");
+        executeStatement(query, "Ein Datensatz der Tabelle book zugefügt.");
     }
 
     public void updateRecordBook(String title, int idAuthor, int idCategory, long isbn, int fsk, String publisher,
@@ -71,8 +71,7 @@ public class BookDAO extends DAO {
                 "idColumn = " + idColumn;
         String query3 = " where idBook = " + idBook + ";";
         String query = query1 + query2 + query3;
-        System.out.println(query);
-        executeStatement(query, "Ein Datensatz book wurde in der Tabelle book geändert.");
+        executeStatement(query, "Ein Datensatz wurde in der Tabelle book geändert.");
     }
 
     public List<Integer> selectIdBooks(Statement st) throws SQLException {
@@ -230,18 +229,6 @@ public class BookDAO extends DAO {
             sqle.printStackTrace();
         }
         return listCBA;
-    }
-
-    public boolean checkIsIDBookInTable(int zuLoeschendeIdBook) {
-        boolean bookIsInTable;
-        String query = "select count(*) as anzahlDS from book where idBook = " + zuLoeschendeIdBook;
-        int anzahlDS = zaehlenDS(query);
-        if (anzahlDS > 0) {
-            bookIsInTable = true;
-        } else {
-            bookIsInTable = false;
-        }
-        return bookIsInTable;
     }
 }
 

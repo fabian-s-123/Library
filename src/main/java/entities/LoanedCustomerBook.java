@@ -37,13 +37,14 @@ public class LoanedCustomerBook {
     }
 
     public void ausgabeKopfListLCB() {
-        System.out.println("Lfd  ID    ID      Vorname         Name           ID    Titel                                              Vorname         Name                entliehen              zurückgegeben        ver-  erstellt               updated");
-        System.out.println("Nr   loan  cust.   customer                      book                                                      Author                              am                     am                   län-  am                     am");
+        System.out.println("ID    ID      Vorname         Name           ID    Titel                                              Vorname         Name                entliehen              zurückgegeben        ver-  erstellt               updated");
+        System.out.println("loan  cust.   customer                      book                                                      Author                              am                     am                   län-  am                     am");
+        System.out.println("_____________________________________________________________________________________________________________________________________________________________________________________________________________________________________\n");
     }
 
-    public void ausgabeZeileListLCB(LoanedCustomerBook temp, int i) {
+    public void ausgabeZeileListLCB(LoanedCustomerBook temp) {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd.MM.yy  HH:mm:ss");
-        System.out.printf("%-3d  %-5d  %-4d   %-15s %-15s %-4d %-50s %-15s %-15s     %18s     ", i, temp.idLoaned, temp.idCustomer, temp.customerFirstName, temp.customerLastName, temp.idBook, temp.title, temp.authorFirstName, temp.authorLastName, temp.loanedOn.format(dtf));
+        System.out.printf("%-5d  %-4d   %-15s %-15s %-4d %-50s %-15s %-15s     %18s     ", temp.idLoaned, temp.idCustomer, temp.customerFirstName, temp.customerLastName, temp.idBook, temp.title, temp.authorFirstName, temp.authorLastName, temp.loanedOn.format(dtf));
         if (temp.returnedOn != null) {
             System.out.print(temp.returnedOn.format(dtf));
         } else {
@@ -60,7 +61,7 @@ public class LoanedCustomerBook {
             LoanedCustomerBook temp = listLCB.get(i);
             if (temp.returnedOn == null) {
                 lfdnr++;
-                ausgabeZeileListLCB(temp, lfdnr);
+                ausgabeZeileListLCB(temp);
             }
         }
         System.out.print("Ende der Liste\n\n");
@@ -70,7 +71,7 @@ public class LoanedCustomerBook {
         ausgabeKopfListLCB();
         for (int i = 0; i < listLCB.size(); i++) {
             LoanedCustomerBook temp = listLCB.get(i);
-            ausgabeZeileListLCB(temp, i+1);
+            ausgabeZeileListLCB(temp);
         }
         System.out.print("Ende der Liste\n\n");
     }
@@ -82,7 +83,7 @@ public class LoanedCustomerBook {
             LoanedCustomerBook temp = listLCB.get(i);
             if (temp.returnedOn == null) {
                 lfdnr++;
-                ausgabeZeileListLCB(temp, lfdnr);
+                ausgabeZeileListLCB(temp);
             }
         }
         System.out.print("Ende der Liste\n\n");
@@ -92,7 +93,7 @@ public class LoanedCustomerBook {
         ausgabeKopfListLCB();
         for (int i = 0; i < listLCB.size(); i++) {
             LoanedCustomerBook temp = listLCB.get(i);
-                ausgabeZeileListLCB(temp, i+1);
+            ausgabeZeileListLCB(temp);
         }
         System.out.print("Ende der Liste\n\n");
     }

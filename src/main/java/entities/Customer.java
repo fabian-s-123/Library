@@ -74,7 +74,7 @@ public class Customer {
         this.updated_at = updated_at;
     }
 
-    public void ausgabeListAllCustomers(LinkedList<Customer> listAllCustomers){
+    public void ausgabeListAllCustomers(LinkedList<Customer> listAllCustomers) {
         ausgabeKopfListCustomer();
         for (int i = 0; i < listAllCustomers.size(); i++) {
             Customer temp = listAllCustomers.get(i);
@@ -83,15 +83,16 @@ public class Customer {
         System.out.print("Ende der Liste\n\n");
     }
 
-    public void ausgabeKopfListCustomer(){
+    public void ausgabeKopfListCustomer() {
         System.out.println("ID   Name                      Vorname                   Straße HNr                                    PLZ   Ort                    GebDat     email                          PIN             KreditKartenNr       CVC   gültig bis  erstellt am          updated am");
+        System.out.println("____________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________\n");
     }
 
     public void ausgabeZeileListCustomer(Customer temp) {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd.MM.yy  HH:mm:ss");
         DateTimeFormatter dtf_k = DateTimeFormatter.ofPattern("dd.MM.yy");
         System.out.printf("%-4d %-25s %-25s %-45s %-5d %-20s %10s   %-30s %-15s %-16d %7s   %-7s     %18s   %18s \n", +
-                temp.idCustomer, temp.lastName, temp.firstName, (temp.street + " " + temp.apNr), temp.zip, temp.city, (temp.birthDay.toLocalDateTime()).format(dtf_k), temp.email, temp.pinCode, temp.creditCardNr, temp.cvc,  (temp.expiryDateMonth + "/" + temp.expiryDateYear), temp.created_at.format(dtf), temp.updated_at.format(dtf));
+                temp.idCustomer, temp.lastName, temp.firstName, (temp.street + " " + temp.apNr), temp.zip, temp.city, (temp.birthDay.toLocalDateTime()).format(dtf_k), temp.email, temp.pinCode, temp.creditCardNr, temp.cvc, (temp.expiryDateMonth + "/" + temp.expiryDateYear), temp.created_at.format(dtf), temp.updated_at.format(dtf));
     }
 
     public int getIdCustomer() {

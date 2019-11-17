@@ -1,7 +1,6 @@
 package daos;
 
-import entities.Author;
-import entities.Customer;
+import entities.*;
 
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -36,7 +35,6 @@ public class CustomerDAO extends DAO {
         executeStatement(query, "Die Tabelle customer wurde angelegt.");
     }
 
-
     public void createRecordCustomer(String pinCode, String email, String firstName, String lastName, LocalDateTime birthDay, String street, String apNr, int zip, String city, long creditCardNr, int cvc, int expiryDateYear, int expiryDateMonth) {
         String query1 = "insert into customer (pinCode, email, firstName, lastName, birthDay, street, apNr, zip, city, creditCardNr, cvc, expiryDateYear, expiryDateMonth) values (";
         Timestamp birthDayTS = Timestamp.valueOf(birthDay);
@@ -54,7 +52,7 @@ public class CustomerDAO extends DAO {
                 expiryDateYear + ", " +
                 expiryDateMonth + ");";
         String query = query1 + query2;
-        executeStatement(query, "Ein Datensatz customer der Tabelle customer zugefügt.");
+        executeStatement(query, "Ein Datensatz der Tabelle customer zugefügt.");
     }
 
     public void updateRecordCustomer(String pinCode, String email, String firstName, String lastName, LocalDateTime birthDay, String street, String apNr, int zip, String city, long creditCardNr, int cvc, int expiryDateYear, int expiryDateMonth, int idCustomer) {
@@ -75,8 +73,7 @@ public class CustomerDAO extends DAO {
                 "expiryDateMonth = " + expiryDateMonth;
         String query3 = " where idCustomer = " + idCustomer + ";";
         String query = query1 + query2 + query3;
-        System.out.println(query);
-        executeStatement(query, "Ein Datensatz customer wurde in der Tabelle customer editiert/geupdated.");
+        executeStatement(query, "Ein Datensatz wurde in der Tabelle customer editiert/geupdated.");
     }
 
     public List<Customer> select(Statement st) throws SQLException {
@@ -186,17 +183,5 @@ public class CustomerDAO extends DAO {
             sqle.printStackTrace();
         }
         return listAC;
-    }
-
-    public boolean checkIsIDCustomerInTable(int zuLoeschendeIdCustomer) {
-        boolean customerIsInTable;
-        String query = "select count(*) as anzahlDS from customer where idCustomer = " + zuLoeschendeIdCustomer;
-        int anzahlDS = zaehlenDS(query);
-        if (anzahlDS > 0) {
-            customerIsInTable = true;
-        } else {
-            customerIsInTable = false;
-        }
-        return customerIsInTable;
     }
 }

@@ -6,6 +6,10 @@ import daos.*;
 
 import java.util.Scanner;
 
+// was könnte ich noch tun: bei id 0 = Abbruch von edit, delete
+//                          bei eingabe Buch prüfen, ob idAuthor und idCategory vorhanden sind
+// Optimierungshinweise von intelliJ anschauen
+
 public class Administration {
 
     public static void main(String[] args) {

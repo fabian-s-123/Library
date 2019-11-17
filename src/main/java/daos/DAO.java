@@ -37,7 +37,6 @@ public abstract class DAO {
             while (rs.next()) {
                 anzahlDS = rs.getInt("anzahlDS");
             }
-            System.out.println("Das Ergebnis von zaehlenDS: " + anzahlDS);
             st.close();
         } catch (SQLException sqle) {
             System.err.println("SQLException: " + sqle.getMessage());
@@ -54,16 +53,16 @@ public abstract class DAO {
         executeStatement(query, meldung);
     }
 
-    public boolean checkIsIdInTableBook(String columnName, int id) {
-        boolean isIdInTableBook;
-        String query = "select count(*) as anzahlDS from book where " + columnName + " = " + id;
+    public boolean checkIsXxxIdInTableXxx(String columnName, String tableName, int id) {
+        boolean isIdInTable;
+        String query = "select count(*) as anzahlDS from " + tableName + " where " + columnName + " = " + id;
         int anzahlDS = zaehlenDS(query);
         if (anzahlDS > 0) {
-            isIdInTableBook = true;
+            isIdInTable = true;
         } else {
-            isIdInTableBook = false;
+            isIdInTable = false;
         }
-        return isIdInTableBook;
+        return isIdInTable;
     }
 }
 
