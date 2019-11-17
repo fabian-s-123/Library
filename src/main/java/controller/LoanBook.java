@@ -58,8 +58,6 @@ public class LoanBook {
                 }
             } while (!validInput);
             loanedDAO.createNewRecordLoaned(idCustomer, choice, now);
-            System.out.println("Press enter to continue");
-
         } else {
             System.out.println("Sorry " + customerDAO.selectFirstName(st, idCustomer) + ", you already have four books currently in loan. " +
                     "Please return a book first, before you loan out another one.");

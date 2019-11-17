@@ -37,7 +37,6 @@ public class ReturnBook {
         } while (!validInput);
         if (choice > 0) {
             loanedDAO.returnBook(idCustomer, choice, loanedDAO.selectLoanedOn(st, idCustomer, choice) , now);
-            System.out.println("Press enter to continue");
         }
     }
 

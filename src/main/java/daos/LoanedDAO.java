@@ -242,4 +242,9 @@ public class LoanedDAO extends DAO {
         }
         return (time.minusHours(2)); //wegen falscher Zeitrückgabe
     }
+
+    //TODO query for LoanBook
+    //select * from ((loaned inner join book on loaned.idBook=book.idBook) inner join author on book.idAuthor=author.idAuthor) where loan.idCustomer=1 and loaned.idBook=31 and loaned.returnedOn>'0000-00-00 00:00:00' and book.fsk<=10 order by loaned.idLoaned DESC LIMIT 1;
+
+
 }
