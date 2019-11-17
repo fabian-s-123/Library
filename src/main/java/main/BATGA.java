@@ -1,9 +1,6 @@
 package main;
 
-import controller.Authentication;
-import controller.BrowseCollection;
-import controller.LoanBook;
-import controller.ReturnBook;
+import controller.*;
 import daos.*;
 import entities.BookAuthorCategory;
 
@@ -26,6 +23,7 @@ public class BATGA {
         LoanBook loanBook = new LoanBook();
         BrowseCollection browse = new BrowseCollection();
         ReturnBook returnBook = new ReturnBook();
+        ExtendLoan extendLoan = new ExtendLoan();
         BookAuthorCategory b = new BookAuthorCategory();
 
         CustomerDAO customerDAO = new CustomerDAO();
@@ -101,12 +99,7 @@ public class BATGA {
                             System.out.println("Log out successful.\nPress enter to continue.");
                             break;
                         case "1":
-                            if (loanBook.isAllowedToLoan(st, idCustomer, loanedDAO)) {
-                                loanBook.loanBook(st, scanner, idCustomer, loanedDAO, customerDAO, bookDAO, bacDAO, b);
-                            } else {
-                                System.out.println("Sorry " + customerDAO.selectFirstName(st, idCustomer) + ", you already have four books currently in loan. " +
-                                        "Please return a book first, before you loan out another one.");
-                            }
+                            loanBook.loanBook(st, scanner, idCustomer, loanedDAO, customerDAO, bookDAO, bacDAO, b);
                             validInput = false;
                             break;
                         case "2":
@@ -114,7 +107,8 @@ public class BATGA {
                             validInput = false;
                             break;
                         case "3":
-                            //handle extend loan
+                            extendLoan.extendLoan(st, scanner, returnBook, idCustomer, b, bacDAO, loanedDAO);
+                            validInput = false;
                             break;
                         case "4":
                             browse.browseCollection(st, bacDAO, bookDAO);

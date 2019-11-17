@@ -97,7 +97,7 @@ public class BookAuthorCategory {
     public void printHeadBAC(){
         System.out.println("ID    Title                                              First Name      Last Name       Y.o.  Category                      ISBN           FSK Publisher                    First              pages   Language");
         System.out.println("book                                                     Author          Author          Birth ID  Description                                                               Edition                            ");
-        System.out.println("________________________________________________________________________________________________________________________________________________________________________________________________________________");
+        System.out.println("______________________________________________________________________________________________________________________________________________________________________________________________________________________");
     }
 
     public void printListBAC(BookAuthorCategory temp) {

@@ -4,7 +4,9 @@ import java.sql.*;
 import entities.Loaned;
 import entities.LoanedCustomerBook;
 
+import javax.swing.plaf.nimbus.State;
 import java.sql.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,18 +45,19 @@ public class LoanedDAO extends DAO {
         executeStatement(query, "Ein Datensatz loaned wurde der Tabelle loaned zugefügt. (Rückgabedatum eingetragen)");
     }
 
-    public void createRecordLoanedWithExtraTime(int idCustomer, int idBook, LocalDateTime loanedOn, LocalDateTime returnedOn) {
+    //TODO check due to changes (removing returnedOn)
+    public void createRecordLoanedWithExtraTime(int idCustomer, int idBook, LocalDateTime loanedOn) {
         Timestamp loanedOnTS = Timestamp.valueOf(loanedOn);
-        Timestamp returnedOnTS = Timestamp.valueOf(returnedOn);
-        String query1 = "insert into loaned (idCustomer, idBook, loanedOn, returnedOn, extraTime) values (";
+        //Timestamp returnedOnTS = Timestamp.valueOf(returnedOn);
+        String query1 = "insert into loaned (idCustomer, idBook, loanedOn, extraTime) values (";
         String query2 = idCustomer + ", " +
                 idBook + ", " +
                 "\"" + loanedOnTS + "\", " +
-                "\"" + returnedOnTS + "\", " +
+                //"\"" + returnedOnTS + "\", " +
                 true + ");";
         String query = query1 + query2;
         executeStatement(query, "Ein Datensatz loaned wurde der Tabelle loaned zugefügt. (mit Verlängerungsvermerk)");
-        createRecordLoanedWithoutReturn(idCustomer, idBook, returnedOn);
+        //createRecordLoanedWithoutReturn(idCustomer, idBook, loanedOn);
     }
 
     public void createRecordLoanedWithoutReturn(int idCustomer, int idBook, LocalDateTime loanedOn) {
@@ -77,6 +80,13 @@ public class LoanedDAO extends DAO {
                 false + ");";
         String query = query1 + query2;
         executeStatement(query, "One moment please...\nHere is your book.\n");
+    }
+
+    public void returnBook(int idCustomer, int idBook, LocalDateTime loanedOn, LocalDateTime returnedOn) throws SQLException {
+        Timestamp loanedOnTS = Timestamp.valueOf(loanedOn);
+        Timestamp returnedOnTS = Timestamp.valueOf(returnedOn);
+        String query = "update loaned set returnedOn='" + returnedOnTS + "' where idCustomer=" + idCustomer + " and idBook=" + idBook + " and loanedOn ='" + loanedOnTS + "';";
+        executeStatement(query, "Thank you for returning.");
     }
 
     public LinkedList<Loaned> getListeoffeneRückgabenKurz() {
@@ -220,5 +230,16 @@ public class LoanedDAO extends DAO {
             ids.add(idBook);
         }
         return ids;
+    }
+
+    public LocalDateTime selectLoanedOn(Statement st, int idCustomer, int idBook) throws SQLException {
+        LocalDateTime time = LocalDateTime.now();
+        String query = "select loanedOn from loaned where idCustomer=" + idCustomer + " and idBook=" + idBook + " and returnedOn='0000-00-00 00:00:00';";
+        ResultSet rs = st.executeQuery(query);
+        while (rs.next()){
+            Timestamp loanedOn = rs.getTimestamp("loanedOn");
+            time = loanedOn.toLocalDateTime();
+        }
+        return (time.minusHours(2)); //wegen falscher Zeitrückgabe
     }
 }

@@ -7,15 +7,14 @@ import entities.BookAuthorCategory;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class ReturnBook {
+public class ExtendLoan {
 
-    public void returnBook(Statement st, int idCustomer, BookAuthorCategory b, BACDAO bacDAO, LoanedDAO loanedDAO, Scanner scanner) throws SQLException {
+    public void extendLoan (Statement st, Scanner scanner, ReturnBook returnBook, int idCustomer, BookAuthorCategory b, BACDAO bacDAO, LoanedDAO loanedDAO) throws SQLException {
         LocalDateTime now = LocalDateTime.now();
-        List<Integer> loanedList = booksInLoanByCustomer(st, idCustomer, bacDAO, loanedDAO);
+        List<Integer> loanedList = returnBook.booksInLoanByCustomer(st, idCustomer, bacDAO, loanedDAO);
         System.out.println("These are the books you currently have in loan:\n");
         b.printHeadBAC();
 
@@ -27,7 +26,7 @@ public class ReturnBook {
         boolean validInput = false;
         int choice = 0;
         do {
-            System.out.println("Please select the book you would like to return.");
+            System.out.println("Please select the book you would like to extend the loan for.");
             choice = scanner.nextInt();
             if (loanedList.contains(choice)) {
                 validInput = true;
@@ -37,18 +36,8 @@ public class ReturnBook {
         } while (!validInput);
         if (choice > 0) {
             loanedDAO.returnBook(idCustomer, choice, loanedDAO.selectLoanedOn(st, idCustomer, choice) , now);
+            loanedDAO.createRecordLoanedWithExtraTime(idCustomer, choice, now);
             System.out.println("Press enter to continue");
         }
-    }
-
-    public List<Integer> booksInLoanByCustomer (Statement st, int idCustomer, BACDAO bacDAO, LoanedDAO loanedDAO) throws SQLException {
-        List<Integer> list = new ArrayList<>();
-        for (Integer x : loanedDAO.selectOpenIdBookPerCustomer(st, idCustomer)){
-            list.add(x);
-        }
-        for (Integer y : list) {
-            bacDAO.selectBacId(st, y);
-        }
-        return list;
     }
 }
