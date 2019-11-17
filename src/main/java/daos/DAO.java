@@ -48,5 +48,22 @@ public abstract class DAO {
         return anzahlDS;
     }
 
+    public void createQueryDeleteID(String table, String columnName, int zuLoeschendeId) {
+        String query = "DELETE FROM " + table + " WHERE " + columnName + " = " + zuLoeschendeId;
+        String meldung = "Ein Datensatz aus " + table + " mit der ID = " + zuLoeschendeId + " wurde gelöscht.";
+        executeStatement(query, meldung);
+    }
+
+    public boolean checkIsIdInTableBook(String columnName, int id) {
+        boolean isIdInTableBook;
+        String query = "select count(*) as anzahlDS from book where " + columnName + " = " + id;
+        int anzahlDS = zaehlenDS(query);
+        if (anzahlDS > 0) {
+            isIdInTableBook = true;
+        } else {
+            isIdInTableBook = false;
+        }
+        return isIdInTableBook;
+    }
 }
 

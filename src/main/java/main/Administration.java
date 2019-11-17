@@ -25,10 +25,10 @@ public class Administration {
         RecordNewUpdateDelete recNUD = new RecordNewUpdateDelete();
 
         boolean verbleibImProgramm = true;
-        boolean verbleibInAuswahlstufe = true;
-        int auswahl1 = 0; //für 1. Menüstufe (Pflege Book, Author, Category, Customer, Loaned, Übersichten
-        int auswahl2 = 0; //für 2. Menüstufe (Liste, anfügen, ändern, löschen)
-        int auswahl3 = 0; //für 2. Menüstufe (diverse Listen)
+        boolean verbleibInAuswahlstufe;
+        int auswahl1; //für 1. Menüstufe (Pflege Book, Author, Category, Customer, Loaned, Übersichten
+        int auswahl2; //für 2. Menüstufe (Liste, anfügen, ändern, löschen)
+        int auswahl3; //für 2. Menüstufe (diverse Listen)
         Scanner sc = new Scanner(System.in);
         do { //Verbleib im Programm
             boolean isEingabeGueltig = false;
@@ -128,7 +128,7 @@ public class Administration {
                             verbleibInAuswahlstufe = false;
                             break;
                         case 1:
-                            System.out.println("Hier ist die Liste aller DS zu (" + auswahlString1[auswahl1 - 1].toUpperCase() + ") vorgesehen");
+                            System.out.println("Hier ist die Liste aller DS zu (" + auswahlString1[auswahl1 - 1].toUpperCase() + ").");
                             switch (auswahl1) {
                                 case 1: //book
                                     diLi.createListeBookAllRecords(boDAO);
@@ -148,27 +148,27 @@ public class Administration {
                             }
                             break;
                         case 2:
-                            System.out.println("Hier ist das Erstellen eines neuen DS in (" + auswahlString1[auswahl1 - 1].toUpperCase() + ") vorgesehen");
+                            System.out.println("Hier geht es zum Erstellen eines neuen DS in (" + auswahlString1[auswahl1 - 1].toUpperCase() + ").");
                             switch (auswahl1) {
                                 case 1: //book
-                                    recNUD.createNewRecordBook(boDAO, true);
+                                    recNUD.createNewRecordBook(boDAO);
                                     break;
                                 case 2: //author
-                                    recNUD.createNewRecordAuthor(auDAO, true);
+                                    recNUD.createNewRecordAuthor(auDAO);
                                     break;
                                 case 3: //category
-                                    recNUD.createNewRecordCategory(caDAO, true, 0);
+                                    recNUD.createNewRecordCategory(caDAO);
                                     break;
                                 case 4: //customer
-                                    recNUD.createNewRecordCustomer(cuDAO, true);
+                                    recNUD.createNewRecordCustomer(cuDAO);
                                     break;
                                 case 5: //loaned
-                                    recNUD.createNewRecordLoaned(loDAO, true);
+                                    recNUD.createNewRecordLoaned(loDAO);
                                     break;
                             }
                             break;
                         case 3:
-                            System.out.println("Hier ist das Editieren eines einzelnen DS in (" + auswahlString1[auswahl1 - 1].toUpperCase() + ") vorgesehen");
+                            System.out.println("Hier geht es zum Editieren eines einzelnen DS in (" + auswahlString1[auswahl1 - 1].toUpperCase() + ").");
                             switch (auswahl1) {
                                 case 1: //book
                                     recNUD.editRecordBook(boDAO, diLi);
@@ -188,7 +188,7 @@ public class Administration {
                             }
                             break;
                         case 4:
-                            System.out.println("Hier ist das Löschen eines einzelnen DS in (" + auswahlString1[auswahl1 - 1].toUpperCase() + ")vorgesehen");
+                            System.out.println("Hier geht es zum Löschen eines einzelnen DS in (" + auswahlString1[auswahl1 - 1].toUpperCase() + ").");
                             switch (auswahl1) {
                                 case 1: //book
                                     recNUD.deleteRecordBook(boDAO, diLi);

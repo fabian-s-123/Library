@@ -36,6 +36,18 @@ public class AuthorDAO extends DAO {
         executeStatement(query, "Ein Datensatz entities.Author wurde der Tabelle entities.Author zugefügt.");
     }
 
+    public void updateRecordAuthor(String firstname, String lastname, int birthYear, int idAuthor) {
+        String query1 = "update author set ";
+        String query2 = "firstName = " + "\"" + firstname + "\", " +
+                "lastname = " + "\"" + lastname + "\"," +
+                "birthYear = " + birthYear;
+        String query3 = " where idAuthor = " + idAuthor + ";";
+        String query = query1 + query2 + query3;
+        System.out.println(query);
+        executeStatement(query, "Ein Datensatz author wurde in der Tabelle Author editiert/geupdated.");
+    }
+
+
     public LinkedList<Author> getListAllAuthors() {
         LinkedList<Author> listAllAuthors = new LinkedList<>();
         String query = "select * from author order by author.lastName ASC";
@@ -55,7 +67,7 @@ public class AuthorDAO extends DAO {
                 int birthYear = rs.getInt(4);
                 LocalDateTime created_at = rs.getTimestamp(5).toLocalDateTime();
                 LocalDateTime updated_at = rs.getTimestamp(6).toLocalDateTime();
-                Author temp = new Author(  idAuthor, firstName, lastName, birthYear, created_at, updated_at);
+                Author temp = new Author(idAuthor, firstName, lastName, birthYear, created_at, updated_at);
                 listAA.add(temp);
             }
             st.close();

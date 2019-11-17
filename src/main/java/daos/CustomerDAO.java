@@ -36,13 +36,14 @@ public class CustomerDAO extends DAO {
         executeStatement(query, "Die Tabelle customer wurde angelegt.");
     }
 
-    public void createRecordCustomer(String pinCode, String email, String firstName, String lastName, LocalDateTime birthDay, String street, String apNr, int zip, String city, long creditCardNr, int cvc, int expiryDateYear, int expiryDateMonth){
+
+    public void createRecordCustomer(String pinCode, String email, String firstName, String lastName, LocalDateTime birthDay, String street, String apNr, int zip, String city, long creditCardNr, int cvc, int expiryDateYear, int expiryDateMonth) {
         String query1 = "insert into customer (pinCode, email, firstName, lastName, birthDay, street, apNr, zip, city, creditCardNr, cvc, expiryDateYear, expiryDateMonth) values (";
         Timestamp birthDayTS = Timestamp.valueOf(birthDay);
         String query2 = "\"" + pinCode + "\", " +
                 "\"" + email + "\", " +
-                "\"" + firstName  + "\", " +
-                "\"" + lastName  + "\", " +
+                "\"" + firstName + "\", " +
+                "\"" + lastName + "\", " +
                 "\"" + birthDayTS + "\", " +
                 "\"" + street + "\", " +
                 "\"" + apNr + "\", " +
@@ -56,12 +57,33 @@ public class CustomerDAO extends DAO {
         executeStatement(query, "Ein Datensatz customer der Tabelle customer zugefügt.");
     }
 
+    public void updateRecordCustomer(String pinCode, String email, String firstName, String lastName, LocalDateTime birthDay, String street, String apNr, int zip, String city, long creditCardNr, int cvc, int expiryDateYear, int expiryDateMonth, int idCustomer) {
+        Timestamp birthDayTS = Timestamp.valueOf(birthDay);
+        String query1 = "update customer set ";
+        String query2 = "pinCode = " + "\"" + pinCode + "\", " +
+                "email = " + "\"" + email + "\", " +
+                "firstName = " + "\"" + firstName + "\", " +
+                "lastName = " + "\"" + lastName + "\", " +
+                "birthDay = " + "\"" + birthDayTS + "\", " +
+                "street = " + "\"" + street + "\", " +
+                "apNr = " + "\"" + apNr + "\", " +
+                "zip = " + zip + ", " +
+                "city = " + "\"" + city + "\", " +
+                "creditCardNr = " + creditCardNr + ", " +
+                "cvc = " + cvc + ", " +
+                "expiryDateYear = " + expiryDateYear + ", " +
+                "expiryDateMonth = " + expiryDateMonth;
+        String query3 = " where idCustomer = " + idCustomer + ";";
+        String query = query1 + query2 + query3;
+        System.out.println(query);
+        executeStatement(query, "Ein Datensatz customer wurde in der Tabelle customer editiert/geupdated.");
+    }
+
     public List<Customer> select(Statement st) throws SQLException {
         List<Customer> customers = new LinkedList<Customer>();
         String query = "SELECT * FROM customer";
         ResultSet rs = st.executeQuery(query);
-        while (rs.next())
-        {
+        while (rs.next()) {
             int idCustomer = rs.getInt("idCustomer");
             String pinCode = rs.getString("pinCode");
             String email = rs.getString("email");
@@ -87,8 +109,7 @@ public class CustomerDAO extends DAO {
         ArrayList<Integer> ids = new ArrayList<>();
         String query = "SELECT idCustomer FROM customer;";
         ResultSet rs = st.executeQuery(query);
-        while (rs.next())
-        {
+        while (rs.next()) {
             int idCustomer = rs.getInt("idCustomer");
             ids.add(idCustomer);
         }
@@ -99,8 +120,7 @@ public class CustomerDAO extends DAO {
         String query = "SELECT pinCode FROM customer WHERE idCustomer =" + idCustomer + ";";
         String pinCode = "";
         ResultSet rs = st.executeQuery(query);
-        while (rs.next())
-        {
+        while (rs.next()) {
             pinCode = rs.getString("pinCode");
         }
         return pinCode;
@@ -110,8 +130,7 @@ public class CustomerDAO extends DAO {
         String query = "SELECT firstName FROM customer WHERE idCustomer =" + idCustomer + ";";
         String firstName = "";
         ResultSet rs = st.executeQuery(query);
-        while (rs.next())
-        {
+        while (rs.next()) {
             firstName = rs.getString("firstName");
         }
         return firstName;
@@ -121,8 +140,7 @@ public class CustomerDAO extends DAO {
         String query = "SELECT birthDay FROM customer WHERE idCustomer =" + idCustomer + ";";
         Timestamp birthDay = null;
         ResultSet rs = st.executeQuery(query);
-        while (rs.next())
-        {
+        while (rs.next()) {
             birthDay = rs.getTimestamp("birthDay");
         }
         return birthDay;
@@ -157,7 +175,7 @@ public class CustomerDAO extends DAO {
                 int expiryDateMonth = rs.getInt(14);
                 LocalDateTime created_at = rs.getTimestamp(15).toLocalDateTime();
                 LocalDateTime updated_at = rs.getTimestamp(16).toLocalDateTime();
-                Customer temp = new Customer(idCustomer, pinCode, email, firstName, lastName, birthDay, street, apNr, zip, city, creditCardNr, CVC, expiryDateYear, expiryDateMonth , created_at, updated_at);
+                Customer temp = new Customer(idCustomer, pinCode, email, firstName, lastName, birthDay, street, apNr, zip, city, creditCardNr, CVC, expiryDateYear, expiryDateMonth, created_at, updated_at);
                 listAC.add(temp);
             }
             st.close();
