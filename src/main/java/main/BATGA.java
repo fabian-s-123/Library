@@ -93,7 +93,7 @@ public class BATGA {
                             System.out.println("Log out successful.\nPress enter to continue.");
                             break;
                         case "1":
-                            loanBook.loanBook(st, scanner, idCustomer, loanedDAO, customerDAO, bookDAO, bacDAO, b);
+                            loanBook.loanBook(st, scanner, idCustomer, loanedDAO, customerDAO, bacDAO, b);
                             validInput = false;
                             break;
                         case "2":

@@ -16,7 +16,7 @@ import java.util.Scanner;
 
 public class LoanBook {
 
-    public void loanBook(Statement st, Scanner scanner, int idCustomer, LoanedDAO loanedDAO, CustomerDAO customerDAO, BookDAO bookDAO, BACDAO bacDAO, BookAuthorCategory b) throws SQLException {
+    public void loanBook(Statement st, Scanner scanner, int idCustomer, LoanedDAO loanedDAO, CustomerDAO customerDAO, BACDAO bacDAO, BookAuthorCategory b) throws SQLException {
         LocalDateTime now = LocalDateTime.now();
         List<BookAuthorCategory> listOfBooks;
         List<Integer> listOfBooksLoaned;
