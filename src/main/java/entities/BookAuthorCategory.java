@@ -148,18 +148,17 @@ public class BookAuthorCategory {
         System.out.println("________________________________________________________________________________________________________________________________________________________________________________________________________________");
     }
 
-    private void printListBAC(BookAuthorCategory temp) {
+    public void printListBAC(BookAuthorCategory temp) {
         System.out.printf("%-5d %-50s %-15s %-15s %4d %2d   %-25s %-13d  %2d  %-25s %-10s %-10s %-5d   %-10s\n", +
                 temp.idBook, temp.title, temp.firstName, temp.lastName, temp.birthYear, temp.idCategory, temp.description, temp.isbn, temp.fsk, temp.publisher, temp.edition, temp.firstEdition, temp.amountPages, temp.language);
     }
 
-    public void printListBAC(List<BookAuthorCategory> listAllBooks) {
+    public void printListBACList(List<BookAuthorCategory> listAllBooks) {
         for (int i = 0; i < listAllBooks.size(); i++) {
             BookAuthorCategory temp = listAllBooks.get(i);
             printListBAC(temp);
         }
     }
-
     /**
      * End Version Fabian
      */

@@ -42,9 +42,7 @@ public class LoanBook {
 
             //print the available books
             b.printHeadBAC();
-            for (BookAuthorCategory bac : listOfBooks) {
-                b.printListBAC(bac);
-            }
+            b.printListBACList(listOfBooks);
 
             //validating the book id to return
             boolean validInput = false;

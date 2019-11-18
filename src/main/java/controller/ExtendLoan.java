@@ -53,7 +53,7 @@ public class ExtendLoan {
 
             //updating loan with returnedOn & add new entry with annotation extra time
             if (choice > 0) {
-                loanedDAO.returnBook(idCustomer, choice, temp.getLoanedOn().toLocalDateTime().minusHours(2), now);
+                loanedDAO.returnBook(idCustomer, choice, temp.getLoanedOn().toLocalDateTime(), now);
                 loanedDAO.createRecordLoanedWithExtraTime(idCustomer, choice, now);
                 System.out.println("The loan has been extended.\n");
             }
