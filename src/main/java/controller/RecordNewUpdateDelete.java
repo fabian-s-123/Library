@@ -6,12 +6,38 @@ import entities.*;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 public class RecordNewUpdateDelete {
+
+    private int eingabeZahlInt(String meldung) {
+        String eingabeString = eingabeZeichenkette(meldung);
+        int zahlInt = Integer.parseInt(eingabeString);
+        return zahlInt;
+    }
+
+    private long eingabeZahlLong(String meldung) {
+        String eingabeString = eingabeZeichenkette(meldung);
+        long zahlLong = Long.parseLong(eingabeString);
+        return zahlLong;
+    }
+
+    public String eingabeZeichenkette(String meldung) {
+        String eingabeString;
+        Scanner sc_String = new Scanner(System.in);
+        do {
+            System.out.print(meldung);
+            eingabeString = sc_String.next();
+            if (!(Pattern.matches("\\d*", eingabeString)))
+                System.out.print("--> fehlerhafte Eingabe, Wiederholung! --> ");
+        } while (!(Pattern.matches("\\d*", eingabeString)));
+        return eingabeString;
+    }
 
     private Book inputDataBook(AuthorDAO auDAO, CategoryDAO caDAO, DiverseLists diLi) {
         System.out.println("Stelle sicher, dass die Autoren- und die Kategorien-ID für das zu erfassende Buch bekannt ist, bei entsprechenden Zeitressourcen wird hier weitergearbeitet.");
         Scanner sc_String = new Scanner(System.in);
+        Scanner sc1_String = new Scanner(System.in);
         Scanner sc_int = new Scanner(System.in);
         System.out.print("Titel:              ");
         String title = sc_String.nextLine();
@@ -21,32 +47,27 @@ public class RecordNewUpdateDelete {
         System.out.print("Kategorien_ID:      ");
         int idCategory = inputIdCategory(caDAO, diLi, "auszuwählenden");
         if (idCategory == 0) idCategory = 1;
-        System.out.print("ISBN:               ");
-        long isbn = sc_int.nextLong();
-        if (isbn < 0) isbn = isbn * -1;
+        long isbn = eingabeZahlLong("ISBN:               ");
         if (isbn > 9999999999999L) isbn = 9999999999999L;
-        System.out.print("FSK/empfohlen ab:   ");
-        int fsk = sc_int.nextInt();
-        if (isbn < 0) fsk = fsk * -1;
-        if (fsk > 99) fsk = 99;
+        int fsk = eingabeZahlInt("FSK/empfohlen ab:   ");
+        if (fsk > 99) fsk = 18;
         System.out.print("Verlag:             ");
         String publisher = sc_String.nextLine();
         System.out.print("aktuelle Ausgabe:   ");
         String edition = sc_String.nextLine();
+        if (edition.length() > 10) edition = edition.substring(0, 10);
         System.out.print("Erstausgabe:        ");
         String firstEdition = sc_String.nextLine();
-        System.out.print("Anzahl der Seiten:  ");
-        int amountPages = sc_int.nextInt();
+        if (firstEdition.length() > 10) firstEdition = firstEdition.substring(0, 10);
+        int amountPages = eingabeZahlInt("Anzahl der Seiten:  ");
         if (amountPages < 0) amountPages = amountPages * -1;
         if (amountPages > 999) amountPages = 999;
         System.out.print("Sprache:            ");
         String language = sc_String.nextLine();
-        System.out.print("Lagerort - ROW:     ");
-        int idRow = sc_int.nextInt();
+        int idRow = eingabeZahlInt("Lagerort - ROW:     ");
         if (idRow < 0) idRow = idRow * -1;
         if (idRow > 99) idRow = 99;
-        System.out.print("           COLUMN:  ");
-        int idColumn = sc_int.nextInt();
+        int idColumn = eingabeZahlInt("           COLUMN:  ");
         if (idColumn < 0) idColumn = idColumn * -1;
         if (idColumn > 99) idColumn = 99;
         Book temp = new Book(0, title, idAuthor, idCategory, isbn, fsk, publisher, edition, firstEdition, amountPages, language, idRow, idColumn, null, null);
@@ -112,10 +133,8 @@ public class RecordNewUpdateDelete {
         String firstName = sc_String.nextLine();
         System.out.print("Nachname:          ");
         String lastName = sc_String.nextLine();
-        System.out.print("GeburtsJAHR:       ");
-        int gebJahr = sc_int.nextInt();
-        if (gebJahr<0) gebJahr=gebJahr*-1;
-        if (gebJahr > 9999) gebJahr = 9999;
+        int gebJahr = eingabeZahlInt("GeburtsJAHR:       ");
+        if (gebJahr > 9999) gebJahr = 2000;
         Author temp = new Author(0, firstName, lastName, gebJahr, null, null);
         return temp;
     }
@@ -238,36 +257,28 @@ public class RecordNewUpdateDelete {
         System.out.print("Hausnummer:        ");
         String apNr = sc_String.nextLine();
         if (apNr.length() > 7) apNr = apNr.substring(0, 7);
-        System.out.print("PLZ:               ");
-        int zip = sc_int.nextInt();
+        int zip = eingabeZahlInt("PLZ:               ");
         if (zip > 99999) zip = 99999;
         System.out.print("Stadt:             ");
         String city = sc_String.nextLine();
-        System.out.print("GeburtsTAG:        ");
-        int gebTag = sc_int.nextInt();
+        int gebTag = eingabeZahlInt("GeburtsTAG:        ");
         if (gebTag > 31) gebTag = 28;
-        System.out.print("GeburtsMONAT:      ");
-        int gebMonat = sc_int.nextInt();
+        int gebMonat = eingabeZahlInt("GeburtsMONAT:      ");
         if (gebMonat > 12) gebMonat = 12;
-        System.out.print("GeburtsJAHR:       ");
-        int gebJahr = sc_int.nextInt();
+        int gebJahr = eingabeZahlInt("GeburtsJAHR:       ");
         if (gebJahr < 1970) gebJahr = 1970;
-        if (gebJahr > 9999) gebJahr = 2020;
+        if (gebJahr > 2500) gebJahr = 2020;
         System.out.print("PIN-Code:          ");
         String pinCode = sc_String.nextLine();
         System.out.print("Email:             ");
         String email = sc_String.nextLine();
-        System.out.print("KreditKartenNr:    ");
-        long creditCardNr = sc_int.nextLong();
+        long creditCardNr = eingabeZahlLong("KreditKartenNr:    ");
         if (creditCardNr > 9999999999999999L) creditCardNr = 9999999999999999L;
-        System.out.print("CVC:               ");
-        int cvc = sc_int.nextInt();
+        int cvc = eingabeZahlInt("CVC:               ");
         if (cvc > 999) cvc = 999;
-        System.out.print("gültig bis Jahr:   ");
-        int expiryDateYear = sc_int.nextInt();
+        int expiryDateYear = eingabeZahlInt("gültig bis Jahr:   ");
         if (expiryDateYear > 9999) expiryDateYear = 2030;
-        System.out.print("       bis Monat:  ");
-        int expiryDateMonth = sc_int.nextInt();
+        int expiryDateMonth = eingabeZahlInt("       bis Monat:  ");
         if (expiryDateMonth > 12) expiryDateMonth = 12;
         Customer temp = new Customer(0, pinCode, email, firstName, lastName, Timestamp.valueOf(LocalDateTime.of(gebJahr, gebMonat, gebTag, 0, 0)), street, apNr, zip, city, creditCardNr, cvc, expiryDateYear, expiryDateMonth);
         return temp;
@@ -334,14 +345,11 @@ public class RecordNewUpdateDelete {
         System.out.print("ID Buch/book:        ");
         int idBook = inputIdBook(boDAO, diLi, "aufzunehmenden");
         if (idBook == 0) idBook = 1;
-        System.out.print("Ausleih-TAG:         ");
-        int leihTag = sc_int.nextInt();
+        int leihTag = eingabeZahlInt("Ausleih-TAG:         ");
         if (leihTag > 31) leihTag = 28;
-        System.out.print("Ausleih-MONAT:       ");
-        int leihMonat = sc_int.nextInt();
+        int leihMonat = eingabeZahlInt("Ausleih-MONAT:       ");
         if (leihMonat > 12) leihMonat = 12;
-        System.out.print("Ausleih-JAHR:        ");
-        int leihJahr = sc_int.nextInt();
+        int leihJahr = eingabeZahlInt("Ausleih-JAHR:        ");
         if (leihJahr < 1970) leihJahr = 1970;
         if (leihJahr > 3000) leihJahr = 2020;
         Loaned temp = new Loaned(0, idCustomer, idBook, LocalDateTime.of(leihJahr, leihMonat, leihTag, 0, 0), null, false, null, null);
@@ -358,24 +366,18 @@ public class RecordNewUpdateDelete {
         System.out.print("ID Buch/book:        ");
         int idBook = inputIdBook(boDAO, diLi, "aufzunehmenden");
         if (idBook == 0) idBook = 1;
-        System.out.print("Ausleih-TAG:         ");
-        int leihTag = sc_int.nextInt();
+        int leihTag = eingabeZahlInt("Ausleih-TAG:         ");
         if (leihTag > 31) leihTag = 28;
-        System.out.print("Ausleih-MONAT:       ");
-        int leihMonat = sc_int.nextInt();
+        int leihMonat = eingabeZahlInt("Ausleih-MONAT:       ");
         if (leihMonat > 12) leihMonat = 12;
-        System.out.print("Ausleih-JAHR:        ");
-        int leihJahr = sc_int.nextInt();
+        int leihJahr = eingabeZahlInt("Ausleih-JAHR:        ");
         if (leihJahr < 1970) leihJahr = 1970;
         if (leihJahr > 3000) leihJahr = 2020;
-        System.out.print("Rückgabe-TAG:        ");
-        int rueckgabeTag = sc_int.nextInt();
+        int rueckgabeTag = eingabeZahlInt("Rückgabe-TAG:        ");
         if (rueckgabeTag > 31) rueckgabeTag = 28;
-        System.out.print("Rückgabe-MONAT:      ");
-        int rueckgabeMonat = sc_int.nextInt();
+        int rueckgabeMonat = eingabeZahlInt("Rückgabe-MONAT:      ");
         if (rueckgabeMonat > 12) rueckgabeMonat = 12;
-        System.out.print("Rückgabe-JAHR:       ");
-        int rueckgabeJahr = sc_int.nextInt();
+        int rueckgabeJahr = eingabeZahlInt("Rückgabe-JAHR:       ");
         if (rueckgabeJahr < 1970) rueckgabeJahr = 1970;
         if (rueckgabeJahr > 3000) rueckgabeJahr = 2020;
         System.out.print("Verlängerung? j/n    ");
