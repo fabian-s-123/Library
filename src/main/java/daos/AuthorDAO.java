@@ -47,9 +47,8 @@ public class AuthorDAO extends DAO {
 
 
     public LinkedList<Author> getListAllAuthors() {
-        LinkedList<Author> listAllAuthors = new LinkedList<>();
         String query = "select * from author order by author.lastName ASC";
-        listAllAuthors = createLinkedListAllAuthors(query);
+        LinkedList<Author> listAllAuthors = createLinkedListAllAuthors(query);
         return listAllAuthors;
     }
 
@@ -59,12 +58,12 @@ public class AuthorDAO extends DAO {
             Statement st = dbConnector.getConnection().createStatement();
             ResultSet rs = st.executeQuery(query);
             while (rs.next()) {
-                int idAuthor = rs.getInt(1);
-                String firstName = rs.getString(2);
-                String lastName = rs.getString(3);
-                int birthYear = rs.getInt(4);
-                LocalDateTime created_at = rs.getTimestamp(5).toLocalDateTime();
-                LocalDateTime updated_at = rs.getTimestamp(6).toLocalDateTime();
+                int idAuthor = rs.getInt("idAuthor");
+                String firstName = rs.getString("firstName");
+                String lastName = rs.getString("lastName");
+                int birthYear = rs.getInt("birthYear");
+                LocalDateTime created_at = rs.getTimestamp("created_at").toLocalDateTime();
+                LocalDateTime updated_at = rs.getTimestamp("updated_at").toLocalDateTime();
                 Author temp = new Author(idAuthor, firstName, lastName, birthYear, created_at, updated_at);
                 listAA.add(temp);
             }

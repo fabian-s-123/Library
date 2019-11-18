@@ -6,43 +6,69 @@ import entities.*;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 public class RecordNewUpdateDelete {
 
-    private Book inputDataBook() {
+    private int eingabeZahlInt(String meldung) {
+        String eingabeString = eingabeZeichenkette(meldung);
+        int zahlInt = Integer.parseInt(eingabeString);
+        return zahlInt;
+    }
+
+    private long eingabeZahlLong(String meldung) {
+        String eingabeString = eingabeZeichenkette(meldung);
+        long zahlLong = Long.parseLong(eingabeString);
+        return zahlLong;
+    }
+
+    public String eingabeZeichenkette(String meldung) {
+        String eingabeString;
+        Scanner sc_String = new Scanner(System.in);
+        do {
+            System.out.print(meldung);
+            eingabeString = sc_String.next();
+            if (!(Pattern.matches("\\d*", eingabeString)))
+                System.out.print("--> fehlerhafte Eingabe, Wiederholung! --> ");
+        } while (!(Pattern.matches("\\d*", eingabeString)));
+        return eingabeString;
+    }
+
+    private Book inputDataBook(AuthorDAO auDAO, CategoryDAO caDAO, DiverseLists diLi) {
         System.out.println("Stelle sicher, dass die Autoren- und die Kategorien-ID für das zu erfassende Buch bekannt ist, bei entsprechenden Zeitressourcen wird hier weitergearbeitet.");
         Scanner sc_String = new Scanner(System.in);
+        Scanner sc1_String = new Scanner(System.in);
         Scanner sc_int = new Scanner(System.in);
         System.out.print("Titel:              ");
         String title = sc_String.nextLine();
         System.out.print("Autoren-ID:         ");
-        int idAuthor = sc_int.nextInt();
-        if (idAuthor > 9999) idAuthor = 9999;
+        int idAuthor = inputIdAuthor(auDAO, diLi, "auszuwählenden");
+        if (idAuthor == 0) idAuthor = 1;
         System.out.print("Kategorien_ID:      ");
-        int idCategory = sc_int.nextInt();
-        if (idCategory > 99) idCategory = 99;
-        System.out.print("ISBN:               ");
-        long isbn = sc_int.nextLong();
+        int idCategory = inputIdCategory(caDAO, diLi, "auszuwählenden");
+        if (idCategory == 0) idCategory = 1;
+        long isbn = eingabeZahlLong("ISBN:               ");
         if (isbn > 9999999999999L) isbn = 9999999999999L;
-        System.out.print("FSK/empfohlen ab:   ");
-        int fsk = sc_int.nextInt();
-        if (fsk > 99) fsk = 99;
+        int fsk = eingabeZahlInt("FSK/empfohlen ab:   ");
+        if (fsk > 99) fsk = 18;
         System.out.print("Verlag:             ");
         String publisher = sc_String.nextLine();
         System.out.print("aktuelle Ausgabe:   ");
         String edition = sc_String.nextLine();
+        if (edition.length() > 10) edition = edition.substring(0, 10);
         System.out.print("Erstausgabe:        ");
         String firstEdition = sc_String.nextLine();
-        System.out.print("Anzahl der Seiten:  ");
-        int amountPages = sc_int.nextInt();
+        if (firstEdition.length() > 10) firstEdition = firstEdition.substring(0, 10);
+        int amountPages = eingabeZahlInt("Anzahl der Seiten:  ");
+        if (amountPages < 0) amountPages = amountPages * -1;
         if (amountPages > 999) amountPages = 999;
         System.out.print("Sprache:            ");
         String language = sc_String.nextLine();
-        System.out.print("Lagerort - ROW:     ");
-        int idRow = sc_int.nextInt();
+        int idRow = eingabeZahlInt("Lagerort - ROW:     ");
+        if (idRow < 0) idRow = idRow * -1;
         if (idRow > 99) idRow = 99;
-        System.out.print("           COLUMN:  ");
-        int idColumn = sc_int.nextInt();
+        int idColumn = eingabeZahlInt("           COLUMN:  ");
+        if (idColumn < 0) idColumn = idColumn * -1;
         if (idColumn > 99) idColumn = 99;
         Book temp = new Book(0, title, idAuthor, idCategory, isbn, fsk, publisher, edition, firstEdition, amountPages, language, idRow, idColumn, null, null);
         return temp;
@@ -51,44 +77,52 @@ public class RecordNewUpdateDelete {
     private int inputIdBook(BookDAO boDAO, DiverseLists diLi, String meldung) {
         diLi.createListeBookAllRecords(boDAO);
         Scanner sc_int = new Scanner(System.in);
-        int zuLoeschendeIdBook;
+        int idBook;
         boolean eingabegueltig;
         do {
             eingabegueltig = true;
             System.out.print("Bitte gib die IdBook vom zu " + meldung + " Buch aus der vorstehenden Liste ein! ");
-            zuLoeschendeIdBook = sc_int.nextInt();
-            boolean bookIsInTable = boDAO.checkIsXxxIdInTableXxx("idBook", "book", zuLoeschendeIdBook);
-            if (!bookIsInTable) {
-                System.out.println("Die Eingabe war ungültig, bitte wiederholen! ");
-                eingabegueltig = false;
+            idBook = sc_int.nextInt();
+            if (idBook == 0) {
+                System.out.println("Zurück zur Auswahl ohne Auswahl des zu " + meldung + " Buch.");
+            } else {
+                boolean bookIsInTable = boDAO.checkIsXxxIdInTableXxx("idBook", "book", idBook);
+                if (!bookIsInTable) {
+                    System.out.println("Die Eingabe war ungültig, bitte wiederholen! ");
+                    eingabegueltig = false;
+                }
             }
         } while (!eingabegueltig);
-        return zuLoeschendeIdBook;
+        return idBook;
     }
 
-    public void createNewRecordBook(BookDAO boDAO) {
+    public void createNewRecordBook(BookDAO boDAO, AuthorDAO auDAO, CategoryDAO caDAO, DiverseLists diLi) {
         System.out.println("Erfassung der notwendigen Daten für einen neuen Eintrag in book");
-        Book temp = inputDataBook();
+        Book temp = inputDataBook(auDAO, caDAO, diLi);
         boDAO.createRecordBook(temp.getTitle(), temp.getIdAuthor(), temp.getIdCategory(), temp.getIsbn(), temp.getFsk(),
                 temp.getPublisher(), temp.getEdition(), temp.getFirstEdition(), temp.getAmountPages(), temp.getLanguage(),
                 temp.getIdRow(), temp.getIdColumn());
     }
 
-    public void editRecordBook(BookDAO boDAO, DiverseLists diLi) {
+    public void editRecordBook(BookDAO boDAO, AuthorDAO auDAO, CategoryDAO caDAO, DiverseLists diLi) {
         int zuEditierendeIdBook = inputIdBook(boDAO, diLi, "editierenden");
-        Book temp = inputDataBook();
-        boDAO.updateRecordBook(temp.getTitle(), temp.getIdAuthor(), temp.getIdCategory(), temp.getIsbn(), temp.getFsk(),
-                temp.getPublisher(), temp.getEdition(), temp.getFirstEdition(), temp.getAmountPages(), temp.getLanguage(),
-                temp.getIdRow(), temp.getIdColumn(), zuEditierendeIdBook);
+        if (zuEditierendeIdBook > 0) {
+            Book temp = inputDataBook(auDAO, caDAO, diLi);
+            boDAO.updateRecordBook(temp.getTitle(), temp.getIdAuthor(), temp.getIdCategory(), temp.getIsbn(), temp.getFsk(),
+                    temp.getPublisher(), temp.getEdition(), temp.getFirstEdition(), temp.getAmountPages(), temp.getLanguage(),
+                    temp.getIdRow(), temp.getIdColumn(), zuEditierendeIdBook);
+        }
     }
 
     public void deleteRecordBook(BookDAO boDAO, DiverseLists diLi) {
         int zuLoeschendeIdBook = inputIdBook(boDAO, diLi, "löschenden");
-        boolean isBookInLoaned = boDAO.checkIsXxxIdInTableXxx("idBook", "loaned", zuLoeschendeIdBook);
-        if (isBookInLoaned) {
-            System.out.println("Von diesem Buch gibt es Einträge in Loaned, deswegen ist ein Löschen des Buchs nicht möglich.");
-        } else {
-            boDAO.createQueryDeleteID("book", "IdBook", zuLoeschendeIdBook);
+        if (zuLoeschendeIdBook > 0) {
+            boolean isBookInLoaned = boDAO.checkIsXxxIdInTableXxx("idBook", "loaned", zuLoeschendeIdBook);
+            if (isBookInLoaned) {
+                System.out.println("Von diesem Buch gibt es Einträge in Loaned, deswegen ist ein Löschen des Buchs nicht möglich.");
+            } else {
+                boDAO.createQueryDeleteID("book", "IdBook", zuLoeschendeIdBook);
+            }
         }
     }
 
@@ -99,9 +133,8 @@ public class RecordNewUpdateDelete {
         String firstName = sc_String.nextLine();
         System.out.print("Nachname:          ");
         String lastName = sc_String.nextLine();
-        System.out.print("GeburtsJAHR:       ");
-        int gebJahr = sc_int.nextInt();
-        if (gebJahr > 9999) gebJahr = 9999;
+        int gebJahr = eingabeZahlInt("GeburtsJAHR:       ");
+        if (gebJahr > 9999) gebJahr = 2000;
         Author temp = new Author(0, firstName, lastName, gebJahr, null, null);
         return temp;
     }
@@ -115,10 +148,14 @@ public class RecordNewUpdateDelete {
             eingabegueltig = true;
             System.out.print("Bitte gib die IdAuthor vom zu " + meldung + " Author aus der vorstehenden Liste ein! ");
             zuLoeschendeIdAuthor = sc_int.nextInt();
-            boolean authorIsInTable = auDAO.checkIsXxxIdInTableXxx("idAuthor", "author", zuLoeschendeIdAuthor);
-            if (!authorIsInTable) {
-                System.out.println("Die Eingabe war ungültig, bitte wiederholen! ");
-                eingabegueltig = false;
+            if (zuLoeschendeIdAuthor == 0) {
+                System.out.println("Zurück zur Auswahl ohne Auswahl des zu " + meldung + " Autor.");
+            } else {
+                boolean authorIsInTable = auDAO.checkIsXxxIdInTableXxx("idAuthor", "author", zuLoeschendeIdAuthor);
+                if (!authorIsInTable) {
+                    System.out.println("Die Eingabe war ungültig, bitte wiederholen! ");
+                    eingabegueltig = false;
+                }
             }
         } while (!eingabegueltig);
         return zuLoeschendeIdAuthor;
@@ -132,17 +169,21 @@ public class RecordNewUpdateDelete {
 
     public void editRecordAuthor(AuthorDAO auDAO, DiverseLists diLi) {//fehlt noch
         int zuEditierendeIdAuthor = inputIdAuthor(auDAO, diLi, "editierenden");
-        Author temp = inputDataAuthor();
-        auDAO.updateRecordAuthor(temp.getFirstName(), temp.getLastName(), temp.getBirthYear(), zuEditierendeIdAuthor);
+        if (zuEditierendeIdAuthor > 0) {
+            Author temp = inputDataAuthor();
+            auDAO.updateRecordAuthor(temp.getFirstName(), temp.getLastName(), temp.getBirthYear(), zuEditierendeIdAuthor);
+        }
     }
 
     public void deleteRecordAuthor(AuthorDAO auDAO, DiverseLists diLi) {
         int zuLoeschendeIdAuthor = inputIdAuthor(auDAO, diLi, "löschenden");
-        boolean isAuthorInBook = auDAO.checkIsXxxIdInTableXxx("idAuthor", "book", zuLoeschendeIdAuthor);
-        if (isAuthorInBook) {
-            System.out.println("Von diesem Autor sind noch Bücher in der Liste book, deswegen ist ein Löschen des Autors nicht möglich.");
-        } else {
-            auDAO.createQueryDeleteID("author", "IdAuthor", zuLoeschendeIdAuthor);
+        if (zuLoeschendeIdAuthor > 0) {
+            boolean isAuthorInBook = auDAO.checkIsXxxIdInTableXxx("idAuthor", "book", zuLoeschendeIdAuthor);
+            if (isAuthorInBook) {
+                System.out.println("Von diesem Autor sind noch Bücher in der Liste book, deswegen ist ein Löschen des Autors nicht möglich.");
+            } else {
+                auDAO.createQueryDeleteID("author", "IdAuthor", zuLoeschendeIdAuthor);
+            }
         }
     }
 
@@ -163,12 +204,17 @@ public class RecordNewUpdateDelete {
             eingabegueltig = true;
             System.out.print("Bitte gib die IdKategorie von dem zu " + meldung + " Eintrag aus der vorstehenden Liste ein! ");
             idCategory = sc_int.nextInt();
-            boolean categoryIsInTable = caDAO.checkIsXxxIdInTableXxx("idCategory", "category", idCategory);
-            if (!categoryIsInTable) {
-                System.out.println("Die Eingabe war ungültig, bitte wiederholen! ");
-                eingabegueltig = false;
+            if (idCategory == 0) {
+                System.out.println("Zurück zur Auswahl ohne Auswahl des zu " + meldung + " Kategorie.");
+            } else {
+                boolean categoryIsInTable = caDAO.checkIsXxxIdInTableXxx("idCategory", "category", idCategory);
+                if (!categoryIsInTable) {
+                    System.out.println("Die Eingabe war ungültig, bitte wiederholen! ");
+                    eingabegueltig = false;
+                }
             }
-        } while (!eingabegueltig);
+        }
+        while (!eingabegueltig);
         return idCategory;
     }
 
@@ -180,17 +226,21 @@ public class RecordNewUpdateDelete {
 
     public void editRecordCategory(CategoryDAO caDAO, DiverseLists diLi) {
         int zuEditierendeIdCategory = inputIdCategory(caDAO, diLi, "editierenden");
-        Category temp = inputDataCategory();
-        caDAO.updateRecordCategory(temp.getDescription(), zuEditierendeIdCategory);
+        if (zuEditierendeIdCategory > 0) {
+            Category temp = inputDataCategory();
+            caDAO.updateRecordCategory(temp.getDescription(), zuEditierendeIdCategory);
+        }
     }
 
     public void deleteRecordCategory(CategoryDAO caDAO, DiverseLists diLi) {
         int zuLoeschendeIdCategory = inputIdCategory(caDAO, diLi, "löschenden");
-        boolean isCategoryInBook = caDAO.checkIsXxxIdInTableXxx("idCategory", "book", zuLoeschendeIdCategory);
-        if (isCategoryInBook) {
-            System.out.println("In dieser Kategorie sind noch Bücher in der Liste book, deswegen ist ein Löschen dieser Kategorie nicht möglich.");
-        } else {
-            caDAO.createQueryDeleteID("category", "idCategory", zuLoeschendeIdCategory);
+        if (zuLoeschendeIdCategory > 0) {
+            boolean isCategoryInBook = caDAO.checkIsXxxIdInTableXxx("idCategory", "book", zuLoeschendeIdCategory);
+            if (isCategoryInBook) {
+                System.out.println("In dieser Kategorie sind noch Bücher in der Liste book, deswegen ist ein Löschen dieser Kategorie nicht möglich.");
+            } else {
+                caDAO.createQueryDeleteID("category", "idCategory", zuLoeschendeIdCategory);
+            }
         }
     }
 
@@ -206,36 +256,29 @@ public class RecordNewUpdateDelete {
         String street = sc_String.nextLine();
         System.out.print("Hausnummer:        ");
         String apNr = sc_String.nextLine();
-        System.out.print("PLZ:               ");
-        int zip = sc_int.nextInt();
+        if (apNr.length() > 7) apNr = apNr.substring(0, 7);
+        int zip = eingabeZahlInt("PLZ:               ");
         if (zip > 99999) zip = 99999;
         System.out.print("Stadt:             ");
         String city = sc_String.nextLine();
-        System.out.print("GeburtsTAG:        ");
-        int gebTag = sc_int.nextInt();
+        int gebTag = eingabeZahlInt("GeburtsTAG:        ");
         if (gebTag > 31) gebTag = 28;
-        System.out.print("GeburtsMONAT:      ");
-        int gebMonat = sc_int.nextInt();
+        int gebMonat = eingabeZahlInt("GeburtsMONAT:      ");
         if (gebMonat > 12) gebMonat = 12;
-        System.out.print("GeburtsJAHR:       ");
-        int gebJahr = sc_int.nextInt();
+        int gebJahr = eingabeZahlInt("GeburtsJAHR:       ");
         if (gebJahr < 1970) gebJahr = 1970;
-        if (gebJahr > 9999) gebJahr = 2020;
+        if (gebJahr > 2500) gebJahr = 2020;
         System.out.print("PIN-Code:          ");
         String pinCode = sc_String.nextLine();
         System.out.print("Email:             ");
         String email = sc_String.nextLine();
-        System.out.print("KreditKartenNr:    ");
-        long creditCardNr = sc_int.nextLong();
+        long creditCardNr = eingabeZahlLong("KreditKartenNr:    ");
         if (creditCardNr > 9999999999999999L) creditCardNr = 9999999999999999L;
-        System.out.print("CVC:               ");
-        int cvc = sc_int.nextInt();
+        int cvc = eingabeZahlInt("CVC:               ");
         if (cvc > 999) cvc = 999;
-        System.out.print("gültig bis Jahr:   ");
-        int expiryDateYear = sc_int.nextInt();
-        if (expiryDateYear > 9999) expiryDateYear = 9999;
-        System.out.print("       bis Monat:  ");
-        int expiryDateMonth = sc_int.nextInt();
+        int expiryDateYear = eingabeZahlInt("gültig bis Jahr:   ");
+        if (expiryDateYear > 9999) expiryDateYear = 2030;
+        int expiryDateMonth = eingabeZahlInt("       bis Monat:  ");
         if (expiryDateMonth > 12) expiryDateMonth = 12;
         Customer temp = new Customer(0, pinCode, email, firstName, lastName, Timestamp.valueOf(LocalDateTime.of(gebJahr, gebMonat, gebTag, 0, 0)), street, apNr, zip, city, creditCardNr, cvc, expiryDateYear, expiryDateMonth);
         return temp;
@@ -250,10 +293,14 @@ public class RecordNewUpdateDelete {
             eingabegueltig = true;
             System.out.print("Bitte gib die IdCustomer vom zu " + meldung + "Kunden/Customer aus der vorstehenden Liste ein! ");
             idCustomer = sc_int.nextInt();
-            boolean customerIsInTable = cuDAO.checkIsXxxIdInTableXxx("idCustomer", "customer", idCustomer);
-            if (!customerIsInTable) {
-                System.out.println("Die Eingabe war ungültig, bitte wiederholen! ");
-                eingabegueltig = false;
+            if (idCustomer == 0) {
+                System.out.println("Zurück zur Auswahl ohne Auswahl des zu " + meldung + " Kunden.");
+            } else {
+                boolean customerIsInTable = cuDAO.checkIsXxxIdInTableXxx("idCustomer", "customer", idCustomer);
+                if (!customerIsInTable) {
+                    System.out.println("Die Eingabe war ungültig, bitte wiederholen! ");
+                    eingabegueltig = false;
+                }
             }
         } while (!eingabegueltig);
         return idCustomer;
@@ -269,73 +316,68 @@ public class RecordNewUpdateDelete {
 
     public void editRecordCustomer(CustomerDAO cuDAO, DiverseLists diLi) {
         int zuEditierendeIdCustomer = inputIdCustomer(cuDAO, diLi, "editierende");
-        Customer temp = inputDataCustomer();
-        cuDAO.updateRecordCustomer(temp.getPinCode(), temp.getEmail(), temp.getFirstName(), temp.getLastName(), temp.getBirthDay().toLocalDateTime(),
-                temp.getStreet(), temp.getApNr(), temp.getZip(), temp.getCity(), temp.getCreditCardNr(), temp.getCvc(), temp.getExpiryDateYear(),
-                temp.getExpiryDateMonth(), zuEditierendeIdCustomer);
+        if (zuEditierendeIdCustomer > 0) {
+            Customer temp = inputDataCustomer();
+            cuDAO.updateRecordCustomer(temp.getPinCode(), temp.getEmail(), temp.getFirstName(), temp.getLastName(), temp.getBirthDay().toLocalDateTime(),
+                    temp.getStreet(), temp.getApNr(), temp.getZip(), temp.getCity(), temp.getCreditCardNr(), temp.getCvc(), temp.getExpiryDateYear(),
+                    temp.getExpiryDateMonth(), zuEditierendeIdCustomer);
+        }
     }
 
     public void deleteRecordCustomer(CustomerDAO cuDAO, DiverseLists diLi) {
         int zuLoeschendeIdCustomer = inputIdCustomer(cuDAO, diLi, "löschende");
-        boolean isCustomerInLoaned = cuDAO.checkIsXxxIdInTableXxx("idCustomer", "loaned", zuLoeschendeIdCustomer);
-        if (isCustomerInLoaned) {
-            System.out.println("Der Kunde hat Bücher ausgeliehen (er ist in loaned geführt), ein Löschen des Kunden ist nicht möglich.");
-        } else {
-            cuDAO.createQueryDeleteID("customer", "idCustomer", zuLoeschendeIdCustomer);
+        if (zuLoeschendeIdCustomer > 0) {
+            boolean isCustomerInLoaned = cuDAO.checkIsXxxIdInTableXxx("idCustomer", "loaned", zuLoeschendeIdCustomer);
+            if (isCustomerInLoaned) {
+                System.out.println("Der Kunde hat Bücher ausgeliehen (er ist in loaned geführt), ein Löschen des Kunden ist nicht möglich.");
+            } else {
+                cuDAO.createQueryDeleteID("customer", "idCustomer", zuLoeschendeIdCustomer);
+            }
         }
     }
 
-    private Loaned inputDataLoanedWithOutReturn() {
+    private Loaned inputDataLoanedWithOutReturn(CustomerDAO cuDAO, BookDAO boDAO, DiverseLists diLi) {
         System.out.println("Stelle sicher, dass die Buch-/Book- und die Kunden-/Customer-ID für den zu erfassenden Leihvorgang bekannt ist, bei entsprechenden Zeitressourcen wird hier weitergearbeitet.");
         Scanner sc_int = new Scanner(System.in);
         System.out.print("ID Kunde/customer:   ");
-        int idCustomer = sc_int.nextInt();
-        if (idCustomer > 9999) idCustomer = 9999;
+        int idCustomer = inputIdCustomer(cuDAO, diLi, "aufzunehmenden");
+        if (idCustomer == 0) idCustomer = 1;
         System.out.print("ID Buch/book:        ");
-        int idBook = sc_int.nextInt();
-        if (idBook > 9999) idBook = 9999;
-        System.out.print("Ausleih-TAG:         ");
-        int leihTag = sc_int.nextInt();
+        int idBook = inputIdBook(boDAO, diLi, "aufzunehmenden");
+        if (idBook == 0) idBook = 1;
+        int leihTag = eingabeZahlInt("Ausleih-TAG:         ");
         if (leihTag > 31) leihTag = 28;
-        System.out.print("Ausleih-MONAT:       ");
-        int leihMonat = sc_int.nextInt();
+        int leihMonat = eingabeZahlInt("Ausleih-MONAT:       ");
         if (leihMonat > 12) leihMonat = 12;
-        System.out.print("Ausleih-JAHR:        ");
-        int leihJahr = sc_int.nextInt();
+        int leihJahr = eingabeZahlInt("Ausleih-JAHR:        ");
         if (leihJahr < 1970) leihJahr = 1970;
         if (leihJahr > 3000) leihJahr = 2020;
         Loaned temp = new Loaned(0, idCustomer, idBook, LocalDateTime.of(leihJahr, leihMonat, leihTag, 0, 0), null, false, null, null);
         return temp;
     }
 
-    private Loaned inputDataLoanedWithReturn() {
+    private Loaned inputDataLoanedWithReturn(CustomerDAO cuDAO, BookDAO boDAO, DiverseLists diLi) {
         System.out.println("Stelle sicher, dass die Buch-/Book- und die Kunden-/Customer-ID für den zu erfassenden Leihvorgang bekannt ist, bei entsprechenden Zeitressourcen wird hier weitergearbeitet.");
         Scanner sc_String = new Scanner(System.in);
         Scanner sc_int = new Scanner(System.in);
         System.out.print("ID Kunde/customer:   ");
-        int idCustomer = sc_int.nextInt();
-        if (idCustomer > 9999) idCustomer = 9999;
+        int idCustomer = inputIdCustomer(cuDAO, diLi, "aufzunehmenden");
+        if (idCustomer == 0) idCustomer = 1;
         System.out.print("ID Buch/book:        ");
-        int idBook = sc_int.nextInt();
-        if (idBook > 9999) idBook = 9999;
-        System.out.print("Ausleih-TAG:         ");
-        int leihTag = sc_int.nextInt();
+        int idBook = inputIdBook(boDAO, diLi, "aufzunehmenden");
+        if (idBook == 0) idBook = 1;
+        int leihTag = eingabeZahlInt("Ausleih-TAG:         ");
         if (leihTag > 31) leihTag = 28;
-        System.out.print("Ausleih-MONAT:       ");
-        int leihMonat = sc_int.nextInt();
+        int leihMonat = eingabeZahlInt("Ausleih-MONAT:       ");
         if (leihMonat > 12) leihMonat = 12;
-        System.out.print("Ausleih-JAHR:        ");
-        int leihJahr = sc_int.nextInt();
+        int leihJahr = eingabeZahlInt("Ausleih-JAHR:        ");
         if (leihJahr < 1970) leihJahr = 1970;
         if (leihJahr > 3000) leihJahr = 2020;
-        System.out.print("Rückgabe-TAG:        ");
-        int rueckgabeTag = sc_int.nextInt();
+        int rueckgabeTag = eingabeZahlInt("Rückgabe-TAG:        ");
         if (rueckgabeTag > 31) rueckgabeTag = 28;
-        System.out.print("Rückgabe-MONAT:      ");
-        int rueckgabeMonat = sc_int.nextInt();
+        int rueckgabeMonat = eingabeZahlInt("Rückgabe-MONAT:      ");
         if (rueckgabeMonat > 12) rueckgabeMonat = 12;
-        System.out.print("Rückgabe-JAHR:       ");
-        int rueckgabeJahr = sc_int.nextInt();
+        int rueckgabeJahr = eingabeZahlInt("Rückgabe-JAHR:       ");
         if (rueckgabeJahr < 1970) rueckgabeJahr = 1970;
         if (rueckgabeJahr > 3000) rueckgabeJahr = 2020;
         System.out.print("Verlängerung? j/n    ");
@@ -355,29 +397,37 @@ public class RecordNewUpdateDelete {
             eingabegueltig = true;
             System.out.print("Bitte gib die IdLoaned vom zu " + meldung + " Leihvorgang aus der vorstehenden Liste ein! ");
             idLoaned = sc_int.nextInt();
-            boolean loanedIsInTable = loDAO.checkIsXxxIdInTableXxx("idLoaned", "loaned", idLoaned);
-            if (!loanedIsInTable) {
-                System.out.println("Die Eingabe war ungültig, bitte wiederholen! ");
-                eingabegueltig = false;
+            if (idLoaned == 0) {
+                System.out.println("Zurück zur Auswahl ohne Auswahl des zu " + meldung + " Ausleihvorgangs.");
+            } else {
+                boolean loanedIsInTable = loDAO.checkIsXxxIdInTableXxx("idLoaned", "loaned", idLoaned);
+                if (!loanedIsInTable) {
+                    System.out.println("Die Eingabe war ungültig, bitte wiederholen! ");
+                    eingabegueltig = false;
+                }
             }
         } while (!eingabegueltig);
         return idLoaned;
     }
 
-    public void createNewRecordLoaned(LoanedDAO loDAO) {
+    public void createNewRecordLoaned(LoanedDAO loDAO, CustomerDAO cuDAO, BookDAO boDAO, DiverseLists diLi) {
         System.out.println("Erfassung der notwendigen Daten für einen neuen Eintrag in loaned");
-        Loaned temp = inputDataLoanedWithOutReturn();
+        Loaned temp = inputDataLoanedWithOutReturn(cuDAO, boDAO, diLi);
         loDAO.createRecordLoanedWithoutReturn(temp.getIdCustomer(), temp.getIdBook(), temp.getLoanedOn());
     }
 
-    public void editRecordLoaned(LoanedDAO loDAO, DiverseLists diLi) {//fehlt noch
+    public void editRecordLoaned(LoanedDAO loDAO, CustomerDAO cuDAO, BookDAO boDAO, DiverseLists diLi) {
         int zueditierendeIdLoaned = inputIdLoaned(loDAO, diLi, "editierende");
-        Loaned temp = inputDataLoanedWithReturn();
-        loDAO.updateRecordLoaned(temp.getIdCustomer(), temp.getIdBook(), temp.getLoanedOn(), temp.getReturnedOn(), temp.isExtraTime(), zueditierendeIdLoaned);
+        if (zueditierendeIdLoaned > 0) {
+            Loaned temp = inputDataLoanedWithReturn(cuDAO, boDAO, diLi);
+            loDAO.updateRecordLoaned(temp.getIdCustomer(), temp.getIdBook(), temp.getLoanedOn(), temp.getReturnedOn(), temp.isExtraTime(), zueditierendeIdLoaned);
+        }
     }
 
     public void deleteRecordLoaned(LoanedDAO loDAO, DiverseLists diLi) {
         int zuLoeschendeIdLoaned = inputIdLoaned(loDAO, diLi, "löschende");
-        loDAO.createQueryDeleteID("loaned", "idLoaned", zuLoeschendeIdLoaned);
+        if (zuLoeschendeIdLoaned > 0) {
+            loDAO.createQueryDeleteID("loaned", "idLoaned", zuLoeschendeIdLoaned);
+        }
     }
 }

@@ -103,31 +103,31 @@ public class BookDAO extends DAO {
         return listBAC;
     }
 
-    public LinkedList<BookAuthorCategory> createLinkedListBAC(String query) {
+    private LinkedList<BookAuthorCategory> createLinkedListBAC(String query) {
         LinkedList<BookAuthorCategory> listBAC = new LinkedList<>();
         try {
             Statement st = dbConnector.getConnection().createStatement();
             ResultSet rs = st.executeQuery(query);
             while (rs.next()) {
-                int idBook = rs.getInt(1);
-                String title = rs.getString(2);
-                int idAuthor = rs.getInt(3);
-                String firstName = rs.getString(17);
-                String lastName = rs.getString(18);
-                int birthYear = rs.getInt(19);
-                int idCategory = rs.getInt(4);
-                String description = rs.getString(23);
-                long isbn = rs.getLong(5);
-                int fsk = rs.getInt(6);
-                String publisher = rs.getString(7);
-                String edition = rs.getString(8);
-                String firstEdition = rs.getString(9);
-                int amountPages = rs.getInt(10);
-                String language = rs.getString(11);
-                int idRow = rs.getInt(12);
-                int idColumn = rs.getInt(13);
-                LocalDateTime created_at = rs.getTimestamp(14).toLocalDateTime();
-                LocalDateTime updated_at = rs.getTimestamp(15).toLocalDateTime();
+                int idBook = rs.getInt("idBook");
+                String title = rs.getString("title");
+                int idAuthor = rs.getInt("idAuthor");
+                String firstName = rs.getString("firstName");
+                String lastName = rs.getString("lastName");
+                int birthYear = rs.getInt("birthYear");
+                int idCategory = rs.getInt("idCategory");
+                String description = rs.getString("description");
+                long isbn = rs.getLong("isbn");
+                int fsk = rs.getInt("fsk");
+                String publisher = rs.getString("publisher");
+                String edition = rs.getString("edition");
+                String firstEdition = rs.getString("firstEdition");
+                int amountPages = rs.getInt("amountPages");
+                String language = rs.getString("language");
+                int idRow = rs.getInt("idRow");
+                int idColumn = rs.getInt("idColumn");
+                LocalDateTime created_at = rs.getTimestamp("created_at").toLocalDateTime();
+                LocalDateTime updated_at = rs.getTimestamp("updated_at").toLocalDateTime();
                 BookAuthorCategory temp = new BookAuthorCategory(idBook, title, idAuthor, firstName, lastName, birthYear, idCategory, description, isbn, fsk, publisher, edition, firstEdition, amountPages, language, idRow, idColumn, created_at, updated_at);
                 listBAC.add(temp);
             }
@@ -143,36 +143,36 @@ public class BookDAO extends DAO {
 
     public LinkedList<BookAuthorCategory> getListAuthorBook() {
         LinkedList<BookAuthorCategory> listAuthorBook = new LinkedList<>();
-        String query = "select * from ((author inner join book on author.idAuthor=book.idAuthor) inner join category on book.idCategory = category.idCategory) order by author.lastName ASC";
+        String query = "select * from ((author inner join book As book on author.idAuthor=book.idAuthor) inner join category on book.idCategory = category.idCategory) order by author.lastName ASC";
         listAuthorBook = createLinkedListABC(query);
         return listAuthorBook;
     }
 
-    public LinkedList<BookAuthorCategory> createLinkedListABC(String query) {
+    private LinkedList<BookAuthorCategory> createLinkedListABC(String query) {
         LinkedList<BookAuthorCategory> listABC = new LinkedList<>();
         try {
             Statement st = dbConnector.getConnection().createStatement();
             ResultSet rs = st.executeQuery(query);
             while (rs.next()) {
-                int idAuthor = rs.getInt(1);
-                String firstName = rs.getString(2);
-                String lastName = rs.getString(3);
-                int birthYear = rs.getInt(4);
-                int idBook = rs.getInt(7);
-                String title = rs.getString(8);
-                int idCategory = rs.getInt(10);
-                String description = rs.getString(23);
-                long isbn = rs.getLong(11);
-                int fsk = rs.getInt(12);
-                String publisher = rs.getString(13);
-                String edition = rs.getString(14);
-                String firstEdition = rs.getString(15);
-                int amountPages = rs.getInt(16);
-                String language = rs.getString(17);
-                int idRow = rs.getInt(18);
-                int idColumn = rs.getInt(19);
-                LocalDateTime created_at = rs.getTimestamp(5).toLocalDateTime();
-                LocalDateTime updated_at = rs.getTimestamp(6).toLocalDateTime();
+                int idAuthor = rs.getInt("idAuthor");
+                String firstName = rs.getString("firstName");
+                String lastName = rs.getString("lastName");
+                int birthYear = rs.getInt("birthYear");
+                int idBook = rs.getInt("idBook");
+                String title = rs.getString("title");
+                int idCategory = rs.getInt("idCategory");
+                String description = rs.getString("description");
+                long isbn = rs.getLong("isbn");
+                int fsk = rs.getInt("fsk");
+                String publisher = rs.getString("publisher");
+                String edition = rs.getString("edition");
+                String firstEdition = rs.getString("firstEdition");
+                int amountPages = rs.getInt("amountPages");
+                String language = rs.getString("language");
+                int idRow = rs.getInt("idRow");
+                int idColumn = rs.getInt("idColumn");
+                LocalDateTime created_at = rs.getTimestamp("updated_at").toLocalDateTime();
+                LocalDateTime updated_at = rs.getTimestamp("created_at").toLocalDateTime();
                 BookAuthorCategory temp = new BookAuthorCategory(idBook, title, idAuthor, firstName, lastName, birthYear, idCategory, description, isbn, fsk, publisher, edition, firstEdition, amountPages, language, idRow, idColumn, created_at, updated_at);
                 listABC.add(temp);
             }
@@ -193,31 +193,38 @@ public class BookDAO extends DAO {
         return listCategoryBook;
     }
 
-    public LinkedList<BookAuthorCategory> createLinkedListCBA(String query) {
+    public LinkedList<BookAuthorCategory> getListLanguageBook() {
+        LinkedList<BookAuthorCategory> listLanguageBook = new LinkedList<>();
+        String query = "select * from ((category inner join book on category.idCategory=book.idCategory) inner join author on book.idAuthor = author.idAuthor) order by book.language, author.lastName ASC";
+        listLanguageBook = createLinkedListCBA(query);
+        return listLanguageBook;
+    }
+
+    private LinkedList<BookAuthorCategory> createLinkedListCBA(String query) {
         LinkedList<BookAuthorCategory> listCBA = new LinkedList<>();
         try {
             Statement st = dbConnector.getConnection().createStatement();
             ResultSet rs = st.executeQuery(query);
             while (rs.next()) {
-                int idCategory = rs.getInt(1);
-                String description = rs.getString(2);
-                LocalDateTime created_at = rs.getTimestamp(3).toLocalDateTime();
-                LocalDateTime updated_at = rs.getTimestamp(4).toLocalDateTime();
-                int idBook = rs.getInt(5);
-                String title = rs.getString(6);
-                int idAuthor = rs.getInt(7);
-                String firstName = rs.getString(21);
-                String lastName = rs.getString(22);
-                int birthYear = rs.getInt(23);
-                long isbn = rs.getLong(9);
-                int fsk = rs.getInt(10);
-                String publisher = rs.getString(11);
-                String edition = rs.getString(12);
-                String firstEdition = rs.getString(13);
-                int amountPages = rs.getInt(14);
-                String language = rs.getString(15);
-                int idRow = rs.getInt(16);
-                int idColumn = rs.getInt(17);
+                int idCategory = rs.getInt("idCategory");
+                String description = rs.getString("description");
+                LocalDateTime created_at = rs.getTimestamp("created_at").toLocalDateTime();
+                LocalDateTime updated_at = rs.getTimestamp("updated_at").toLocalDateTime();
+                int idBook = rs.getInt("idBook");
+                String title = rs.getString("title");
+                int idAuthor = rs.getInt("idAuthor");
+                String firstName = rs.getString("firstName");
+                String lastName = rs.getString("lastName");
+                int birthYear = rs.getInt("birthYear");
+                long isbn = rs.getLong("isbn");
+                int fsk = rs.getInt("fsk");
+                String publisher = rs.getString("publisher");
+                String edition = rs.getString("edition");
+                String firstEdition = rs.getString("firstEdition");
+                int amountPages = rs.getInt("amountPages");
+                String language = rs.getString("language");
+                int idRow = rs.getInt("idRow");
+                int idColumn = rs.getInt("idColumn");
                 BookAuthorCategory temp = new BookAuthorCategory(idBook, title, idAuthor, firstName, lastName, birthYear, idCategory, description, isbn, fsk, publisher, edition, firstEdition, amountPages, language, idRow, idColumn, created_at, updated_at);
                 listCBA.add(temp);
             }

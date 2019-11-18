@@ -144,34 +144,33 @@ public class CustomerDAO extends DAO {
     }
 
     public LinkedList<Customer> getListAllCustomers() {
-        LinkedList<Customer> listAllCustomers = new LinkedList<>();
         String query = "select * from customer order by customer.lastName ASC";
-        listAllCustomers = createLinkedListAllCustomers(query);
+        LinkedList<Customer> listAllCustomers = createLinkedListAllCustomers(query);
         return listAllCustomers;
     }
 
-    public LinkedList<Customer> createLinkedListAllCustomers(String query) {
+    private LinkedList<Customer> createLinkedListAllCustomers(String query) {
         LinkedList<Customer> listAC = new LinkedList<>();
         try {
             Statement st = dbConnector.getConnection().createStatement();
             ResultSet rs = st.executeQuery(query);
             while (rs.next()) {
-                int idCustomer = rs.getInt(1);
-                String pinCode = rs.getString(2);
-                String email = rs.getString(3);
-                String firstName = rs.getString(4);
-                String lastName = rs.getString(5);
-                Timestamp birthDay = rs.getTimestamp(6);
-                String street = rs.getString(7);
-                String apNr = rs.getString(8);
-                int zip = rs.getInt(9);
-                String city = rs.getString(10);
-                long creditCardNr = rs.getLong(11);
-                int CVC = rs.getInt(12);
-                int expiryDateYear = rs.getInt(13);
-                int expiryDateMonth = rs.getInt(14);
-                LocalDateTime created_at = rs.getTimestamp(15).toLocalDateTime();
-                LocalDateTime updated_at = rs.getTimestamp(16).toLocalDateTime();
+                int idCustomer = rs.getInt("idCustomer");
+                String pinCode = rs.getString("pinCode");
+                String email = rs.getString("email");
+                String firstName = rs.getString("firstName");
+                String lastName = rs.getString("lastName");
+                Timestamp birthDay = rs.getTimestamp("birthDay");
+                String street = rs.getString("street");
+                String apNr = rs.getString("apNr");
+                int zip = rs.getInt("zip");
+                String city = rs.getString("city");
+                long creditCardNr = rs.getLong("creditCardNr");
+                int CVC = rs.getInt("cvc");
+                int expiryDateYear = rs.getInt("expiryDateYear");
+                int expiryDateMonth = rs.getInt("expiryDateMonth");
+                LocalDateTime created_at = rs.getTimestamp("created_at").toLocalDateTime();
+                LocalDateTime updated_at = rs.getTimestamp("updated_at").toLocalDateTime();
                 Customer temp = new Customer(idCustomer, pinCode, email, firstName, lastName, birthDay, street, apNr, zip, city, creditCardNr, CVC, expiryDateYear, expiryDateMonth, created_at, updated_at);
                 listAC.add(temp);
             }

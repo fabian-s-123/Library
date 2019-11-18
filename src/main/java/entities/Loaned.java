@@ -1,8 +1,6 @@
 package entities;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.LinkedList;
 
 public class Loaned {
     private int idLoaned;
@@ -23,24 +21,6 @@ public class Loaned {
         this.extraTime = extraTime;
         this.created_at = created_at;
         this.updated_at = updated_at;
-    }
-
-    public void ausgabeListLoaned(LinkedList<Loaned> listLoaned) {
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd.MM.yy  HH:mm:ss");
-        System.out.println("ID    ID         ID    entliehen              zurückgegeben        ver-  erstellt               updated");
-        System.out.println("loan  customer   book  am                     am                   län-  am                     am");
-        for (int i = 0; i < listLoaned.size(); i++) {
-            Loaned temp = listLoaned.get(i);
-            System.out.printf("%5d  %4d   %4d     %18s     ", temp.idLoaned, temp.idCustomer, temp.idBook, temp.loanedOn.format(dtf));
-            if (temp.returnedOn != null) {
-                System.out.print(temp.returnedOn.format(dtf));
-            } else {
-                System.out.print("offen             ");
-            }
-            System.out.print((temp.extraTime) ? "   X   " : "   -   ");
-            System.out.printf("  %18s     %18s\n", temp.created_at.format(dtf), temp.updated_at.format(dtf));
-        }
-        System.out.print("Ende der Liste\n\n");
     }
 
     public int getIdLoaned() {
