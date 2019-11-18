@@ -28,19 +28,6 @@ public class LoanedDAO extends DAO {
         executeStatement(query, "Die Tabelle loaned wurde angelegt.");
     }
 
-    public void createRecordLoanedWithReturn(int idCustomer, int idBook, LocalDateTime loanedOn, LocalDateTime returnedOn) {
-        Timestamp loanedOnTS = Timestamp.valueOf(loanedOn);
-        Timestamp returnedOnTS = Timestamp.valueOf(returnedOn);
-        String query1 = "insert into loaned (idCustomer, idBook, loanedOn, returnedOn, extraTime) values (";
-        String query2 = idCustomer + ", " +
-                idBook + ", " +
-                "\"" + loanedOnTS + "\", " +
-                "\"" + returnedOnTS + "\", " +
-                false + ");";
-        String query = query1 + query2;
-        executeStatement(query, "Ein Datensatz wurde der Tabelle loaned zugefügt. (Rückgabedatum eingetragen)");
-    }
-
     public void createRecordLoanedWithExtraTime(int idCustomer, int idBook, LocalDateTime loanedOn) {
         Timestamp loanedOnTS = Timestamp.valueOf(loanedOn);
         //Timestamp returnedOnTS = Timestamp.valueOf(returnedOn);
@@ -82,37 +69,6 @@ public class LoanedDAO extends DAO {
         Timestamp returnedOnTS = Timestamp.valueOf(returnedOn);
         String query = "update loaned set returnedOn='" + returnedOnTS + "' where idCustomer=" + idCustomer + " and idBook=" + idBook + " and loanedOn ='" + loanedOnTS + "';";
         executeStatement(query, "");
-    }
-
-    public LinkedList<Loaned> createLinkedListLoaned(String query) {
-        LinkedList<Loaned> listLoaned = new LinkedList<>();
-        try {
-            Statement st = dbConnector.getConnection().createStatement();
-            ResultSet rs = st.executeQuery(query);
-            while (rs.next()) {
-                int idLoaned = rs.getInt("idLoaned");
-                int idCustomer = rs.getInt("idCustomer");
-                int idBook = rs.getInt("idBook");
-                LocalDateTime loanedOn = rs.getTimestamp("loanedOn").toLocalDateTime();
-                LocalDateTime returnedOn = null;
-                Timestamp tsReturnedOn = rs.getTimestamp("returnedOn");
-                if (tsReturnedOn != null) {
-                    returnedOn = tsReturnedOn.toLocalDateTime();
-                }
-                boolean extraTime = rs.getBoolean("extraTime");
-                LocalDateTime created_at = rs.getTimestamp("created_at").toLocalDateTime();
-                LocalDateTime updated_at = rs.getTimestamp("updated_at").toLocalDateTime();
-                Loaned temp = new Loaned(idLoaned, idCustomer, idBook, loanedOn, returnedOn, extraTime, created_at, updated_at);
-                listLoaned.add(temp);
-            }
-            st.close();
-        } catch (SQLException sqle) {
-            System.out.println("SQLException: " + sqle.getMessage());
-            System.out.println("SQLState: " + sqle.getSQLState());
-            System.out.println("VendorError: " + sqle.getErrorCode());
-            sqle.printStackTrace();
-        }
-        return listLoaned;
     }
 
     public LinkedList<LoanedCustomerBook> getListeLCB_sortCustomer() {
@@ -174,49 +130,6 @@ public class LoanedDAO extends DAO {
         return ids;
     }
 
-    public List<Timestamp> selectBookReturned(Statement st, String column, int condition, int limit) throws SQLException {
-        List<Timestamp> ids = new ArrayList<>();
-        String query = "SELECT returnedOn FROM loaned WHERE " + column + "=" + condition + " ORDER BY `idLoaned` DESC LIMIT " + limit + ";";
-        ResultSet rs = st.executeQuery(query);
-        while (rs.next()) {
-            Timestamp returnedOn = rs.getTimestamp("returnedOn");
-            ids.add(returnedOn);
-        }
-        return ids;
-    }
-
-    public List<Timestamp> selectBookLoaned(Statement st, int idLoaned, int condition, int limit) throws SQLException {
-        List<Timestamp> ids = new ArrayList<>();
-        String query = "SELECT loanedOn FROM loaned WHERE idLoaned=" + idLoaned + ";";
-        ResultSet rs = st.executeQuery(query);
-        while (rs.next()) {
-            Timestamp loanedOn = rs.getTimestamp("loanedOn");
-            ids.add(loanedOn);
-        }
-        return ids;
-    }
-
-    public int selectCountIdCustomer(Statement st, int idCustomer) throws SQLException {
-        int result = 0;
-        String query = "SELECT COUNT(idCustomer) FROM loaned WHERE idCustomer=" + idCustomer + ";";
-        ResultSet rs = st.executeQuery(query);
-        while (rs.next()) {
-            result = rs.getInt(1);
-        }
-        return result;
-    }
-
-    public List<Integer> selectOpenIdBookPerCustomer(Statement st, int idCustomer) throws SQLException {
-        List<Integer> ids = new ArrayList<>();
-        String query = "SELECT idBook FROM loaned WHERE idCustomer=" + idCustomer + " AND returnedOn='0000-00-00 00:00:00' ORDER BY `idLoaned` ASC;";
-        ResultSet rs = st.executeQuery(query);
-        while (rs.next()) {
-            int idBook = rs.getInt("idBook");
-            ids.add(idBook);
-        }
-        return ids;
-    }
-
     public void updateRecordLoaned(int idCustomer, int idBook, LocalDateTime loanedOn, LocalDateTime returnedOn, boolean extraTime, int idLoaned) {
         String query1 = "update loaned set ";
         String query2 = "idCustomer = " + idCustomer + ", " +
@@ -227,16 +140,5 @@ public class LoanedDAO extends DAO {
         String query3 = " where idLoaned = " + idLoaned + ";";
         String query = query1 + query2 + query3;
         executeStatement(query, "Ein Datensatz wurde in der Tabelle loaned editiert/geupdated.");
-    }
-
-    public LocalDateTime selectLoanedOn(Statement st, int idCustomer, int idBook) throws SQLException {
-        LocalDateTime time = LocalDateTime.now();
-        String query = "select loanedOn from loaned where idCustomer=" + idCustomer + " and idBook=" + idBook + " and returnedOn='0000-00-00 00:00:00';";
-        ResultSet rs = st.executeQuery(query);
-        while (rs.next()) {
-            Timestamp loanedOn = rs.getTimestamp("loanedOn");
-            time = loanedOn.toLocalDateTime();
-        }
-        return (time.minusHours(2)); //wegen falscher Zeitrückgabe
     }
 }

@@ -8,10 +8,11 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Scanner;
-import java.util.TimeZone;
 
 public class BATGA {
     public static void main(String[] args) throws SQLException {
+
+        //creating connection
         DBConnector dbConnector;
         dbConnector = DBConnector.getInstance();
         dbConnector.connect("w0136ee0.kasserver.com", "d03037fa", "d03037fa", "fpcQdPhv5v4UoQ6H");
@@ -19,6 +20,7 @@ public class BATGA {
 
         Statement st = connection.createStatement();
 
+        //controller classes required
         Scanner scanner = new Scanner(System.in);
         Authentication aut = new Authentication();
         LoanBook loanBook = new LoanBook();
@@ -27,30 +29,23 @@ public class BATGA {
         ExtendLoan extendLoan = new ExtendLoan();
         BookAuthorCategory b = new BookAuthorCategory();
 
+        //DAOs required
         CustomerDAO customerDAO = new CustomerDAO();
         BookDAO bookDAO = new BookDAO();
-        AuthorDAO authorDAO = new AuthorDAO();
-        CategoryDAO categoryDAO = new CategoryDAO();
         LoanedDAO loanedDAO = new LoanedDAO();
         BACDAO bacDAO = new BACDAO();
 
-        /**
-         * test start
-         */
-
-        /**
-         * test end
-         */
-
+        //local variables required for the program to run
         int idCustomer = 0;
         boolean runProgram = true;
         boolean isAuthenticated = false;
         String input = "";
-        boolean validInput = false;
+        boolean validInput;
 
+        //program start
         while (runProgram) {
 
-            //Log in
+            //log in
             if (!isAuthenticated) {
                 System.out.println("Welcome to Lukas' Library. My name is BATGA. To proceed please log in first.");
                 System.out.println("1 - log in");
@@ -79,7 +74,7 @@ public class BATGA {
                 } while (!validInput);
             }
 
-            //Main Menu
+            //main menu
             if (isAuthenticated && idCustomer > 0) {
                 do {
                     System.out.println("Hello " + customerDAO.selectFirstName(st, idCustomer) + "! What do you wish to do?");

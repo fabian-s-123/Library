@@ -74,28 +74,6 @@ public class BookDAO extends DAO {
         executeStatement(query, "Ein Datensatz wurde in der Tabelle book geändert.");
     }
 
-    public List<Integer> selectIdBooks(Statement st) throws SQLException {
-        List<Integer> ids = new ArrayList<Integer>();
-        String query = "SELECT idBook FROM book;";
-        ResultSet rs = st.executeQuery(query);
-        while (rs.next()) {
-            int idBook = rs.getInt("idBook");
-            ids.add(idBook);
-        }
-        return ids;
-    }
-
-    public static List<Integer> selectBooksFSK(Statement st, int fsk) throws SQLException {
-        List<Integer> ids = new ArrayList<>();
-        String query = "SELECT idBook FROM book WHERE fsk<=" + fsk + ";";
-        ResultSet rs = st.executeQuery(query);
-        while (rs.next()) {
-            int idBook = rs.getInt("idBook");
-            ids.add(idBook);
-        }
-        return ids;
-    }
-
     public LinkedList<BookAuthorCategory> getListBAC() {
         LinkedList<BookAuthorCategory> listBAC = new LinkedList<>();
         String query = "select * from ((book inner join author on book.idAuthor=author.idAuthor) inner join category on book.idCategory = category.idCategory) order by book.idBook ASC";
