@@ -51,7 +51,7 @@ public class LoanedDAO extends DAO {
                 //"\"" + returnedOnTS + "\", " +
                 true + ");";
         String query = query1 + query2;
-        executeStatement(query, "Ein Datensatz loaned wurde der Tabelle loaned zugefügt. (mit Verlängerungsvermerk)");
+        executeStatement(query, "");
         //createRecordLoanedWithoutReturn(idCustomer, idBook, loanedOn);
     }
 
@@ -74,14 +74,14 @@ public class LoanedDAO extends DAO {
                 "\"" + loanedOnTS + "\", " +
                 false + ");";
         String query = query1 + query2;
-        executeStatement(query, "One moment please...\nHere is your book.\n");
+        executeStatement(query, "");
     }
 
     public void returnBook(int idCustomer, int idBook, LocalDateTime loanedOn, LocalDateTime returnedOn) throws SQLException {
         Timestamp loanedOnTS = Timestamp.valueOf(loanedOn);
         Timestamp returnedOnTS = Timestamp.valueOf(returnedOn);
         String query = "update loaned set returnedOn='" + returnedOnTS + "' where idCustomer=" + idCustomer + " and idBook=" + idBook + " and loanedOn ='" + loanedOnTS + "';";
-        executeStatement(query, "Thank you for returning.");
+        executeStatement(query, "");
     }
 
     public LinkedList<Loaned> createLinkedListLoaned(String query) {
@@ -164,8 +164,8 @@ public class LoanedDAO extends DAO {
     }
 
     public List<Integer> selectIdBooksLoaned(Statement st) throws SQLException {
-        List<Integer> ids = new ArrayList<Integer>();
-        String query = "SELECT idBook FROM loaned;";
+        List<Integer> ids = new ArrayList<>();
+        String query = "SELECT idBook FROM loaned WHERE returnedOn='0000-00-00 00:00:00';";
         ResultSet rs = st.executeQuery(query);
         while (rs.next()) {
             int idBook = rs.getInt("idBook");
@@ -239,9 +239,4 @@ public class LoanedDAO extends DAO {
         }
         return (time.minusHours(2)); //wegen falscher Zeitrückgabe
     }
-
-    //TODO query for LoanBook
-    //select * from ((loaned inner join book on loaned.idBook=book.idBook) inner join author on book.idAuthor=author.idAuthor) where idCustomer=1 and loaned.idBook=31 and loaned.returnedOn>'0000-00-00 00:00:00' and book.fsk<=10 order by loaned.idLoaned DESC LIMIT 1;
-
-
 }

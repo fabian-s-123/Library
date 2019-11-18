@@ -1,5 +1,7 @@
 package entities;
 
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -20,6 +22,8 @@ public class BookAuthorCategory {
     private String firstEdition;
     private int amountPages;
     private String language;
+    private Timestamp loanedOn;
+    private Timestamp returnedOn;
     private int idRow;
     private int idColumn;
     private LocalDateTime created_at;
@@ -47,7 +51,7 @@ public class BookAuthorCategory {
         this.updated_at = updated_at;
     }
 
-    public BookAuthorCategory(int idBook, String title, int idAuthor, String firstName, String lastName, int birthYear, int idCategory, String description, long isbn, int fsk, String publisher, String edition, String firstEdition, int amountPages, String language, int idRow, int idColumn) {
+    public BookAuthorCategory(int idBook, String title, int idAuthor, String firstName, String lastName, int birthYear, int idCategory, String description, long isbn, int fsk, Timestamp loanedOn, Timestamp returnedOn, String publisher, String edition, String firstEdition, int amountPages, String language, int idRow, int idColumn) {
         this.idBook = idBook;
         this.title = title;
         this.idAuthor = idAuthor;
@@ -58,6 +62,8 @@ public class BookAuthorCategory {
         this.description = description;
         this.isbn = isbn;
         this.fsk = fsk;
+        this.loanedOn = loanedOn;
+        this.returnedOn = returnedOn;
         this.publisher = publisher;
         this.edition = edition;
         this.firstEdition = firstEdition;
@@ -236,6 +242,10 @@ public class BookAuthorCategory {
 
     public void setFsk(int fsk) {
         this.fsk = fsk;
+    }
+
+    public Timestamp getLoanedOn() {
+        return loanedOn;
     }
 
     public String getPublisher() {

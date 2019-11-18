@@ -20,7 +20,7 @@ public class DBConnector {
     public void connect(String hostname, String dbname, String user, String password) {
         try {
             System.out.println("* Verbindung zur Datenbank " + dbname + " wird aufgebaut.");
-            String url = "jdbc:mysql://" + hostname + "/" + dbname + "?serverTimezone=GMT-1&zeroDateTimeBehavior=CONVERT_TO_NULL";
+            String url = "jdbc:mysql://" + hostname + "/" + dbname + "?serverTimezone=GMT%2B1&zeroDateTimeBehavior=CONVERT_TO_NULL"; //2B ASCII für '+'  -> GMT%2B1 = GMT+1
             connection = DriverManager.getConnection(url, user, password);
         } catch (SQLException sqle) {
             System.out.println("SQLException: " + sqle.getMessage());

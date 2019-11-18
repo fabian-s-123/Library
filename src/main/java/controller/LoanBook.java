@@ -18,56 +18,71 @@ public class LoanBook {
 
     public void loanBook(Statement st, Scanner scanner, int idCustomer, LoanedDAO loanedDAO, CustomerDAO customerDAO, BookDAO bookDAO, BACDAO bacDAO, BookAuthorCategory b) throws SQLException {
         LocalDateTime now = LocalDateTime.now();
+        List<BookAuthorCategory> listOfBooks;
+        List<Integer> listOfBooksLoaned;
+        List<BookAuthorCategory> listOfBooksToRemove = new ArrayList<>();
 
-        if (isAllowedToLoan(st, idCustomer, loanedDAO)) {
-            System.out.println("Of course, these books are available for loaning:\n");
-            List<Integer> listAllBooksAfterFSKCheck;
-            ArrayList<Integer> listBooksLoaned = new ArrayList<>();
-            listAllBooksAfterFSKCheck = checkFSK(st, idCustomer, customerDAO, now);
+        if (isAllowedToLoan(st, idCustomer, bacDAO)) {
+            System.out.println("\nOf course, these books are available for loaning:\n");
 
-            for (Integer x : bookDAO.selectIdBooks(st)) {
-                if (loanedDAO.selectIdBooksLoaned(st).contains(x)) {
-                    listBooksLoaned.add(x);
-                }
-            }
-            for (Integer y : listBooksLoaned) {
-                for (Timestamp time : loanedDAO.selectBookReturned(st, "idBook", y, 1)) {
-                    if (time == null) {
-                        listAllBooksAfterFSKCheck.remove(y);
+            //list of books available for loaning after FSK check
+            listOfBooks = bacDAO.selectBooksAvailableFSKSortedAsBAC(st, checkFSK(st, idCustomer, customerDAO, now));
+            //list of book IDs currently loaned out
+            listOfBooksLoaned = loanedDAO.selectIdBooksLoaned(st);
+
+            //removing books from listOfBook that are currently loaned out
+            for (Integer x : listOfBooksLoaned) {
+                for (BookAuthorCategory c : listOfBooks){
+                    if (c.getIdBook()==x) {
+                        listOfBooksToRemove.add(c);
                     }
                 }
             }
+            listOfBooks.removeAll(listOfBooksToRemove);
 
-            //printing the list of book available for this customer
+            //print the available books
             b.printHeadBAC();
-            for (Integer x : listAllBooksAfterFSKCheck) {
-                b.printListBAC(bacDAO.selectBacId(st, x));
+            for (BookAuthorCategory bac : listOfBooks) {
+                b.printListBAC(bac);
             }
-            System.out.println();
 
-            //select the book for loan
+            //validating the book id to return
             boolean validInput = false;
             int choice = 0;
+            BookAuthorCategory temp = new BookAuthorCategory();
             do {
-                System.out.println("Please select the book you would like to loan.");
+                System.out.println("\n\nPlease select the book you would like to loan.  |  0 - quit loan book (return to main menu)");
                 choice = scanner.nextInt();
-                if (listAllBooksAfterFSKCheck.contains(choice)) {
-                    validInput = true;
-                } else {
+                for (BookAuthorCategory i : listOfBooks) {
+                    if (i.getIdBook() == choice) {
+                        temp = i;
+                        validInput = true;
+                    } else if (choice==0) {
+                        validInput= true;
+                        System.out.println();
+                        break;
+                    }
+                }
+                if (!validInput) {
                     System.out.println("This book is not available.");
                 }
             } while (!validInput);
-            loanedDAO.createNewRecordLoaned(idCustomer, choice, now);
+
+            //creating entry in DB
+            if (choice > 0) {
+                loanedDAO.createNewRecordLoaned(idCustomer, temp.getIdBook(), now);
+                System.out.println("One moment please... Here is your book.\n");
+            }
+            //if isAllowedToLoan = false
         } else {
             System.out.println("Sorry " + customerDAO.selectFirstName(st, idCustomer) + ", you already have four books currently in loan. " +
-                    "Please return a book first, before you loan out another one.");
+                    "Please return a book first, before you loaning another one.");
         }
     }
 
-    private List<Integer> checkFSK(Statement st, int idCustomer, CustomerDAO customerDAO, LocalDateTime now) throws SQLException {
+    private Integer checkFSK(Statement st, int idCustomer, CustomerDAO customerDAO, LocalDateTime now) throws SQLException {
         Timestamp timestamp = customerDAO.selectBirthDay(st, idCustomer);
         LocalDateTime birthDayCustomer = timestamp.toLocalDateTime();
-        List<Integer> booksAfterFSKCheck = new ArrayList<>();
         int fsk = -1;
         if (birthDayCustomer.plusYears(18).isBefore(now)) {
             fsk = 18;
@@ -76,26 +91,12 @@ public class LoanBook {
         } else if (birthDayCustomer.plusYears(10).isAfter(now)) {
             fsk = 0;
         }
-        for (Integer x : BookDAO.selectBooksFSK(st, fsk)) {
-            booksAfterFSKCheck.add(x);
-        }
-        return booksAfterFSKCheck;
+        return fsk;
     }
 
-    public boolean isAllowedToLoan(Statement st, int idCustomer, LoanedDAO loanedDAO) throws SQLException {
+    private boolean isAllowedToLoan(Statement st, int idCustomer, BACDAO bacDAO) throws SQLException {
         boolean isAllowed = false;
-        int booksLoanedAllTime = loanedDAO.selectCountIdCustomer(st, idCustomer);
-        if (booksLoanedAllTime >= 4) {
-            int booksCurrentlyLoaned = 0;
-            for (Timestamp time : loanedDAO.selectBookReturned(st, "idCustomer", idCustomer, booksLoanedAllTime)) {
-                if (time == null) {
-                    booksCurrentlyLoaned++;
-                }
-            }
-            if (booksCurrentlyLoaned < 4) {
-                isAllowed = true;
-            }
-        } else {
+        if (bacDAO.selectBooksLoanedPerCustomerAsBAC(st, idCustomer).size() < 4) {
             isAllowed = true;
         }
         return isAllowed;
