@@ -26,12 +26,12 @@ public class Category {
         System.out.print("Ende der Liste\n\n");
     }
 
-    public void ausgabeKopfListCategory() {
+    private void ausgabeKopfListCategory() {
         System.out.println("ID       Beschreibung                     erstellt am          updated am");
         System.out.println("_________________________________________________________________________________\n");
     }
 
-    public void ausgabeZeileListCategory(Category temp) {
+    private void ausgabeZeileListCategory(Category temp) {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd.MM.yy  HH:mm:ss");
         System.out.printf("%-8d %-30s   %18s   %18s\n", +
                 temp.idCategory, temp.description, temp.created_at.format(dtf), temp.updated_at.format(dtf));

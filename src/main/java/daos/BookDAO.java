@@ -103,7 +103,7 @@ public class BookDAO extends DAO {
         return listBAC;
     }
 
-    public LinkedList<BookAuthorCategory> createLinkedListBAC(String query) {
+    private LinkedList<BookAuthorCategory> createLinkedListBAC(String query) {
         LinkedList<BookAuthorCategory> listBAC = new LinkedList<>();
         try {
             Statement st = dbConnector.getConnection().createStatement();
@@ -148,7 +148,7 @@ public class BookDAO extends DAO {
         return listAuthorBook;
     }
 
-    public LinkedList<BookAuthorCategory> createLinkedListABC(String query) {
+    private LinkedList<BookAuthorCategory> createLinkedListABC(String query) {
         LinkedList<BookAuthorCategory> listABC = new LinkedList<>();
         try {
             Statement st = dbConnector.getConnection().createStatement();
@@ -195,12 +195,12 @@ public class BookDAO extends DAO {
 
     public LinkedList<BookAuthorCategory> getListLanguageBook() {
         LinkedList<BookAuthorCategory> listLanguageBook = new LinkedList<>();
-        String query = "select * from ((category inner join book on category.idCategory=book.idCategory) inner join author on book.idAuthor = author.idAuthor) order by book.language ASC";
+        String query = "select * from ((category inner join book on category.idCategory=book.idCategory) inner join author on book.idAuthor = author.idAuthor) order by book.language, author.lastName ASC";
         listLanguageBook = createLinkedListCBA(query);
         return listLanguageBook;
     }
 
-    public LinkedList<BookAuthorCategory> createLinkedListCBA(String query) {
+    private LinkedList<BookAuthorCategory> createLinkedListCBA(String query) {
         LinkedList<BookAuthorCategory> listCBA = new LinkedList<>();
         try {
             Statement st = dbConnector.getConnection().createStatement();

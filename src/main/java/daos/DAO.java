@@ -11,11 +11,11 @@ public abstract class DAO {
     protected DBConnector dbConnector;
     protected Connection connection;
 
-    public DAO() {
+    DAO() {
         dbConnector = DBConnector.getInstance();
     }
 
-    public void executeStatement(String query, String meldung) {
+    void executeStatement(String query, String meldung) {
         try {
             Statement st = dbConnector.getConnection().createStatement();
             st.executeUpdate(query);
@@ -29,7 +29,7 @@ public abstract class DAO {
         }
     }
 
-    public int zaehlenDS(String query) {
+    private int zaehlenDS(String query) {
         int anzahlDS = 0;
         try {
             Statement st = dbConnector.getConnection().createStatement();
@@ -57,11 +57,8 @@ public abstract class DAO {
         boolean isIdInTable;
         String query = "select count(*) as anzahlDS from " + tableName + " where " + columnName + " = " + id;
         int anzahlDS = zaehlenDS(query);
-        if (anzahlDS > 0) {
-            isIdInTable = true;
-        } else {
-            isIdInTable = false;
-        }
+        if (anzahlDS > 0) isIdInTable = true;
+        else isIdInTable = false;
         return isIdInTable;
     }
 }

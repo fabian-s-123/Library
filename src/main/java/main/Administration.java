@@ -6,9 +6,6 @@ import daos.*;
 
 import java.util.Scanner;
 
-// was könnte ich noch tun: bei eingabe Buch prüfen, ob idAuthor und idCategory vorhanden sind
-// Optimierungshinweise von intelliJ anschauen
-
 public class Administration {
 
     public static void main(String[] args) {
@@ -158,7 +155,7 @@ public class Administration {
                             System.out.println("Hier geht es zum Erstellen eines neuen DS in (" + auswahlString1[auswahl1 - 1].toUpperCase() + ").");
                             switch (auswahl1) {
                                 case 1: //book
-                                    recNUD.createNewRecordBook(boDAO);
+                                    recNUD.createNewRecordBook(boDAO, auDAO, caDAO, diLi);
                                     break;
                                 case 2: //author
                                     recNUD.createNewRecordAuthor(auDAO);
@@ -170,7 +167,7 @@ public class Administration {
                                     recNUD.createNewRecordCustomer(cuDAO);
                                     break;
                                 case 5: //loaned
-                                    recNUD.createNewRecordLoaned(loDAO);
+                                    recNUD.createNewRecordLoaned(loDAO, cuDAO, boDAO, diLi);
                                     break;
                             }
                             break;
@@ -178,7 +175,7 @@ public class Administration {
                             System.out.println("Hier geht es zum Editieren eines einzelnen DS in (" + auswahlString1[auswahl1 - 1].toUpperCase() + ").");
                             switch (auswahl1) {
                                 case 1: //book
-                                    recNUD.editRecordBook(boDAO, diLi);
+                                    recNUD.editRecordBook(boDAO, auDAO, caDAO, diLi);
                                     break;
                                 case 2: //author
                                     recNUD.editRecordAuthor(auDAO, diLi);
@@ -190,7 +187,7 @@ public class Administration {
                                     recNUD.editRecordCustomer(cuDAO, diLi);
                                     break;
                                 case 5: //loaned
-                                    recNUD.editRecordLoaned(loDAO, diLi);
+                                    recNUD.editRecordLoaned(loDAO, cuDAO, boDAO, diLi);
                                     break;
                             }
                             break;

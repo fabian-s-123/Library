@@ -70,13 +70,13 @@ public class BookAuthorCategory {
     public BookAuthorCategory() {
     }
 
-    public void ausgabeKopfListBookAuthorCategory() {
+    private void ausgabeKopfListBookAuthorCategory() {
         System.out.println("ID    Titel                                              Vorname         Name            Geb.  Kategorie                     ISBN          FSK  Verlag                    Edition               Sei-    Sprache    erstellt             updated");
         System.out.println("book                                                     Author                          Jahr  ID Beschreibung                                                                      First       ten                am                   am");
         System.out.println("__________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________\n");
     }
 
-    public void ausgabeZeileListBookAuthorCategory(BookAuthorCategory temp) {
+    private void ausgabeZeileListBookAuthorCategory(BookAuthorCategory temp) {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd.MM.yy  HH:mm:ss");
         System.out.printf("%-5d %-50s %-15s %-15s %4d %2d   %-25s %-13d  %2d  %-25s %-10s %-10s %-5d   %-10s %18s   %18s\n", +
                 temp.idBook, temp.title, temp.firstName, temp.lastName, temp.birthYear, temp.idCategory, temp.description, temp.isbn, temp.fsk, temp.publisher, temp.edition, temp.firstEdition, temp.amountPages, temp.language, temp.created_at.format(dtf), temp.updated_at.format(dtf));
@@ -125,7 +125,7 @@ public class BookAuthorCategory {
         for (int i = 0; i < listAllBooks.size(); i++) {
             BookAuthorCategory temp = listAllBooks.get(i);
             if (!currentLanguage.contains(temp.getLanguage())) {
-                System.out.println("Sprache: " +  temp.getLanguage());
+                System.out.println("Sprache: " + temp.getLanguage());
                 currentLanguage = temp.getLanguage();
             }
             ausgabeZeileListBookAuthorCategory(temp);
@@ -142,7 +142,7 @@ public class BookAuthorCategory {
         System.out.println("________________________________________________________________________________________________________________________________________________________________________________________________________________");
     }
 
-    public void printListBAC(BookAuthorCategory temp) {
+    private void printListBAC(BookAuthorCategory temp) {
         System.out.printf("%-5d %-50s %-15s %-15s %4d %2d   %-25s %-13d  %2d  %-25s %-10s %-10s %-5d   %-10s\n", +
                 temp.idBook, temp.title, temp.firstName, temp.lastName, temp.birthYear, temp.idCategory, temp.description, temp.isbn, temp.fsk, temp.publisher, temp.edition, temp.firstEdition, temp.amountPages, temp.language);
     }

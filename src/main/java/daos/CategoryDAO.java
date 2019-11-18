@@ -40,13 +40,12 @@ public class CategoryDAO extends DAO {
     }
 
     public LinkedList<Category> getListAllCategories() {
-        LinkedList<Category> listAllCategories = new LinkedList<>();
         String query = "select * from category order by category.description ASC";
-        listAllCategories = createLinkedListAllCategories(query);
+        LinkedList<Category> listAllCategories = createLinkedListAllCategories(query);
         return listAllCategories;
     }
 
-    public LinkedList<Category> createLinkedListAllCategories(String query) {
+    private LinkedList<Category> createLinkedListAllCategories(String query) {
         LinkedList<Category> listAC = new LinkedList<>();
         try {
             Statement st = dbConnector.getConnection().createStatement();

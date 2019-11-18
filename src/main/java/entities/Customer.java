@@ -83,12 +83,12 @@ public class Customer {
         System.out.print("Ende der Liste\n\n");
     }
 
-    public void ausgabeKopfListCustomer() {
+    private void ausgabeKopfListCustomer() {
         System.out.println("ID   Name                      Vorname                   Straße HNr                                    PLZ   Ort                    GebDat     email                          PIN             KreditKartenNr       CVC   gültig bis  erstellt am          updated am");
         System.out.println("____________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________\n");
     }
 
-    public void ausgabeZeileListCustomer(Customer temp) {
+    private void ausgabeZeileListCustomer(Customer temp) {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd.MM.yy  HH:mm:ss");
         DateTimeFormatter dtf_k = DateTimeFormatter.ofPattern("dd.MM.yy");
         System.out.printf("%-4d %-25s %-25s %-45s %-5d %-20s %10s   %-30s %-15s %-16d %7s   %-7s     %18s   %18s \n", +

@@ -144,13 +144,12 @@ public class CustomerDAO extends DAO {
     }
 
     public LinkedList<Customer> getListAllCustomers() {
-        LinkedList<Customer> listAllCustomers = new LinkedList<>();
         String query = "select * from customer order by customer.lastName ASC";
-        listAllCustomers = createLinkedListAllCustomers(query);
+        LinkedList<Customer> listAllCustomers = createLinkedListAllCustomers(query);
         return listAllCustomers;
     }
 
-    public LinkedList<Customer> createLinkedListAllCustomers(String query) {
+    private LinkedList<Customer> createLinkedListAllCustomers(String query) {
         LinkedList<Customer> listAC = new LinkedList<>();
         try {
             Statement st = dbConnector.getConnection().createStatement();

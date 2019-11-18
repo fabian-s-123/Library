@@ -4,9 +4,6 @@ import java.sql.*;
 
 import entities.*;
 
-import javax.swing.plaf.nimbus.State;
-import java.sql.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -87,13 +84,6 @@ public class LoanedDAO extends DAO {
         executeStatement(query, "Thank you for returning.");
     }
 
-    public LinkedList<Loaned> getListeoffeneRückgabenKurz() {
-        LinkedList<Loaned> listLoaned = new LinkedList<>();
-        String query = "select * from loaned";
-        listLoaned = createLinkedListLoaned(query);
-        return listLoaned;
-    }
-
     public LinkedList<Loaned> createLinkedListLoaned(String query) {
         LinkedList<Loaned> listLoaned = new LinkedList<>();
         try {
@@ -126,20 +116,18 @@ public class LoanedDAO extends DAO {
     }
 
     public LinkedList<LoanedCustomerBook> getListeLCB_sortCustomer() {
-        LinkedList<LoanedCustomerBook> listLCB = new LinkedList<>();
         String query = "select * from (((loaned inner join customer on loaned.idCustomer=customer.idCustomer) inner join book on loaned.idBook = book.idBook) inner join author on book.idAuthor = author.idAuthor) order by customer.lastName, loaned.idBook";
-        listLCB = createLinkedListLCB(query);
+        LinkedList<LoanedCustomerBook> listLCB = createLinkedListLCB(query);
         return listLCB;
     }
 
     public LinkedList<LoanedCustomerBook> getListeLCB_sortBook() {
-        LinkedList<LoanedCustomerBook> listLCB = new LinkedList<>();
         String query = "select * from (((loaned inner join customer on loaned.idCustomer=customer.idCustomer) inner join book on loaned.idBook = book.idBook) inner join author on book.idAuthor = author.idAuthor) order by loaned.idBook ASC";
-        listLCB = createLinkedListLCB(query);
+        LinkedList<LoanedCustomerBook> listLCB = createLinkedListLCB(query);
         return listLCB;
     }
 
-    public LinkedList<LoanedCustomerBook> createLinkedListLCB(String query) {
+    private LinkedList<LoanedCustomerBook> createLinkedListLCB(String query) {
         LinkedList<LoanedCustomerBook> listLCB = new LinkedList<>();
         try {
             Statement st = dbConnector.getConnection().createStatement();
@@ -245,7 +233,7 @@ public class LoanedDAO extends DAO {
         LocalDateTime time = LocalDateTime.now();
         String query = "select loanedOn from loaned where idCustomer=" + idCustomer + " and idBook=" + idBook + " and returnedOn='0000-00-00 00:00:00';";
         ResultSet rs = st.executeQuery(query);
-        while (rs.next()){
+        while (rs.next()) {
             Timestamp loanedOn = rs.getTimestamp("loanedOn");
             time = loanedOn.toLocalDateTime();
         }

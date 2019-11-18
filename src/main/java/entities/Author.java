@@ -30,13 +30,13 @@ public class Author {
         System.out.print("Ende der Liste\n\n");
     }
 
-    public void ausgabeKopfListAuthor() {
+    private void ausgabeKopfListAuthor() {
         System.out.println("ID       Vorname                   Name                      Geb.    erstellt             updated");
         System.out.println("Author                                                       Jahr    am                   am");
         System.out.println("____________________________________________________________________________________________________________\n");
     }
 
-    public void ausgabeZeileListAuthor(Author temp) {
+    private void ausgabeZeileListAuthor(Author temp) {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd.MM.yy  HH:mm:ss");
         System.out.printf("%-8d %-25s %-25s %-4d    %18s   %18s\n", +
                 temp.idAuthor, temp.firstName, temp.lastName, temp.birthYear, temp.created_at.format(dtf), temp.updated_at.format(dtf));

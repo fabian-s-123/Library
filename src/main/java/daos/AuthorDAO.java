@@ -47,9 +47,8 @@ public class AuthorDAO extends DAO {
 
 
     public LinkedList<Author> getListAllAuthors() {
-        LinkedList<Author> listAllAuthors = new LinkedList<>();
         String query = "select * from author order by author.lastName ASC";
-        listAllAuthors = createLinkedListAllAuthors(query);
+        LinkedList<Author> listAllAuthors = createLinkedListAllAuthors(query);
         return listAllAuthors;
     }
 
