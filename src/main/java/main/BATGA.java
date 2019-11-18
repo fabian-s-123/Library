@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Scanner;
+import java.util.TimeZone;
 
 public class BATGA {
     public static void main(String[] args) throws SQLException {
@@ -36,9 +37,7 @@ public class BATGA {
         /**
          * test start
          */
-        /*
 
-         */
         /**
          * test end
          */
@@ -107,11 +106,11 @@ public class BATGA {
                             validInput = false;
                             break;
                         case "3":
-                            extendLoan.extendLoan(st, scanner, returnBook, idCustomer, b, bacDAO, loanedDAO);
+                            extendLoan.extendLoan(st, scanner, idCustomer, b, bacDAO, loanedDAO);
                             validInput = false;
                             break;
                         case "4":
-                            browse.browseCollection(st, bacDAO, bookDAO);
+                            browse.browseCollection(st, bacDAO);
                             validInput = false;
                             break;
                         default:

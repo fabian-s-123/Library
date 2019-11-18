@@ -15,39 +15,49 @@ public class ReturnBook {
 
     public void returnBook(Statement st, int idCustomer, BookAuthorCategory b, BACDAO bacDAO, LoanedDAO loanedDAO, Scanner scanner) throws SQLException {
         LocalDateTime now = LocalDateTime.now();
-        List<Integer> loanedList = booksInLoanByCustomer(st, idCustomer, bacDAO, loanedDAO);
-        System.out.println("These are the books you currently have in loan:\n");
-        b.printHeadBAC();
+        List<BookAuthorCategory> listOfBooks = new ArrayList<>();
 
-        for (Integer x : loanedList) {
-            b.printListBAC(bacDAO.selectBacId(st, x));
-        }
-        System.out.println();
+        //check if customer has any books in loan at the moment
+        if (bacDAO.selectBooksLoanedPerCustomerAsBAC(st, idCustomer).size() > 0) {
 
-        boolean validInput = false;
-        int choice = 0;
-        do {
-            System.out.println("Please select the book you would like to return.");
-            choice = scanner.nextInt();
-            if (loanedList.contains(choice)) {
-                validInput = true;
-            } else {
-                System.out.println("You have not loaned this book.");
+            System.out.println("\nThese are the books you currently have in loan:\n");
+
+            //print all the books the customer has in loan & add list of book ids the customer has in loan to ArrayList
+            b.printHeadBAC();
+            for (BookAuthorCategory bac : bacDAO.selectBooksLoanedPerCustomerAsBAC(st, idCustomer)) {
+                b.printListBAC(bac);
+                listOfBooks.add(bac);
             }
-        } while (!validInput);
-        if (choice > 0) {
-            loanedDAO.returnBook(idCustomer, choice, loanedDAO.selectLoanedOn(st, idCustomer, choice) , now);
-        }
-    }
 
-    public List<Integer> booksInLoanByCustomer (Statement st, int idCustomer, BACDAO bacDAO, LoanedDAO loanedDAO) throws SQLException {
-        List<Integer> list = new ArrayList<>();
-        for (Integer x : loanedDAO.selectOpenIdBookPerCustomer(st, idCustomer)){
-            list.add(x);
+            //validating the book id to return
+            boolean validInput = false;
+            int choice = 0;
+            BookAuthorCategory temp = new BookAuthorCategory();
+            do {
+                System.out.println("\n\nPlease select the book you would like to return.  |  0 - quit return book (return to main menu)");
+                choice = scanner.nextInt();
+                for (BookAuthorCategory i : listOfBooks) {
+                    if (i.getIdBook() == choice) {
+                        temp = i;
+                        validInput = true;
+                    } else if (choice==0) {
+                        validInput= true;
+                        System.out.println();
+                        break;
+                    }
+                }
+                if (!validInput) {
+                    System.out.println("You have not loaned this book.");
+                }
+            } while (!validInput);
+
+            //updating loan with returnedOn & add new entry with annotation extra time
+            if (choice > 0) {
+                loanedDAO.returnBook(idCustomer, choice, temp.getLoanedOn().toLocalDateTime(), now);
+                System.out.println("\nThank you for returning.\n");
+            }
+        } else {
+            System.out.println("You do not have any books in loan at the moment.");
         }
-        for (Integer y : list) {
-            bacDAO.selectBacId(st, y);
-        }
-        return list;
     }
 }
