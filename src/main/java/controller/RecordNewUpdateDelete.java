@@ -51,19 +51,23 @@ public class RecordNewUpdateDelete {
     private int inputIdBook(BookDAO boDAO, DiverseLists diLi, String meldung) {
         diLi.createListeBookAllRecords(boDAO);
         Scanner sc_int = new Scanner(System.in);
-        int zuLoeschendeIdBook;
+        int idBook;
         boolean eingabegueltig;
         do {
             eingabegueltig = true;
             System.out.print("Bitte gib die IdBook vom zu " + meldung + " Buch aus der vorstehenden Liste ein! ");
-            zuLoeschendeIdBook = sc_int.nextInt();
-            boolean bookIsInTable = boDAO.checkIsXxxIdInTableXxx("idBook", "book", zuLoeschendeIdBook);
-            if (!bookIsInTable) {
-                System.out.println("Die Eingabe war ungültig, bitte wiederholen! ");
-                eingabegueltig = false;
+            idBook = sc_int.nextInt();
+            if (idBook == 0) {
+                System.out.println("Zurück zur Auswahl ohne Auswahl des zu " + meldung + " Buch.");
+            } else {
+                boolean bookIsInTable = boDAO.checkIsXxxIdInTableXxx("idBook", "book", idBook);
+                if (!bookIsInTable) {
+                    System.out.println("Die Eingabe war ungültig, bitte wiederholen! ");
+                    eingabegueltig = false;
+                }
             }
         } while (!eingabegueltig);
-        return zuLoeschendeIdBook;
+        return idBook;
     }
 
     public void createNewRecordBook(BookDAO boDAO) {
@@ -76,19 +80,23 @@ public class RecordNewUpdateDelete {
 
     public void editRecordBook(BookDAO boDAO, DiverseLists diLi) {
         int zuEditierendeIdBook = inputIdBook(boDAO, diLi, "editierenden");
-        Book temp = inputDataBook();
-        boDAO.updateRecordBook(temp.getTitle(), temp.getIdAuthor(), temp.getIdCategory(), temp.getIsbn(), temp.getFsk(),
-                temp.getPublisher(), temp.getEdition(), temp.getFirstEdition(), temp.getAmountPages(), temp.getLanguage(),
-                temp.getIdRow(), temp.getIdColumn(), zuEditierendeIdBook);
+        if (zuEditierendeIdBook > 0) {
+            Book temp = inputDataBook();
+            boDAO.updateRecordBook(temp.getTitle(), temp.getIdAuthor(), temp.getIdCategory(), temp.getIsbn(), temp.getFsk(),
+                    temp.getPublisher(), temp.getEdition(), temp.getFirstEdition(), temp.getAmountPages(), temp.getLanguage(),
+                    temp.getIdRow(), temp.getIdColumn(), zuEditierendeIdBook);
+        }
     }
 
     public void deleteRecordBook(BookDAO boDAO, DiverseLists diLi) {
         int zuLoeschendeIdBook = inputIdBook(boDAO, diLi, "löschenden");
-        boolean isBookInLoaned = boDAO.checkIsXxxIdInTableXxx("idBook", "loaned", zuLoeschendeIdBook);
-        if (isBookInLoaned) {
-            System.out.println("Von diesem Buch gibt es Einträge in Loaned, deswegen ist ein Löschen des Buchs nicht möglich.");
-        } else {
-            boDAO.createQueryDeleteID("book", "IdBook", zuLoeschendeIdBook);
+        if (zuLoeschendeIdBook > 0) {
+            boolean isBookInLoaned = boDAO.checkIsXxxIdInTableXxx("idBook", "loaned", zuLoeschendeIdBook);
+            if (isBookInLoaned) {
+                System.out.println("Von diesem Buch gibt es Einträge in Loaned, deswegen ist ein Löschen des Buchs nicht möglich.");
+            } else {
+                boDAO.createQueryDeleteID("book", "IdBook", zuLoeschendeIdBook);
+            }
         }
     }
 
@@ -115,10 +123,14 @@ public class RecordNewUpdateDelete {
             eingabegueltig = true;
             System.out.print("Bitte gib die IdAuthor vom zu " + meldung + " Author aus der vorstehenden Liste ein! ");
             zuLoeschendeIdAuthor = sc_int.nextInt();
-            boolean authorIsInTable = auDAO.checkIsXxxIdInTableXxx("idAuthor", "author", zuLoeschendeIdAuthor);
-            if (!authorIsInTable) {
-                System.out.println("Die Eingabe war ungültig, bitte wiederholen! ");
-                eingabegueltig = false;
+            if (zuLoeschendeIdAuthor == 0) {
+                System.out.println("Zurück zur Auswahl ohne Auswahl des zu " + meldung + " Autor.");
+            } else {
+                boolean authorIsInTable = auDAO.checkIsXxxIdInTableXxx("idAuthor", "author", zuLoeschendeIdAuthor);
+                if (!authorIsInTable) {
+                    System.out.println("Die Eingabe war ungültig, bitte wiederholen! ");
+                    eingabegueltig = false;
+                }
             }
         } while (!eingabegueltig);
         return zuLoeschendeIdAuthor;
@@ -132,17 +144,21 @@ public class RecordNewUpdateDelete {
 
     public void editRecordAuthor(AuthorDAO auDAO, DiverseLists diLi) {//fehlt noch
         int zuEditierendeIdAuthor = inputIdAuthor(auDAO, diLi, "editierenden");
-        Author temp = inputDataAuthor();
-        auDAO.updateRecordAuthor(temp.getFirstName(), temp.getLastName(), temp.getBirthYear(), zuEditierendeIdAuthor);
+        if (zuEditierendeIdAuthor > 0) {
+            Author temp = inputDataAuthor();
+            auDAO.updateRecordAuthor(temp.getFirstName(), temp.getLastName(), temp.getBirthYear(), zuEditierendeIdAuthor);
+        }
     }
 
     public void deleteRecordAuthor(AuthorDAO auDAO, DiverseLists diLi) {
         int zuLoeschendeIdAuthor = inputIdAuthor(auDAO, diLi, "löschenden");
-        boolean isAuthorInBook = auDAO.checkIsXxxIdInTableXxx("idAuthor", "book", zuLoeschendeIdAuthor);
-        if (isAuthorInBook) {
-            System.out.println("Von diesem Autor sind noch Bücher in der Liste book, deswegen ist ein Löschen des Autors nicht möglich.");
-        } else {
-            auDAO.createQueryDeleteID("author", "IdAuthor", zuLoeschendeIdAuthor);
+        if (zuLoeschendeIdAuthor > 0) {
+            boolean isAuthorInBook = auDAO.checkIsXxxIdInTableXxx("idAuthor", "book", zuLoeschendeIdAuthor);
+            if (isAuthorInBook) {
+                System.out.println("Von diesem Autor sind noch Bücher in der Liste book, deswegen ist ein Löschen des Autors nicht möglich.");
+            } else {
+                auDAO.createQueryDeleteID("author", "IdAuthor", zuLoeschendeIdAuthor);
+            }
         }
     }
 
@@ -163,12 +179,17 @@ public class RecordNewUpdateDelete {
             eingabegueltig = true;
             System.out.print("Bitte gib die IdKategorie von dem zu " + meldung + " Eintrag aus der vorstehenden Liste ein! ");
             idCategory = sc_int.nextInt();
-            boolean categoryIsInTable = caDAO.checkIsXxxIdInTableXxx("idCategory", "category", idCategory);
-            if (!categoryIsInTable) {
-                System.out.println("Die Eingabe war ungültig, bitte wiederholen! ");
-                eingabegueltig = false;
+            if (idCategory == 0) {
+                System.out.println("Zurück zur Auswahl ohne Auswahl des zu " + meldung + " Kategorie.");
+            } else {
+                boolean categoryIsInTable = caDAO.checkIsXxxIdInTableXxx("idCategory", "category", idCategory);
+                if (!categoryIsInTable) {
+                    System.out.println("Die Eingabe war ungültig, bitte wiederholen! ");
+                    eingabegueltig = false;
+                }
             }
-        } while (!eingabegueltig);
+        }
+        while (!eingabegueltig);
         return idCategory;
     }
 
@@ -180,17 +201,21 @@ public class RecordNewUpdateDelete {
 
     public void editRecordCategory(CategoryDAO caDAO, DiverseLists diLi) {
         int zuEditierendeIdCategory = inputIdCategory(caDAO, diLi, "editierenden");
-        Category temp = inputDataCategory();
-        caDAO.updateRecordCategory(temp.getDescription(), zuEditierendeIdCategory);
+        if (zuEditierendeIdCategory > 0) {
+            Category temp = inputDataCategory();
+            caDAO.updateRecordCategory(temp.getDescription(), zuEditierendeIdCategory);
+        }
     }
 
     public void deleteRecordCategory(CategoryDAO caDAO, DiverseLists diLi) {
         int zuLoeschendeIdCategory = inputIdCategory(caDAO, diLi, "löschenden");
-        boolean isCategoryInBook = caDAO.checkIsXxxIdInTableXxx("idCategory", "book", zuLoeschendeIdCategory);
-        if (isCategoryInBook) {
-            System.out.println("In dieser Kategorie sind noch Bücher in der Liste book, deswegen ist ein Löschen dieser Kategorie nicht möglich.");
-        } else {
-            caDAO.createQueryDeleteID("category", "idCategory", zuLoeschendeIdCategory);
+        if (zuLoeschendeIdCategory > 0) {
+            boolean isCategoryInBook = caDAO.checkIsXxxIdInTableXxx("idCategory", "book", zuLoeschendeIdCategory);
+            if (isCategoryInBook) {
+                System.out.println("In dieser Kategorie sind noch Bücher in der Liste book, deswegen ist ein Löschen dieser Kategorie nicht möglich.");
+            } else {
+                caDAO.createQueryDeleteID("category", "idCategory", zuLoeschendeIdCategory);
+            }
         }
     }
 
@@ -250,10 +275,14 @@ public class RecordNewUpdateDelete {
             eingabegueltig = true;
             System.out.print("Bitte gib die IdCustomer vom zu " + meldung + "Kunden/Customer aus der vorstehenden Liste ein! ");
             idCustomer = sc_int.nextInt();
-            boolean customerIsInTable = cuDAO.checkIsXxxIdInTableXxx("idCustomer", "customer", idCustomer);
-            if (!customerIsInTable) {
-                System.out.println("Die Eingabe war ungültig, bitte wiederholen! ");
-                eingabegueltig = false;
+            if (idCustomer == 0) {
+                System.out.println("Zurück zur Auswahl ohne Auswahl des zu " + meldung + " Kunden.");
+            } else {
+                boolean customerIsInTable = cuDAO.checkIsXxxIdInTableXxx("idCustomer", "customer", idCustomer);
+                if (!customerIsInTable) {
+                    System.out.println("Die Eingabe war ungültig, bitte wiederholen! ");
+                    eingabegueltig = false;
+                }
             }
         } while (!eingabegueltig);
         return idCustomer;
@@ -269,19 +298,23 @@ public class RecordNewUpdateDelete {
 
     public void editRecordCustomer(CustomerDAO cuDAO, DiverseLists diLi) {
         int zuEditierendeIdCustomer = inputIdCustomer(cuDAO, diLi, "editierende");
-        Customer temp = inputDataCustomer();
-        cuDAO.updateRecordCustomer(temp.getPinCode(), temp.getEmail(), temp.getFirstName(), temp.getLastName(), temp.getBirthDay().toLocalDateTime(),
-                temp.getStreet(), temp.getApNr(), temp.getZip(), temp.getCity(), temp.getCreditCardNr(), temp.getCvc(), temp.getExpiryDateYear(),
-                temp.getExpiryDateMonth(), zuEditierendeIdCustomer);
+        if (zuEditierendeIdCustomer > 0) {
+            Customer temp = inputDataCustomer();
+            cuDAO.updateRecordCustomer(temp.getPinCode(), temp.getEmail(), temp.getFirstName(), temp.getLastName(), temp.getBirthDay().toLocalDateTime(),
+                    temp.getStreet(), temp.getApNr(), temp.getZip(), temp.getCity(), temp.getCreditCardNr(), temp.getCvc(), temp.getExpiryDateYear(),
+                    temp.getExpiryDateMonth(), zuEditierendeIdCustomer);
+        }
     }
 
     public void deleteRecordCustomer(CustomerDAO cuDAO, DiverseLists diLi) {
         int zuLoeschendeIdCustomer = inputIdCustomer(cuDAO, diLi, "löschende");
-        boolean isCustomerInLoaned = cuDAO.checkIsXxxIdInTableXxx("idCustomer", "loaned", zuLoeschendeIdCustomer);
-        if (isCustomerInLoaned) {
-            System.out.println("Der Kunde hat Bücher ausgeliehen (er ist in loaned geführt), ein Löschen des Kunden ist nicht möglich.");
-        } else {
-            cuDAO.createQueryDeleteID("customer", "idCustomer", zuLoeschendeIdCustomer);
+        if (zuLoeschendeIdCustomer > 0) {
+            boolean isCustomerInLoaned = cuDAO.checkIsXxxIdInTableXxx("idCustomer", "loaned", zuLoeschendeIdCustomer);
+            if (isCustomerInLoaned) {
+                System.out.println("Der Kunde hat Bücher ausgeliehen (er ist in loaned geführt), ein Löschen des Kunden ist nicht möglich.");
+            } else {
+                cuDAO.createQueryDeleteID("customer", "idCustomer", zuLoeschendeIdCustomer);
+            }
         }
     }
 
@@ -355,10 +388,14 @@ public class RecordNewUpdateDelete {
             eingabegueltig = true;
             System.out.print("Bitte gib die IdLoaned vom zu " + meldung + " Leihvorgang aus der vorstehenden Liste ein! ");
             idLoaned = sc_int.nextInt();
-            boolean loanedIsInTable = loDAO.checkIsXxxIdInTableXxx("idLoaned", "loaned", idLoaned);
-            if (!loanedIsInTable) {
-                System.out.println("Die Eingabe war ungültig, bitte wiederholen! ");
-                eingabegueltig = false;
+            if (idLoaned == 0) {
+                System.out.println("Zurück zur Auswahl ohne Auswahl des zu " + meldung + " Ausleihvorgangs.");
+            } else {
+                boolean loanedIsInTable = loDAO.checkIsXxxIdInTableXxx("idLoaned", "loaned", idLoaned);
+                if (!loanedIsInTable) {
+                    System.out.println("Die Eingabe war ungültig, bitte wiederholen! ");
+                    eingabegueltig = false;
+                }
             }
         } while (!eingabegueltig);
         return idLoaned;
@@ -372,12 +409,16 @@ public class RecordNewUpdateDelete {
 
     public void editRecordLoaned(LoanedDAO loDAO, DiverseLists diLi) {//fehlt noch
         int zueditierendeIdLoaned = inputIdLoaned(loDAO, diLi, "editierende");
-        Loaned temp = inputDataLoanedWithReturn();
-        loDAO.updateRecordLoaned(temp.getIdCustomer(), temp.getIdBook(), temp.getLoanedOn(), temp.getReturnedOn(), temp.isExtraTime(), zueditierendeIdLoaned);
+        if (zueditierendeIdLoaned > 0) {
+            Loaned temp = inputDataLoanedWithReturn();
+            loDAO.updateRecordLoaned(temp.getIdCustomer(), temp.getIdBook(), temp.getLoanedOn(), temp.getReturnedOn(), temp.isExtraTime(), zueditierendeIdLoaned);
+        }
     }
 
     public void deleteRecordLoaned(LoanedDAO loDAO, DiverseLists diLi) {
         int zuLoeschendeIdLoaned = inputIdLoaned(loDAO, diLi, "löschende");
-        loDAO.createQueryDeleteID("loaned", "idLoaned", zuLoeschendeIdLoaned);
+        if (zuLoeschendeIdLoaned > 0) {
+            loDAO.createQueryDeleteID("loaned", "idLoaned", zuLoeschendeIdLoaned);
+        }
     }
 }

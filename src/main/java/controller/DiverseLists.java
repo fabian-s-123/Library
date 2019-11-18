@@ -78,14 +78,21 @@ public class DiverseLists {
     public void createListeVomAutorsindwelcheBuechergelistet(BookDAO boDAO, String meldung) {
         System.out.println("Übersicht7: " + meldung);
         LinkedList<BookAuthorCategory> listAuthorBook = boDAO.getListAuthorBook();
-        listAuthorBook.get(0).ausgabeListBookAuthorCategory(listAuthorBook);
+        listAuthorBook.get(0).ausgabeListBookAuthorCategoryGruppierungAuthor(listAuthorBook);
     }
 
     public void createListeInwelcherKategoriesindwelcheBuechergelistet(BookDAO boDAO, String meldung) {
         System.out.println("Übersicht8: " + meldung);
         LinkedList<BookAuthorCategory> listCategoryBook = boDAO.getListCategoryBook();
-        listCategoryBook.get(0).ausgabeListBookAuthorCategory(listCategoryBook);
+        listCategoryBook.get(0).ausgabeListBookAuthorCategoryGruppierungCategory(listCategoryBook);
     }
+
+    public void createListeInwelcherSprachesindwelcheBuechergelistet(BookDAO boDAO, String meldung) {
+        System.out.println("Übersicht9: " + meldung);
+        LinkedList<BookAuthorCategory> listLanguageBook = boDAO.getListLanguageBook();
+        listLanguageBook.get(0).ausgabeListBookAuthorCategoryGruppierungLanguage(listLanguageBook);
+    }
+
 
     public void createListeBookAllRecords(BookDAO boDAO) {
         System.out.println("Bereich book - alle Datensätze der Tabelle (mit ergänzenden Angaben aus author und category, sortiert nach BuchID");

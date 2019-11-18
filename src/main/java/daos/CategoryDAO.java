@@ -52,10 +52,10 @@ public class CategoryDAO extends DAO {
             Statement st = dbConnector.getConnection().createStatement();
             ResultSet rs = st.executeQuery(query);
             while (rs.next()) {
-                int idCategory = rs.getInt(1);
-                String description = rs.getString(2);
-                LocalDateTime created_at = rs.getTimestamp(3).toLocalDateTime();
-                LocalDateTime updated_at = rs.getTimestamp(4).toLocalDateTime();
+                int idCategory = rs.getInt("idCategory");
+                String description = rs.getString("description");
+                LocalDateTime created_at = rs.getTimestamp("created_at").toLocalDateTime();
+                LocalDateTime updated_at = rs.getTimestamp("updated_at").toLocalDateTime();
                 Category temp = new Category(idCategory, description, created_at, updated_at);
                 listAC.add(temp);
             }

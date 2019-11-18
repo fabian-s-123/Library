@@ -100,18 +100,18 @@ public class LoanedDAO extends DAO {
             Statement st = dbConnector.getConnection().createStatement();
             ResultSet rs = st.executeQuery(query);
             while (rs.next()) {
-                int idLoaned = rs.getInt(1);
-                int idCustomer = rs.getInt(2);
-                int idBook = rs.getInt(3);
-                LocalDateTime loanedOn = rs.getTimestamp(4).toLocalDateTime();
+                int idLoaned = rs.getInt("idLoaned");
+                int idCustomer = rs.getInt("idCustomer");
+                int idBook = rs.getInt("idBook");
+                LocalDateTime loanedOn = rs.getTimestamp("loanedOn").toLocalDateTime();
                 LocalDateTime returnedOn = null;
-                Timestamp tsReturnedOn = rs.getTimestamp(5);
+                Timestamp tsReturnedOn = rs.getTimestamp("returnedOn");
                 if (tsReturnedOn != null) {
                     returnedOn = tsReturnedOn.toLocalDateTime();
                 }
-                boolean extraTime = rs.getBoolean(6);
-                LocalDateTime created_at = rs.getTimestamp(7).toLocalDateTime();
-                LocalDateTime updated_at = rs.getTimestamp(8).toLocalDateTime();
+                boolean extraTime = rs.getBoolean("extraTime");
+                LocalDateTime created_at = rs.getTimestamp("created_at").toLocalDateTime();
+                LocalDateTime updated_at = rs.getTimestamp("updated_at").toLocalDateTime();
                 Loaned temp = new Loaned(idLoaned, idCustomer, idBook, loanedOn, returnedOn, extraTime, created_at, updated_at);
                 listLoaned.add(temp);
             }
@@ -145,21 +145,21 @@ public class LoanedDAO extends DAO {
             Statement st = dbConnector.getConnection().createStatement();
             ResultSet rs = st.executeQuery(query);
             while (rs.next()) {
-                int idLoaned = rs.getInt(1);
-                int idCustomer = rs.getInt(2);
-                int idBook = rs.getInt(3);
-                LocalDateTime loanedOn = rs.getTimestamp(4).toLocalDateTime();
+                int idLoaned = rs.getInt("idLoaned");
+                int idCustomer = rs.getInt("idCustomer");
+                int idBook = rs.getInt("idBook");
+                LocalDateTime loanedOn = rs.getTimestamp("loanedOn").toLocalDateTime();
                 LocalDateTime returnedOn = null;
-                Timestamp tsReturnedOn = rs.getTimestamp(5);
+                Timestamp tsReturnedOn = rs.getTimestamp("returnedOn");
                 if (tsReturnedOn != null) {
                     returnedOn = tsReturnedOn.toLocalDateTime();
                 }
-                boolean extraTime = rs.getBoolean(6);
-                LocalDateTime created_at = rs.getTimestamp(7).toLocalDateTime();
-                LocalDateTime updated_at = rs.getTimestamp(8).toLocalDateTime();
-                String customerFirstName = rs.getString(12);
-                String customerLastName = rs.getString(13);
-                String title = rs.getString(26);
+                boolean extraTime = rs.getBoolean("extraTime");
+                LocalDateTime created_at = rs.getTimestamp("created_at").toLocalDateTime();
+                LocalDateTime updated_at = rs.getTimestamp("updated_at").toLocalDateTime();
+                String customerFirstName = rs.getString("firstName");
+                String customerLastName = rs.getString("lastName");
+                String title = rs.getString("title");
                 String authorFirstName = rs.getString(41);
                 String authorLastName = rs.getString(42);
                 LoanedCustomerBook temp = new LoanedCustomerBook(idLoaned, idCustomer, customerFirstName, customerLastName, idBook, title, authorFirstName, authorLastName, loanedOn, returnedOn, extraTime, created_at, updated_at);

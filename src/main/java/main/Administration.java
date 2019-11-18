@@ -6,8 +6,7 @@ import daos.*;
 
 import java.util.Scanner;
 
-// was könnte ich noch tun: bei id 0 = Abbruch von edit, delete
-//                          bei eingabe Buch prüfen, ob idAuthor und idCategory vorhanden sind
+// was könnte ich noch tun: bei eingabe Buch prüfen, ob idAuthor und idCategory vorhanden sind
 // Optimierungshinweise von intelliJ anschauen
 
 public class Administration {
@@ -15,7 +14,7 @@ public class Administration {
     public static void main(String[] args) {
         System.out.println("Willkommen in der Administration");
         String[] auswahlString1 = {"Book", "Author", "Category", "Customer", "Loaned", "diverse Listen"};
-        String[] auswahlString2 = {"Wer hat welche Bücher derzeit ausgeliehen", "Wer hat welche Bücher überhaupt ausgeliehen", "Welche Bücher sind derzeit ausgeliehen", "Welche Bücher sind derzeit im Haus", "Welche Bücher wurden überhaupt verliehen", "Welche Bücher wurden gar nicht verliehen", "Vom Autor ... sind welche Bücher gelistet", "In welcher Kategorie sind welche Bücher gelistet"};
+        String[] auswahlString2 = {"Wer hat welche Bücher derzeit ausgeliehen", "Wer hat welche Bücher überhaupt ausgeliehen", "Welche Bücher sind derzeit ausgeliehen", "Welche Bücher sind derzeit im Haus", "Welche Bücher wurden überhaupt verliehen", "Welche Bücher wurden gar nicht verliehen", "Vom Autor ... sind welche Bücher gelistet", "In welcher Kategorie sind welche Bücher gelistet", "In welcher Sprache sind welche Bücher gelistet"};
         DBConnector dbConnector;
         dbConnector = DBConnector.getInstance();
         dbConnector.connect("w0136ee0.kasserver.com", "d03037fa", "d03037fa", "fpcQdPhv5v4UoQ6H");
@@ -63,7 +62,7 @@ public class Administration {
                             System.out.println("                  " + (i + 1) + " = " + auswahlString2[i]);
                         }
                         auswahl3 = sc.nextInt();
-                        if (auswahl3 >= 0 && auswahl3 < 9) {
+                        if (auswahl3 >= 0 && auswahl3 <= auswahlString2.length) {
                             isEingabeGueltig = true;
                         } else {
                             System.out.println("Deine Eingabe war ungültig, bitte wiederhole die Auswahl!");
@@ -105,6 +104,10 @@ public class Administration {
                         case 8:
                             System.out.println("Hier ist die Liste zu  (" + auswahlString1[auswahl1 - 1].toUpperCase() + " - " + auswahlString2[auswahl3 - 1] + ").");
                             diLi.createListeInwelcherKategoriesindwelcheBuechergelistet(boDAO, auswahlString2[auswahl3 - 1]);
+                            break;
+                        case 9:
+                            System.out.println("Hier ist die Liste zu  (" + auswahlString1[auswahl1 - 1].toUpperCase() + " - " + auswahlString2[auswahl3 - 1] + ").");
+                            diLi.createListeInwelcherSprachesindwelcheBuechergelistet(boDAO, auswahlString2[auswahl3 - 1]);
                             break;
                     }
                 } while (verbleibInAuswahlstufe);
