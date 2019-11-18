@@ -29,8 +29,7 @@ public abstract class DAO {
         }
     }
 
-    public int zaehlenDS(String dateiname) {
-        String query = "select count(*) as anzahlDS from " + dateiname;
+    public int zaehlenDS(String query) {
         int anzahlDS = 0;
         try {
             Statement st = dbConnector.getConnection().createStatement();
@@ -38,7 +37,6 @@ public abstract class DAO {
             while (rs.next()) {
                 anzahlDS = rs.getInt("anzahlDS");
             }
-            System.out.println("Die Datei " + dateiname + " hat " + anzahlDS + " Einträge.");
             st.close();
         } catch (SQLException sqle) {
             System.err.println("SQLException: " + sqle.getMessage());
@@ -49,5 +47,22 @@ public abstract class DAO {
         return anzahlDS;
     }
 
+    public void createQueryDeleteID(String table, String columnName, int zuLoeschendeId) {
+        String query = "DELETE FROM " + table + " WHERE " + columnName + " = " + zuLoeschendeId;
+        String meldung = "Ein Datensatz aus " + table + " mit der ID = " + zuLoeschendeId + " wurde gelöscht.";
+        executeStatement(query, meldung);
+    }
+
+    public boolean checkIsXxxIdInTableXxx(String columnName, String tableName, int id) {
+        boolean isIdInTable;
+        String query = "select count(*) as anzahlDS from " + tableName + " where " + columnName + " = " + id;
+        int anzahlDS = zaehlenDS(query);
+        if (anzahlDS > 0) {
+            isIdInTable = true;
+        } else {
+            isIdInTable = false;
+        }
+        return isIdInTable;
+    }
 }
 

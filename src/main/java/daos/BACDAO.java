@@ -1,8 +1,10 @@
 package daos;
 
-import entities.Book;
-import entities.BookAuthorCategory;
+import entities.*;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -10,7 +12,7 @@ import java.util.List;
 
 public class BACDAO extends DAO {
 
-    public BACDAO(){
+    public BACDAO() {
     }
 
     public void createTableBAC() {
@@ -40,7 +42,7 @@ public class BACDAO extends DAO {
     }
 
     public void createRecordBAC(String title, int idAuthor, String firstName, String lastName, int birthYear, int idCategory, String description, long isbn, int fsk, String publisher,
-                                 String edition, String firstEdition, int amountPages, String language, int idRow, int idColumn){
+                                String edition, String firstEdition, int amountPages, String language, int idRow, int idColumn) {
         String query1 = "insert into bac (title, idAuthor, firstName, lastName, birthYear, idCategory, description, isbn, fsk, publisher, edition, firstEdition, amountPages, language, idRow, idColumn) values (";
 
         String query2 = "\"" + title + "\", " +
@@ -67,8 +69,7 @@ public class BACDAO extends DAO {
         List<BookAuthorCategory> ids = new ArrayList<>();
         String query = "SELECT * FROM bac WHERE idBook=" + id + ";";
         ResultSet rs = st.executeQuery(query);
-        while (rs.next())
-        {
+        while (rs.next()) {
             int idBook = rs.getInt("idBook");
             String title = rs.getString("title");
             int idAuthor = rs.getInt("idAuthor");

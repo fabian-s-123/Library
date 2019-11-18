@@ -1,7 +1,6 @@
 package daos;
 
-import entities.BookAuthorCategory;
-import entities.LoanedCustomerBook;
+import entities.*;
 
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -33,13 +32,12 @@ public class BookDAO extends DAO {
                 "updated_at timestamp default current_timestamp on update current_timestamp, " +
                 "primary key (idBook)" +
                 ");";
-        executeStatement(query, "Die Tabelle customer wurde angelegt.");
+        executeStatement(query, "Die Tabelle book wurde angelegt.");
     }
 
     public void createRecordBook(String title, int idAuthor, int idCategory, long isbn, int fsk, String publisher,
-                                     String edition, String firstEdition, int amountPages, String language, int idRow, int idColumn){
+                                 String edition, String firstEdition, int amountPages, String language, int idRow, int idColumn) {
         String query1 = "insert into book (title, idAuthor, idCategory, isbn, fsk, publisher, edition, firstEdition, amountPages, language, idRow, idColumn) values (";
-
         String query2 = "\"" + title + "\", " +
                 idAuthor + ", " +
                 idCategory + ", " +
@@ -52,16 +50,35 @@ public class BookDAO extends DAO {
                 "\"" + language + "\", " +
                 idRow + ", " +
                 idColumn + ");";
-                String query = query1 + query2;
-        executeStatement(query, "Ein Datensatz book der Tabelle book zugefügt.");
+        String query = query1 + query2;
+        executeStatement(query, "Ein Datensatz der Tabelle book zugefügt.");
+    }
+
+    public void updateRecordBook(String title, int idAuthor, int idCategory, long isbn, int fsk, String publisher,
+                                 String edition, String firstEdition, int amountPages, String language, int idRow, int idColumn, int idBook) {
+        String query1 = "update book set ";
+        String query2 = "title = " + "\"" + title + "\", " +
+                "idAuthor = " + idAuthor + ", " +
+                "idCategory = " + idCategory + ", " +
+                "isbn = " + isbn + ", " +
+                "fsk = " + fsk + ", " +
+                "publisher = " + "\"" + publisher + "\", " +
+                "edition = " + "\"" + edition + "\", " +
+                "firstEdition = " + "\"" + firstEdition + "\", " +
+                "amountPages = " + amountPages + ", " +
+                "language = " + "\"" + language + "\", " +
+                "idRow = " + idRow + ", " +
+                "idColumn = " + idColumn;
+        String query3 = " where idBook = " + idBook + ";";
+        String query = query1 + query2 + query3;
+        executeStatement(query, "Ein Datensatz wurde in der Tabelle book geändert.");
     }
 
     public List<Integer> selectIdBooks(Statement st) throws SQLException {
         List<Integer> ids = new ArrayList<Integer>();
         String query = "SELECT idBook FROM book;";
         ResultSet rs = st.executeQuery(query);
-        while (rs.next())
-        {
+        while (rs.next()) {
             int idBook = rs.getInt("idBook");
             ids.add(idBook);
         }
@@ -72,8 +89,7 @@ public class BookDAO extends DAO {
         List<Integer> ids = new ArrayList<>();
         String query = "SELECT idBook FROM book WHERE fsk<=" + fsk + ";";
         ResultSet rs = st.executeQuery(query);
-        while (rs.next())
-        {
+        while (rs.next()) {
             int idBook = rs.getInt("idBook");
             ids.add(idBook);
         }

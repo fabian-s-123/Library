@@ -1,8 +1,8 @@
 package daos;
 
 import java.sql.*;
-import entities.Loaned;
-import entities.LoanedCustomerBook;
+
+import entities.*;
 
 import javax.swing.plaf.nimbus.State;
 import java.sql.*;
@@ -10,7 +10,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
 
 public class LoanedDAO extends DAO {
@@ -42,7 +41,7 @@ public class LoanedDAO extends DAO {
                 "\"" + returnedOnTS + "\", " +
                 false + ");";
         String query = query1 + query2;
-        executeStatement(query, "Ein Datensatz loaned wurde der Tabelle loaned zugefügt. (Rückgabedatum eingetragen)");
+        executeStatement(query, "Ein Datensatz wurde der Tabelle loaned zugefügt. (Rückgabedatum eingetragen)");
     }
 
     public void createRecordLoanedWithExtraTime(int idCustomer, int idBook, LocalDateTime loanedOn) {
@@ -67,7 +66,7 @@ public class LoanedDAO extends DAO {
                 "\"" + loanedOnTS + "\", " +
                 false + ");";
         String query = query1 + query2;
-        executeStatement(query, "Ein Datensatz loaned wurde der Tabelle loaned zugefügt. (offene Rückgabe)");
+        executeStatement(query, "Ein Datensatz wurde der Tabelle loaned zugefügt. (offene Rückgabe)");
     }
 
     public void createNewRecordLoaned(int idCustomer, int idBook, LocalDateTime loanedOn) {
@@ -180,8 +179,7 @@ public class LoanedDAO extends DAO {
         List<Integer> ids = new ArrayList<Integer>();
         String query = "SELECT idBook FROM loaned;";
         ResultSet rs = st.executeQuery(query);
-        while (rs.next())
-        {
+        while (rs.next()) {
             int idBook = rs.getInt("idBook");
             ids.add(idBook);
         }
@@ -190,9 +188,9 @@ public class LoanedDAO extends DAO {
 
     public List<Timestamp> selectBookReturned(Statement st, String column, int condition, int limit) throws SQLException {
         List<Timestamp> ids = new ArrayList<>();
-        String query = "SELECT returnedOn FROM loaned WHERE " + column + "="+ condition + " ORDER BY `idLoaned` DESC LIMIT " + limit + ";";
+        String query = "SELECT returnedOn FROM loaned WHERE " + column + "=" + condition + " ORDER BY `idLoaned` DESC LIMIT " + limit + ";";
         ResultSet rs = st.executeQuery(query);
-        while (rs.next()){
+        while (rs.next()) {
             Timestamp returnedOn = rs.getTimestamp("returnedOn");
             ids.add(returnedOn);
         }
@@ -203,7 +201,7 @@ public class LoanedDAO extends DAO {
         List<Timestamp> ids = new ArrayList<>();
         String query = "SELECT loanedOn FROM loaned WHERE idLoaned=" + idLoaned + ";";
         ResultSet rs = st.executeQuery(query);
-        while (rs.next()){
+        while (rs.next()) {
             Timestamp loanedOn = rs.getTimestamp("loanedOn");
             ids.add(loanedOn);
         }
@@ -214,7 +212,7 @@ public class LoanedDAO extends DAO {
         int result = 0;
         String query = "SELECT COUNT(idCustomer) FROM loaned WHERE idCustomer=" + idCustomer + ";";
         ResultSet rs = st.executeQuery(query);
-        while (rs.next()){
+        while (rs.next()) {
             result = rs.getInt(1);
         }
         return result;
@@ -224,11 +222,23 @@ public class LoanedDAO extends DAO {
         List<Integer> ids = new ArrayList<>();
         String query = "SELECT idBook FROM loaned WHERE idCustomer=" + idCustomer + " AND returnedOn='0000-00-00 00:00:00' ORDER BY `idLoaned` ASC;";
         ResultSet rs = st.executeQuery(query);
-        while (rs.next()){
+        while (rs.next()) {
             int idBook = rs.getInt("idBook");
             ids.add(idBook);
         }
         return ids;
+    }
+
+    public void updateRecordLoaned(int idCustomer, int idBook, LocalDateTime loanedOn, LocalDateTime returnedOn, boolean extraTime, int idLoaned) {
+        String query1 = "update loaned set ";
+        String query2 = "idCustomer = " + idCustomer + ", " +
+                "idBook = " + idBook + ", " +
+                "loanedOn = " + "\"" + Timestamp.valueOf(loanedOn) + "\", " +
+                "returnedOn = " + "\"" + Timestamp.valueOf(returnedOn) + "\", " +
+                "extraTime = " + extraTime;
+        String query3 = " where idLoaned = " + idLoaned + ";";
+        String query = query1 + query2 + query3;
+        executeStatement(query, "Ein Datensatz wurde in der Tabelle loaned editiert/geupdated.");
     }
 
     public LocalDateTime selectLoanedOn(Statement st, int idCustomer, int idBook) throws SQLException {

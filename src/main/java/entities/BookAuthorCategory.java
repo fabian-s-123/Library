@@ -2,7 +2,6 @@ package entities;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.LinkedList;
 import java.util.List;
 
 public class BookAuthorCategory {
@@ -71,9 +70,10 @@ public class BookAuthorCategory {
     public BookAuthorCategory() {
     }
 
-    public void ausgabeKopfListBookAuthorCategory(){
+    public void ausgabeKopfListBookAuthorCategory() {
         System.out.println("Lfd ID    Titel                                              Vorname         Name            Geb.  Kategorie                     ISBN          FSK  Verlag                    Edition               Sei-    Sprache    erstellt             updated");
         System.out.println("Nr  book                                                     Author                          Jahr  ID Beschreibung                                                                      First       ten                am                   am");
+        System.out.println("______________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________\n");
     }
 
     public void ausgabeZeileListBookAuthorCategory(BookAuthorCategory temp, int i) {
@@ -82,12 +82,12 @@ public class BookAuthorCategory {
                 i, temp.idBook, temp.title, temp.firstName, temp.lastName, temp.birthYear, temp.idCategory, temp.description, temp.isbn, temp.fsk, temp.publisher, temp.edition, temp.firstEdition, temp.amountPages, temp.language, temp.created_at.format(dtf), temp.updated_at.format(dtf));
     }
 
-    public void ausgabeListBookAuthorCategory(List<BookAuthorCategory> listAllBooks){
+    public void ausgabeListBookAuthorCategory(List<BookAuthorCategory> listAllBooks) {
         ausgabeKopfListBookAuthorCategory();
         for (int i = 0; i < listAllBooks.size(); i++) {
             BookAuthorCategory temp = listAllBooks.get(i);
-            ausgabeZeileListBookAuthorCategory(temp, i+1);
-            }
+            ausgabeZeileListBookAuthorCategory(temp, i + 1);
+        }
         System.out.print("Ende der Liste\n\n");
     }
 
@@ -105,14 +105,15 @@ public class BookAuthorCategory {
                 temp.idBook, temp.title, temp.firstName, temp.lastName, temp.birthYear, temp.idCategory, temp.description, temp.isbn, temp.fsk, temp.publisher, temp.edition, temp.firstEdition, temp.amountPages, temp.language);
     }
 
-    public void printListBAC(List<BookAuthorCategory> listAllBooks){
+    public void printListBAC(List<BookAuthorCategory> listAllBooks) {
         for (int i = 0; i < listAllBooks.size(); i++) {
             BookAuthorCategory temp = listAllBooks.get(i);
             printListBAC(temp);
         }
     }
+
     /**
-     *End Version Fabian
+     * End Version Fabian
      */
 
     public int getIdBook() {
@@ -269,8 +270,8 @@ public class BookAuthorCategory {
 
     @Override
     public String toString() {
-            return "'" + idBook + "', '" + title + "', '"+ idAuthor + "', '" + firstName + "', '" + lastName + "', '" + birthYear + "', '" + idCategory + "', '" + description + "', '" + isbn + "', '" + fsk + "', '" + publisher + "', '" + edition + ", '" + firstEdition
-                    + "', '" + amountPages + "', '" + language + "', '" + idRow + "', '" + idColumn + "'";
-        }
+        return "'" + idBook + "', '" + title + "', '" + idAuthor + "', '" + firstName + "', '" + lastName + "', '" + birthYear + "', '" + idCategory + "', '" + description + "', '" + isbn + "', '" + fsk + "', '" + publisher + "', '" + edition + ", '" + firstEdition
+                + "', '" + amountPages + "', '" + language + "', '" + idRow + "', '" + idColumn + "'";
+    }
 }
 

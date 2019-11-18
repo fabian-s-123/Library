@@ -1,21 +1,19 @@
 package daos;
 
-import entities.Author;
-import entities.Category;
+import entities.*;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
 
-public class CategoryDAO extends DAO{
+public class CategoryDAO extends DAO {
 
     public CategoryDAO() {
     }
 
-    public void createTablCategory() {
+    public void createTableCategory() {
         String query = "create table category (" +
                 "idCategory int(2) unsigned auto_increment not null, " +
                 "description varchar(30) not null, " +
@@ -26,12 +24,21 @@ public class CategoryDAO extends DAO{
         executeStatement(query, "Die Tabelle category wurde angelegt.");
     }
 
-    public void createRecordCategory(String description){
+    public void createRecordCategory(String description) {
         String query1 = "insert into category (description) values (";
         String query2 = "\"" + description + "\");";
         String query = query1 + query2;
-        executeStatement(query, "Ein Datensatz entities.Category wurde der Tabelle entities.Category zugefügt.");
+        executeStatement(query, "Ein Datensatz wurde der Tabelle Category zugefügt.");
     }
+
+    public void updateRecordCategory(String description, int idCategory) {
+        String query1 = "update category set ";
+        String query2 = "description = " + "\"" + description + "\" ";
+        String query3 = " where idCategory = " + idCategory + ";";
+        String query = query1 + query2 + query3;
+        executeStatement(query, "Ein Datensatz wurde in der Tabelle category editiert/geupdated.");
+    }
+
     public LinkedList<Category> getListAllCategories() {
         LinkedList<Category> listAllCategories = new LinkedList<>();
         String query = "select * from category order by category.description ASC";
@@ -49,7 +56,7 @@ public class CategoryDAO extends DAO{
                 String description = rs.getString(2);
                 LocalDateTime created_at = rs.getTimestamp(3).toLocalDateTime();
                 LocalDateTime updated_at = rs.getTimestamp(4).toLocalDateTime();
-                Category temp = new Category(  idCategory, description, created_at, updated_at);
+                Category temp = new Category(idCategory, description, created_at, updated_at);
                 listAC.add(temp);
             }
             st.close();
@@ -61,6 +68,4 @@ public class CategoryDAO extends DAO{
         }
         return listAC;
     }
-
-
 }
