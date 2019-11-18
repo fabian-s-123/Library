@@ -45,7 +45,6 @@ public class LoanedDAO extends DAO {
         executeStatement(query, "Ein Datensatz loaned wurde der Tabelle loaned zugefügt. (Rückgabedatum eingetragen)");
     }
 
-    //TODO check due to changes (removing returnedOn)
     public void createRecordLoanedWithExtraTime(int idCustomer, int idBook, LocalDateTime loanedOn) {
         Timestamp loanedOnTS = Timestamp.valueOf(loanedOn);
         //Timestamp returnedOnTS = Timestamp.valueOf(returnedOn);
@@ -244,7 +243,7 @@ public class LoanedDAO extends DAO {
     }
 
     //TODO query for LoanBook
-    //select * from ((loaned inner join book on loaned.idBook=book.idBook) inner join author on book.idAuthor=author.idAuthor) where loan.idCustomer=1 and loaned.idBook=31 and loaned.returnedOn>'0000-00-00 00:00:00' and book.fsk<=10 order by loaned.idLoaned DESC LIMIT 1;
+    //select * from ((loaned inner join book on loaned.idBook=book.idBook) inner join author on book.idAuthor=author.idAuthor) where idCustomer=1 and loaned.idBook=31 and loaned.returnedOn>'0000-00-00 00:00:00' and book.fsk<=10 order by loaned.idLoaned DESC LIMIT 1;
 
 
 }

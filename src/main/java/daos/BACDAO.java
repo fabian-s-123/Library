@@ -1,11 +1,9 @@
 package daos;
 
+import entities.Book;
 import entities.BookAuthorCategory;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -95,4 +93,37 @@ public class BACDAO extends DAO {
         }
         return ids;
     }
+
+
+    public List<BookAuthorCategory> selectBooksLoanedAsBAC(Statement st, int idCustomer, int idBook) throws SQLException {
+        List<BookAuthorCategory> list = new ArrayList<>();
+        String query = "select * from ((loaned inner join book on loaned.idBook=book.idBook) inner join author on book.idAuthor=author.idAuthor) where idCustomer=" + idCustomer + " and loaned.idBook=" + idBook + " and loaned.returnedOn='0000-00-00 00:00:00' order by loaned.idLoaned DESC LIMIT 1;";
+        ResultSet rs = st.executeQuery(query);
+        while (rs.next()){
+            int bookId = rs.getInt("idBook");
+            String title = rs.getString("title");
+            int idAuthor = rs.getInt("idAuthor");
+            String firstName = rs.getString("firstName");
+            String lastName = rs.getString("lastName");
+            int birthYear = rs.getInt("birthYear");
+            int idCategory = rs.getInt("idCategory");
+            String description = rs.getString("description");
+            long isbn = rs.getLong("isbn");
+            int fsk = rs.getInt("fsk");
+            String publisher = rs.getString("publisher");
+            String edition = rs.getString("edition");
+            String firstEdition = rs.getString("firstEdition");
+            int amountPages = rs.getInt("amountPages");
+            String language = rs.getString("language");
+            int idRow = rs.getInt("idRow");
+            int idColumn = rs.getInt("idColumn");
+            BookAuthorCategory bac = new BookAuthorCategory (bookId, title, idAuthor, firstName, lastName, birthYear, idCategory, description, isbn, fsk, publisher, edition, firstEdition, amountPages, language, idRow, idColumn);
+            list.add(bac);
+        }
+        return list;
+    }
+
+
+
+
 }
