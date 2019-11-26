@@ -1,7 +1,6 @@
 package controller;
 
 import daos.BACDAO;
-import daos.BookDAO;
 import daos.CustomerDAO;
 import daos.LoanedDAO;
 import entities.BookAuthorCategory;
